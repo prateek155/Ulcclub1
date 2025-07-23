@@ -74,7 +74,7 @@ const Registration = () => {
               registrationDate: new Date().toISOString()
             };
 
-      const res = await axios.post('http://localhost:8080/api/v1/registration/register', registrationData);
+      const res = await axios.post('https://ulcclub1.onrender.com/api/v1/registration/register', registrationData);
 
       if (res.data.success) {
         setMessage('Registration successful! You will receive a confirmation email shortly.');
