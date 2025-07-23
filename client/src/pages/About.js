@@ -23,7 +23,7 @@ const About = () => {
               Explore our website and discover why we are the trusted choice for so many students.
             </p>
             <div className="d-flex justify-content-center mt-4">
-               <Link to="/About-more"
+               <Link to="https://ulcclub1.onrender.com/About-more"
                className="btn btn-outline-primary btn-lg me-3">Learn More
               </Link>
             </div>
