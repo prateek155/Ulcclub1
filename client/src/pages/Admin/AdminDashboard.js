@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   const fetchCommunityMembers = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/community/members"
+        "https://ulcclub1.onrender.com/api/v1/community/members"
       );
       if (data?.success) {
         setCommunityMembers(data.members);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   const deleteMember = async (id) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8080/api/v1/community/delete-member/${id}`
+        `https://ulcclub1.onrender.com/api/v1/community/delete-member/${id}`
       );
       if (data?.success) {
         setCommunityMembers(communityMembers.filter((member) => member._id !== id));
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
   const acceptMember = async (id) => {
     try {
       const { data } = await axios.post(
-        `http://localhost:8080/api/v1/community/accept-member/${id}`
+        `https://ulcclub1.onrender.com/api/v1/community/accept-member/${id}`
       );
       if (data?.success) {
         setCommunityMembers(
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
   // Get all products
   const getAllProducts = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/product/get-product");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/product/get-product");
       setProducts(data.product);
     } catch (error) {
       console.log(error);
