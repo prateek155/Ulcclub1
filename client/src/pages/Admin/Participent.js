@@ -11,7 +11,7 @@ const Participent = () => {
   // Fetch all groups
   const fetchGroups = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/api/v1/participent/groups');
+      const { data } = await axios.get('https://ulcclub1.onrender.com/api/v1/participent/groups');
       setGroups(data.groups);
     } catch (error) {
       console.error('Failed to fetch groups:', error);
@@ -26,7 +26,7 @@ const Participent = () => {
   const createGroup = async () => {
     if (groupName.trim() && positionNumber.trim()) {
       try {
-        const { data } = await axios.post('http://localhost:8080/api/v1/participent/groups', {
+        const { data } = await axios.post('https://ulcclub1.onrender.com/api/v1/participent/groups', {
           name: groupName,
           position: positionNumber,
         });
@@ -44,7 +44,7 @@ const Participent = () => {
     const group = groups[groupIndex];
     if (memberName.trim()) {
       try {
-        const { data } = await axios.put(`http://localhost:8080/api/v1/participent/groups/${group._id}/members`, {
+        const { data } = await axios.put(`https://ulcclub1.onrender.com/api/v1/participent/groups/${group._id}/members`, {
           name: memberName,
         });
         const updatedGroups = [...groups];
@@ -61,7 +61,7 @@ const Participent = () => {
   const removeMember = async (groupIndex, memberId) => {
     const group = groups[groupIndex];
     try {
-      const { data } = await axios.delete(`http://localhost:8080/api/v1/participent/groups/${group._id}/members/${memberId}`);
+      const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/participent/groups/${group._id}/members/${memberId}`);
       const updatedGroups = [...groups];
       updatedGroups[groupIndex] = data.group;
       setGroups(updatedGroups);
@@ -74,7 +74,7 @@ const Participent = () => {
   const deleteGroup = async (groupIndex) => {
     const group = groups[groupIndex];
     try {
-      await axios.delete(`http://localhost:8080/api/v1/participent/groups/${group._id}`);
+      await axios.delete(`https://ulcclub1.onrender.com/api/v1/participent/groups/${group._id}`);
       const updatedGroups = groups.filter((_, i) => i !== groupIndex);
       setGroups(updatedGroups);
       setSelectedGroupIndex(null);
