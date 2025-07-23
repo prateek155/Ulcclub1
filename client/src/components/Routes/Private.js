@@ -12,7 +12,7 @@ export default function PrivateRoute() {
         const authCheck = async () => {
             try {
                 
-                const res = await axios.get("http://localhost:8080/api/v1/auth/user-auth", {
+                const res = await axios.get("https://ulcclub1.onrender.com/api/v1/auth/user-auth", {
                    
                 });
 
