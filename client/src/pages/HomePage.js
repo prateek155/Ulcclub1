@@ -40,7 +40,7 @@ const HomePage = () => {
 
   // Auto-rotate featured projects
   const featuredProjects = [
-    { title: "Neural Style Transfer", tech: "TensorFlow", difficulty: "Advanced" },
+    { title: "Flashy", tech: "TensorFlow", difficulty: "Advanced", github:"https://github.com/arpitingle/flashy" },
     { title: "Chatbot with NLP", tech: "Python", difficulty: "Intermediate" },
     { title: "Computer Vision OCR", tech: "OpenCV", difficulty: "Advanced" },
     { title: "Sentiment Analysis", tech: "Scikit-learn", difficulty: "Beginner" }
@@ -794,10 +794,15 @@ const HomePage = () => {
                   {featuredProjects[currentProject].difficulty}
                 </span>
               </div>
-              <button style={styles.projectButton}>
+              <a 
+                href={featuredProjects[currentProject].github}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.projectButton}
+                >
                 <Github style={{ width: '1.25rem', height: '1.25rem' }} />
                 View Project
-              </button>
+              </a>
             </div>
             <div style={styles.projectDots}>
               {featuredProjects.map((_, i) => (
