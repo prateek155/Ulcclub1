@@ -12,7 +12,7 @@ export default function AdminRoute() {
         const authCheck = async () => {
             try {
                 
-                const res = await axios.get("http://localhost:8080/api/v1/auth/admin-auth", {
+                const res = await axios.get("https://ulcclub1.onrender.com/api/v1/auth/admin-auth", {
                    
                 });
 
