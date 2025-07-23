@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null);
@@ -168,27 +168,27 @@ const Footer = () => {
           </div>
           
           <div style={responsiveLinksStyles}>
-            <a
+            <NavLink
               to="/about"
               style={getLinkStyle('about')}
               onMouseEnter={() => handleLinkHover('about')}
               onMouseLeave={handleLinkLeave}
             >
               About
-            </a>
+            </NavLink>
             
             {!isMobile && (
               <span style={footerStyles.separator}>|</span>
             )}
             
-            <a
+            <NavLink
               to="/contact"
               style={getLinkStyle('contact')}
               onMouseEnter={() => handleLinkHover('contact')}
               onMouseLeave={handleLinkLeave}
             >
               Contact
-            </a>
+            </NavLink>
             
           </div>
         </div>
