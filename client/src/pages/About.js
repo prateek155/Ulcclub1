@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../components/Layout/Layout';
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const About = () => {
   return (
@@ -23,9 +23,9 @@ const About = () => {
               Explore our website and discover why we are the trusted choice for so many students.
             </p>
             <div className="d-flex justify-content-center mt-4">
-               <Link to="https://ulcclub1.onrender.com/About-more"
+               <NavLink to="/About-more"
                className="btn btn-outline-primary btn-lg me-3">Learn More
-              </Link>
+              </NavLink>
             </div>
           </div>
         </div>
