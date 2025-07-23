@@ -41,9 +41,9 @@ const HomePage = () => {
   // Auto-rotate featured projects
   const featuredProjects = [
     { title: "Flashy", tech: "TensorFlow", difficulty: "Advanced", github:"https://github.com/arpitingle/flashy" },
-    { title: "Chatbot with NLP", tech: "Python", difficulty: "Intermediate" },
-    { title: "Computer Vision OCR", tech: "OpenCV", difficulty: "Advanced" },
-    { title: "Sentiment Analysis", tech: "Scikit-learn", difficulty: "Beginner" }
+    { title: "Lovecraft-gpt", tech: "Python", difficulty: "Intermediate", github:"https://github.com/arpitingle/lovecraft-gpt" },
+    { title: "Mnist-web", tech: "OpenCV", difficulty: "Advanced", github:"https://github.com/arpitingle/mnist-web" },
+    { title: "Emsum", tech: "Scikit-learn", difficulty: "Beginner", github:"https://github.com/arpitingle/emsum" }
   ];
 
   useEffect(() => {
@@ -798,7 +798,7 @@ const HomePage = () => {
                 href={featuredProjects[currentProject].github}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={styles.projectButton}
+                style=  style={{ ...styles.projectButton, display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}
                 >
                 <Github style={{ width: '1.25rem', height: '1.25rem' }} />
                 View Project
