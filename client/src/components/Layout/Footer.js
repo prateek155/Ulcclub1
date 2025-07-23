@@ -168,7 +168,7 @@ const Footer = () => {
           
           <div style={responsiveLinksStyles}>
             <a
-              href="/about"
+              href="https://ulcclub1.onrender.com/about"
               style={getLinkStyle('about')}
               onMouseEnter={() => handleLinkHover('about')}
               onMouseLeave={handleLinkLeave}
@@ -181,7 +181,7 @@ const Footer = () => {
             )}
             
             <a
-              href="/contact"
+              href="https://ulcclub1.onrender.com/contact"
               style={getLinkStyle('contact')}
               onMouseEnter={() => handleLinkHover('contact')}
               onMouseLeave={handleLinkLeave}
