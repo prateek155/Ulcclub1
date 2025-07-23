@@ -43,10 +43,6 @@ const Dashboard = () => {
                 <h1>Welcome back, {auth?.user?.name}!</h1>
                 <p>Manage your community and sponsors efficiently</p>
               </div>
-              <div className="welcome-badge">
-                <Award size={20} />
-                <span>Admin</span>
-              </div>
             </div>
 
             {/* Stats Cards */}
@@ -88,9 +84,6 @@ const Dashboard = () => {
                 <div className="header-content">
                   <h2>Our Sponsors</h2>
                   <p>Trusted partners supporting our community</p>
-                </div>
-                <div className="sponsor-count">
-                  <span>{sponsersList.length} Active</span>
                 </div>
               </div>
 
