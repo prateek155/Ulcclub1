@@ -798,7 +798,7 @@ const HomePage = () => {
                 href={featuredProjects[currentProject].github}
                 target="_blank"
                 rel="noopener noreferrer"
-                style=  style={{ ...styles.projectButton, display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}
+                style={{ ...styles.projectButton, display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}
                 >
                 <Github style={{ width: '1.25rem', height: '1.25rem' }} />
                 View Project
