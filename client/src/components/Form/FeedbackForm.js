@@ -12,7 +12,7 @@ const FeedbackForm = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const { data } = await axios.post("http://localhost:8080/api/feedback/create", values);
+      const { data } = await axios.post("https://ulcclub1.onrender.com/api/feedback/create", values);
       if (data.success) {
         message.success('Feedback submitted successfully');
         form.resetFields();
