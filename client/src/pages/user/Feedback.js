@@ -23,7 +23,7 @@ const Feedback = () => {
   // Get user's feedback history
   const getUserFeedback = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/feedback/user-feedback");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/feedback/user-feedback");
       if (data?.success) {
         setUserFeedback(data.feedback);
       }
@@ -42,7 +42,7 @@ const Feedback = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post("http://localhost:8080/api/v1/feedback/create", {
+      const { data } = await axios.post("https://ulcclub1.onrender.com/api/v1/feedback/create", {
         subject,
         message,
       });
