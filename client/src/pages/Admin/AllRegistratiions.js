@@ -12,7 +12,7 @@ const AllRegistrations = () => {
   const fetchRegistrations = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:8080/api/v1/registration/all');
+      const { data } = await axios.get('https://ulcclub1.onrender.com/api/v1/registration/all');
       if (data.success) {
         setRegistrations(data.registrations);
       } else {
@@ -28,7 +28,7 @@ const AllRegistrations = () => {
 
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`http://localhost:8080/api/v1/registration/delete/${id}`);
+      const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/registration/delete/${id}`);
       if (data.success) {
         toast.success("Registration deleted successfully");
         fetchRegistrations();
