@@ -4,7 +4,7 @@ import AdminMenu from "../../components/Layout/AdminMenu";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaUserAlt, FaUsers, FaSearch } from "react-icons/fa";
+import { User, Users, Search } from "lucide-react";
 import { Trash2 } from "lucide-react";
 
 const CommunityMember = () => {
@@ -85,7 +85,7 @@ const CommunityMember = () => {
             <div className="page-header">
               <div className="header-content">
                 <div className="title-section">
-                  <FaUsers className="header-icon" />
+                  <Users className="header-icon" />
                   <h1 className="page-title">Community Members</h1>
                   <p className="page-subtitle">Manage and view all accepted community members</p>
                 </div>
@@ -99,7 +99,7 @@ const CommunityMember = () => {
             {/* Search Section */}
             <div className="search-section">
               <div className="search-container">
-                <FaSearch className="search-icon" />
+                <Search className="search-icon" />
                 <input
                   type="text"
                   placeholder="Search members by name, phone, or bio..."
@@ -147,7 +147,7 @@ const CommunityMember = () => {
                               <td className="member-cell">
                                 <div className="member-info">
                                   <div className="member-avatar">
-                                    <FaUserAlt />
+                                    <User />
                                   </div>
                                   <div className="member-details">
                                     <span className="member-name">{member.Name}</span>
@@ -179,7 +179,7 @@ const CommunityMember = () => {
                           <tr className="empty-row">
                             <td colSpan="4">
                               <div className="empty-state">
-                                <FaUsers className="empty-icon" />
+                                <Users className="empty-icon" />
                                 <h3>No members found</h3>
                                 <p>
                                   {searchTerm 
