@@ -20,7 +20,6 @@ import CommunityMember from "./pages/Admin/CommunityMember.js";
 import Feedback from "./pages/user/Feedback.js";
 import FeedbackManagement from "./pages/Admin/FeedManagement.js";
 import AllRegistrations from "./pages/Admin/AllRegistratiions.js";
-import Demo from "./pages/Demo.js";
 import Event from "./pages/Event.js";
 import Registration from "./pages/Registration.js";
 import Sponsers from "./pages/Admin/Sponsers.js";
@@ -64,7 +63,6 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about-more" element={<AboutMore />} />
-            <Route path="/Demo" element={<Demo />} />
             <Route path="/Event" element={<Event />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/eventparticipent" element={<Eventparticipent />} />
