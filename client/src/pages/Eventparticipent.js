@@ -10,7 +10,7 @@ const Eventparticipent = () => {
   // Fetch all groups
   const fetchGroups = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/api/v1/participent/groups');
+      const { data } = await axios.get('https://ulcclub1.onrender.com/api/v1/participent/groups');
       setGroups(data.groups);
     } catch (error) {
       console.error('Failed to fetch groups:', error);
