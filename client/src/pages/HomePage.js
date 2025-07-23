@@ -836,7 +836,7 @@ const HomePage = () => {
                 </div>
                 <button style={styles.learningButton}>
                 <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                start Learning
+                start learning with us!
               </button>
               </div>
 
@@ -856,7 +856,7 @@ const HomePage = () => {
                 </div>
                  <button style={{ ...styles.learningButton, ...styles.learningButtonPurple }}>
                      <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                      Start Learning
+                      Start learning with us!
                           </button>
                         </div>
 
@@ -876,7 +876,7 @@ const HomePage = () => {
   </div>
   <button style={{ ...styles.learningButton, ...styles.learningButtonGreen }}>
     <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-    Start Learning
+    Start learning with us!
   </button>
 </div>
 </div>
