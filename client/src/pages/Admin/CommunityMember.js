@@ -17,7 +17,7 @@ const CommunityMember = () => {
   const deleteMember = async (id) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8080/api/v1/community/delete-member/${id}`
+        `https://ulcclub1.onrender.com/api/v1/community/delete-member/${id}`
       );
       if (data?.success) {
         setCommunityMembers(communityMembers.filter((member) => member._id !== id));
@@ -34,7 +34,7 @@ const CommunityMember = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/community/accepted-members"
+        "https://ulcclub1.onrender.com/api/v1/community/accepted-members"
       );
       if (data?.success) {
         setMembers(data.members);
