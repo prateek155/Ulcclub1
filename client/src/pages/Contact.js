@@ -28,13 +28,13 @@ const Contact = () => {
               <div className="contact-method mb-3">
                 <p className="d-flex align-items-center">
                   <BiMailSend size={24} className="me-3" style={{ color: "#007bff" }} />
-                  <span>Email: <a href="mailto:prateekagrawal589@gmail.com" className="text-decoration-none">unsupervisedlearnersclub@mitwpu.edu.in</a></span>
+                  <span>Email: <a href="mailto:unsupervisedlearnersclub@mitwpu.edu.in" className="text-decoration-none">unsupervisedlearnersclub@mitwpu.edu.in</a></span>
                 </p>
               </div>
               <div className="contact-method mb-3">
                 <p className="d-flex align-items-center">
                   <BiPhoneCall size={24} className="me-3" style={{ color: "#007bff" }} />
-                  <span>Phone: <a href="tel:+917627073230" className="text-decoration-none">7627073230</a></span>
+                  <span>Phone: <a href="tel:+917627073230,9175185122" className="text-decoration-none">7627073230</a></span>
                 </p>
               </div>
               <div className="text-center">
