@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 
 const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null);
@@ -168,7 +169,7 @@ const Footer = () => {
           
           <div style={responsiveLinksStyles}>
             <a
-              href="https://ulcclub1.onrender.com/about"
+              to="/about"
               style={getLinkStyle('about')}
               onMouseEnter={() => handleLinkHover('about')}
               onMouseLeave={handleLinkLeave}
@@ -181,7 +182,7 @@ const Footer = () => {
             )}
             
             <a
-              href="https://ulcclub1.onrender.com/contact"
+              to="/contact"
               style={getLinkStyle('contact')}
               onMouseEnter={() => handleLinkHover('contact')}
               onMouseLeave={handleLinkLeave}
