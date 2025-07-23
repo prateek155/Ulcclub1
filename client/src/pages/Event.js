@@ -13,7 +13,7 @@ const EventsDisplay = () => {
   const getAllProducts = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/product/get-product"
+        "https://ulcclub1.onrender.com/api/v1/product/get-product"
       );
       setProducts(data.product);
     } catch (error) {
@@ -252,7 +252,7 @@ const EventsDisplay = () => {
               >
                 {/* Event Image */}
                 <img
-                 src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                 src={`https://ulcclub1.onrender.com/api/v1/product/product-photo/${p._id}`}
                  alt={p.name}
                  style={styles.eventImage}
                  onError={(e) => {
