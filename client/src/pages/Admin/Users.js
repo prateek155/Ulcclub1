@@ -20,7 +20,7 @@ const User = () => {
   // Fetch users
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/users");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/users");
       if (data?.success) {
         setUsers(data.users);
         setFilteredUsers(data.users);
@@ -39,7 +39,7 @@ const User = () => {
   const handleDelete = async (userId) => {
     try {
       const { data } = await axios.delete(
-        `http://localhost:8080/api/v1/users/${userId}`
+        `https://ulcclub1.onrender.com/api/v1/users/${userId}`
       );
       if (data?.success) {
         toast.success("User deleted successfully");
@@ -70,7 +70,7 @@ const handleUpdate = async () => {
     console.log("New role to be set:", formData.role); // Log the new role being sent
 
     const { data } = await axios.put(
-      `http://localhost:8080/api/v1/users/${editUser._id}`,
+      `https://ulcclub1.onrender.com/api/v1/users/${editUser._id}`,
       { role: parseInt(formData.role) }
     );
 
