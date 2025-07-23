@@ -5,7 +5,6 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Edit2, Trash2, Search, Users, Shield, User as UserIcon } from "lucide-react";
-import { useAuth } from '../../context/auth';
 import "../../styles/Users.css";
 
 const User = () => {
@@ -15,7 +14,6 @@ const User = () => {
   const [formData, setFormData] = useState({ role: "" });
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [auth, setAuth] = useAuth();
 
   // Fetch users
   const fetchUsers = async () => {
