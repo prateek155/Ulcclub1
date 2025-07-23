@@ -18,7 +18,7 @@ const JoinCommunity = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/community/create-member",
+        "https://ulcclub1.onrender.com/api/v1/community/create-member",
         formData
       );
       if (data?.success) {
