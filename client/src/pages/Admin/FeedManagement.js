@@ -16,7 +16,7 @@ const FeedbackManagement = () => {
   const fetchFeedback = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("http://localhost:8080/api/v1/feedback/all");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/feedback/all");
       if (data.success) {
         setFeedback(data.feedback);
       }
@@ -34,7 +34,7 @@ const FeedbackManagement = () => {
 
   const handleUpdateStatus = async () => {
     try {
-      const { data } = await axios.put(`http://localhost:8080/api/v1/feedback/update-status/${selectedFeedback._id}`, {
+      const { data } = await axios.put(`https://ulcclub1.onrender.com/api/v1/feedback/update-status/${selectedFeedback._id}`, {
         status,
         response
       });
