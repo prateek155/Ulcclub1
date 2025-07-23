@@ -112,7 +112,7 @@ const Dashboard = () => {
                       >
                         <div className="card-image-container">
                           <img
-                            src={`http://localhost:8080/api/v1/sponsers/photo/${sponser._id}`}
+                            src={`https://ulcclub1.onrender.com/api/v1/sponsers/photo/${sponser._id}`}
                             alt={sponser.sponsername}
                             className="card-image"
                             onError={(e) => {
