@@ -25,7 +25,7 @@ const CreateProduct = () => {
 
   const getAllUsers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/users"); 
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/users"); 
       if (data?.success) {
         setUsers(data.users);
       }
@@ -64,7 +64,7 @@ const CreateProduct = () => {
       productData.append("category", formData.category);
 
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/product/create-product",
+        "https://ulcclub1.onrender.com/api/v1/product/create-product",
         productData,
         {
           headers: {
