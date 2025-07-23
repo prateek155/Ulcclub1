@@ -60,9 +60,8 @@ const HomePage = () => {
   ];
 
   const achievements = [
-    { icon: Trophy, title: "Best AI Project", desc: "Won at TechFest 2024" },
-    { icon: Star, title: "Research Published", desc: "3 papers in top conferences" },
-    { icon: TrendingUp, title: "Industry Partnerships", desc: "Collaborating with 5+ companies" }
+    { icon: Trophy, title: "Best AI Project", desc: "Participated at TechFest 2025" },
+    { icon: TrendingUp, title: "Industry Partnerships", desc: "Collaborating with 3+ companies" }
   ];
 
   const styles = {
