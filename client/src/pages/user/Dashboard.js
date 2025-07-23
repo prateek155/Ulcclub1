@@ -13,7 +13,7 @@ const Dashboard = () => {
   const loadSponsers = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("http://localhost:8080/api/v1/sponsers/get-sponsers");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/sponsers/get-sponsers");
       setSponsersList(data?.sponser || []);
     } catch (error) {
       console.error("Error loading sponsers:", error);
