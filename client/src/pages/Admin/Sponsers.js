@@ -18,7 +18,7 @@ const Sponsers = () => {
 
   const loadSponsers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/sponsers/get-sponsers");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/sponsers/get-sponsers");
       setSponsersList(data?.sponser || []);
     } catch (error) {
       console.error("Error loading sponsers:", error);
@@ -53,7 +53,7 @@ const Sponsers = () => {
       sponserData.append("endDate", formData.endDate);
 
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/sponsers/create",
+        "https://ulcclub1.onrender.com/api/v1/sponsers/create",
         sponserData,
         {
           headers: {
@@ -555,7 +555,7 @@ const Sponsers = () => {
               >
                 {/* Sponsor Image */}
                 <img
-                  src={`http://localhost:8080/api/v1/sponsers/photo/${sponser._id}`}
+                  src={`https://ulcclub1.onrender.com/api/v1/sponsers/photo/${sponser._id}`}
                   alt={sponser.sponsername}
                   style={styles.cardImage}
                   className="card-image"
