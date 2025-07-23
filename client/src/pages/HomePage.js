@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { useNavigate } from "react-router-dom";
-import { Users, Brain, Code, BookOpen, Calendar, Trophy, Zap, ArrowRight,Laptop, Database, ChevronRight, Star, TrendingUp, UserPlus, Coffee, Lightbulb, Code2 } from 'lucide-react';
+import { Users, Brain, Code, BookOpen, Calendar, Trophy, Zap, ArrowRight,Laptop, Database, Github, ChevronRight, Star, TrendingUp, UserPlus, Coffee, Lightbulb, Code2 } from 'lucide-react';
 
 const HomePage = () => {
   const navigate = useNavigate();
