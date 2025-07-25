@@ -20,14 +20,45 @@ const Header = () => {
   return (
     <>
       <ToastContainer />
-      <nav className="navbar navbar-expand-lg navbar-dark bg-black shadow-sm py-2">
+      <style>
+        {`
+          .navbar-custom {
+            background-color: black;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+          }
+
+          .navbar-brand-custom {
+            font-family: 'Satisfy', cursive;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          }
+
+          .navbar-brand-custom img {
+            width: 60px;
+            height: 40px;
+            object-fit: contain;
+          }
+
+          .navbar-nav-custom {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+          }
+
+          .dropdown-toggle.text-capitalize {
+            text-transform: capitalize;
+          }
+        `}
+      </style>
+      <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div className="container-fluid">
-          <Link to="/" className="navbar-brand fs-4 " style={{ fontFamily: 'Satisfy' }} >
-           <img
-           src="/image/Ulcback.png"
-           alt="ULC Logo"
-           style={{ width: '60px', height: '40px', objectFit: 'contain' }}
-           />
+          <Link to="/" className="navbar-brand navbar-brand-custom">
+            <img src="/image/Ulcback.png" alt="ULC Logo" />
             ULC
           </Link>
           <button
@@ -43,14 +74,14 @@ const Header = () => {
           </button>
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center gap-2">
+            <ul className="navbar-nav navbar-nav-custom mb-2 mb-lg-0">
               <li className="nav-item">
-                <NavLink to="/" className="nav-link" >
+                <NavLink to="/" className="nav-link">
                   Home
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/Event" className="nav-link" >
+                <NavLink to="/Event" className="nav-link">
                   Events
                 </NavLink>
               </li>
@@ -58,12 +89,12 @@ const Header = () => {
               {!auth.user ? (
                 <>
                   <li className="nav-item">
-                    <NavLink to="/register" className="nav-link" >
+                    <NavLink to="/register" className="nav-link">
                       Register
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink to="/login" className="nav-link" >
+                    <NavLink to="/login" className="nav-link">
                       Login
                     </NavLink>
                   </li>
@@ -83,9 +114,7 @@ const Header = () => {
                     <li>
                       <NavLink
                         to={`/dashboard/${
-                          auth.user.role === 1
-                            ? 'admin'
-                            : 'user'
+                          auth.user.role === 1 ? 'admin' : 'user'
                         }`}
                         className="dropdown-item"
                       >
@@ -93,7 +122,11 @@ const Header = () => {
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="/login" onClick={handleLogout} className="dropdown-item">
+                      <NavLink
+                        to="/login"
+                        onClick={handleLogout}
+                        className="dropdown-item"
+                      >
                         Logout
                       </NavLink>
                     </li>
