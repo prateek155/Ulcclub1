@@ -34,7 +34,7 @@ const Contact = () => {
               <div className="contact-method mb-3">
                 <p className="d-flex align-items-center">
                   <PhoneCall size={24} className="me-3" style={{ color: "#007bff" }} />
-                  <span>Phone: <a href="tel:+917627073230,9175185122" className="text-decoration-none">7627073230</a></span>
+                  <span>Phone: <a href="tel:+917627073230,9175185122" className="text-decoration-none">7627073230,9175185122</a></span>
                 </p>
               </div>
               <div className="text-center">
