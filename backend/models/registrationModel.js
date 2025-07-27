@@ -13,6 +13,11 @@ const memberSchema = new mongoose.Schema({
     type: String,
     required: true,
     match: /^[0-9]{10}$/,
+  },
+  email: {
+    type: String,
+    required: true,
+    match: /.+\@.+\..+/
   }
 }, { _id: false });
 
@@ -22,7 +27,7 @@ const registrationSchema = new mongoose.Schema({
     enum: ['individual', 'group'],
     required: true
   },
-  
+
   // Individual fields
   name: {
     type: String,
@@ -43,6 +48,13 @@ const registrationSchema = new mongoose.Schema({
     },
     match: /^[0-9]{10}$/
   },
+  email: {
+    type: String,
+    required: function () {
+      return this.type === 'individual';
+    },
+    match: /.+\@.+\..+/
+  },
 
   // Group fields
   groupName: {
@@ -56,15 +68,20 @@ const registrationSchema = new mongoose.Schema({
     required: function () {
       return this.type === 'group';
     }
-
   },
-  leaderphone:{
+  leaderphone: {
     type: String,
     required: function () {
       return this.type === 'group';
     },
     match: /^[0-9]{10}$/
-
+  },
+  leaderemail: {
+    type: String,
+    required: function () {
+      return this.type === 'group';
+    },
+    match: /.+\@.+\..+/
   },
   members: {
     type: [memberSchema],
