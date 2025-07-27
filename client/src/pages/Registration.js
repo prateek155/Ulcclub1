@@ -84,10 +84,12 @@ const Registration = () => {
         setMessage('Registration successful! You will receive a confirmation email shortly.');
         setFormData({
           name: '',
+          email:'',
           department: '',
           phone: '',
           groupName: '',
           leadername: '',
+          leaderemail:'',
           leaderphone:'',
           members: [{ name: '', department: '', phone: '' }]
         });
