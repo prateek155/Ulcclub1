@@ -84,42 +84,97 @@ export const getAllAcceptedMembers = async (req, res) => {
 // controller for accepting button
 export const acceptMemberController = async (req, res) => {
   try {
-    const { id } = req.params; // Extract the member ID from the request parameters
+    const { id } = req.params;
 
     // Find the member by ID
     const member = await CommunityModel.findById(id);
-
     if (!member) {
       return res.status(404).json({ success: false, message: "Member not found" });
     }
 
-    // Update the member's status to 'accepted'
+    // Update status to 'accepted'
     member.status = "accepted";
     await member.save();
 
-    // Configure Nodemailer
+    // Get current date and time in Indian timezone
+    const now = new Date();
+
+    // Format full date-time for 'sent on' part
+    const formattedDateTime = now.toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+
+    // Format just date (e.g., 27th July 2025)
+    const interviewDate = now.toLocaleDateString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    // Static time and mode (can be made dynamic too)
+    const interviewTime = "4:00 PM";
+    const interviewMode = "Offline";
+    const clubName = "Unsupervised Learners Club (ULC)"
+
+    // Nodemailer configuration
     const transporter = nodemailer.createTransport({
-      service: "Gmail", // Use your email service (e.g., Gmail, Outlook, etc.)
+      service: "Gmail",
       auth: {
-        user: "prateekagrawal589@gmail.com", // Replace with your email
-        pass: "evqxuyjpxfuhcati", // Replace with your email password or app password
+        user: "prateekagrawal589@gmail.com",
+        pass: "evqxuyjpxfuhcati",
       },
     });
 
-    // Email options
     const mailOptions = {
-      from: "prateekagrawal589@gmail.com", // Sender address
-      to: member.email, // Recipient's email (from the member's data)
-      subject: "Membership Accepted",
-      text: `Dear ${member.Name},\n\nYour membership request has been accepted!\n\nWelcome to the community!\n\nBest regards,\nThe Community Team`,
+      from: "prateekagrawal589@gmail.com",
+      to: member.email,
+      subject: "Interview Invitation for Our Club",
+      text: `
+Dear ${member.Name},
+
+Thank you for showing interest in joining our Club!
+We are excited to inform you that you have been shortlisted for the next step — the interview round. 🎯
+
+🗓️ Date: ${interviewDate}
+⏰ Time: ${interviewTime}
+📍 Mode: ${interviewMode}
+💬 Duration: Approx. 15–20 minutes
+
+Please confirm your availability by replying to this email before the interview time.
+
+This email was sent on: ${formattedDateTime}
+
+If you have any questions or need to reschedule, feel free to reach out.
+
+We’re looking forward to meeting you!
+
+Warm regards,  
+Recruitment Team  
+${clubName}  
++91-7627073230
+🌐 Visit our website: https://ulcclub1-1.onrender.com
+      `,
     };
 
-    // Send the email
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ success: true, message: "Member accepted successfully and email sent!" });
+    res.status(200).json({
+      success: true,
+      message: "Member accepted and interview mail sent successfully!",
+    });
   } catch (error) {
     console.error("Error accepting member:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
