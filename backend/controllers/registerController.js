@@ -1,4 +1,5 @@
 import registrationModel from '../models/registrationModel.js';
+import nodemailer from "nodemailer";
 
 // CREATE: Register an individual or group
 export const createRegistration = async (req, res) => {
