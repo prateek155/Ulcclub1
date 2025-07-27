@@ -83,7 +83,7 @@ Warm regards,
 Event Coordination Team  
 Unsupervised Learners Club.
 📞 +91-7627073230
-🌐 Visit our website: https://https://ulcclub1-1.onrender.com
+🌐 Visit our website: https://ulcclub1-1.onrender.com
       `,
     };
 
