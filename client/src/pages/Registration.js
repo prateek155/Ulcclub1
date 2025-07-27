@@ -5,7 +5,7 @@ const Registration = () => {
   const [registrationType, setRegistrationType] = useState('individual');
   const [formData, setFormData] = useState({
     name: '',
-    email: ''.
+    email: '',
     department: '',
     phone: '',
     groupName: '',
