@@ -5,10 +5,12 @@ const Registration = () => {
   const [registrationType, setRegistrationType] = useState('individual');
   const [formData, setFormData] = useState({
     name: '',
+    email: ''.
     department: '',
     phone: '',
     groupName: '',
     leadername: '',
+    leaderemail:'',
     leaderphone:'',
     members: [{ name: '', department: '', phone: '' }]
   });
@@ -61,6 +63,7 @@ const Registration = () => {
           ? {
               type: "individual",
               name: formData.name,
+              email: formData.email, 
               department: formData.department,
               phone: formData.phone,
               registrationDate: new Date().toISOString()
@@ -69,6 +72,7 @@ const Registration = () => {
               type: "group",
               groupName: formData.groupName,
               leadername: formData.leadername,
+              leaderemail: formData.leaderemail,
               leaderphone:formData.leaderphone,
               members: formData.members,
               registrationDate: new Date().toISOString()
@@ -143,6 +147,17 @@ const Registration = () => {
                 />
               </div>
               <div style={styles.inputGroup}>
+                  <label style={styles.label}>Email *</label>
+                  <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                   style={styles.input}
+                    required
+                    />
+               </div>
+              <div style={styles.inputGroup}>
                 <label style={styles.label}>Department</label>
                 <input
                   type="text"
@@ -192,6 +207,17 @@ const Registration = () => {
                   required
                 />
               </div>
+               <div style={styles.inputGroup}>
+                        <label style={styles.label}>Leader Email *</label>
+                       <input
+                        type="email"
+                        name="leaderemail"
+                        value={formData.leaderemail}
+                         onChange={handleInputChange}
+                        style={styles.input}
+                          required
+                           />
+                    </div>
               <div style={styles.inputGroup}>
                 <label style={styles.label}>Leader Phone Number *</label>
                 <input
