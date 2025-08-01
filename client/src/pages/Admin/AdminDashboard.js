@@ -89,7 +89,7 @@ const AdminDashboard = () => {
   }, []);
 
   return (
-    <Layout tile={"admin-dashboard"}>
+    <Layout tile={"Admin Dashboard"}>
       <div className="admin-dashboard">
         <div className="dashboard-container">
           <div className="sidebar-section">
