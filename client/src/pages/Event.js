@@ -56,7 +56,7 @@ const EventsDisplay = () => {
 
   const handlePreviousEventParticipant = () => {
     // Add your navigation logic here
-    navigate("/previous-participants"); // or whatever route you want
+    navigate("/eventparticipent"); // or whatever route you want
   };
 
   const styles = {
