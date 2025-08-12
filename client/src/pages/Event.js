@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
-import { Calendar, MapPin, User, Users} from 'lucide-react';
+import { Calendar, MapPin, User, Users, History } from 'lucide-react';
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2"; // Import SweetAlert2
 import { useNavigate } from "react-router-dom";
@@ -54,12 +54,18 @@ const EventsDisplay = () => {
     return colors[category] || '#6b7280';
   };
 
+  const handlePreviousEventParticipant = () => {
+    // Add your navigation logic here
+    navigate("/previous-participants"); // or whatever route you want
+  };
+
   const styles = {
     container: {
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       minHeight: '100vh',
       padding: '20px',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      position: 'relative'
     },
     header: {
       textAlign: 'center',
@@ -219,6 +225,32 @@ const EventsDisplay = () => {
       textTransform: 'capitalize',
       color: '#6366f1',
       fontWeight: '600'
+    },
+    // New styles for the floating button
+    floatingButton: {
+      position: 'fixed',
+      bottom: '30px',
+      right: '30px',
+      background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      color: 'white',
+      border: 'none',
+      borderRadius: '50px',
+      padding: '15px 25px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+      fontWeight: '600',
+      fontSize: '0.95rem',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 8px 25px rgba(245, 158, 11, 0.4)',
+      zIndex: 1000,
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.2)'
+    },
+    floatingButtonHover: {
+      transform: 'translateY(-3px) scale(1.05)',
+      boxShadow: '0 12px 35px rgba(245, 158, 11, 0.6)'
     }
   };
 
@@ -326,6 +358,22 @@ const EventsDisplay = () => {
               </div>
             ))}
           </div>
+
+        {/* Floating Previous Event Participant Button */}
+        <button
+          style={styles.floatingButton}
+          onClick={handlePreviousEventParticipant}
+          onMouseEnter={(e) => {
+            Object.assign(e.currentTarget.style, styles.floatingButtonHover);
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(245, 158, 11, 0.4)';
+          }}
+        >
+          <History size={20} />
+          Previous Event Participant
+        </button>
 
         {/* CSS Animation */}
         <style jsx>{`
