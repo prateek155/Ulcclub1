@@ -68,11 +68,11 @@ const Eventparticipent = () => {
         <div style={styles.sectionHeader}>
           <h2 style={styles.sectionTitle}>
             <span style={styles.sectionIcon}>📊</span>
-            Teams & Participants ({groups.length})
+            Teams 
           </h2>
           <div style={styles.statsContainer}>
             <div style={styles.statItem}>
-              <span style={styles.statNumber}>{groups.reduce((acc, group) => acc + group.members.length, 0)}</span>
+              <span style={styles.statNumber}>{groups.length}</span>
               <span style={styles.statLabel}>Total Members</span>
             </div>
           </div>
