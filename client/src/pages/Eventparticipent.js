@@ -73,7 +73,7 @@ const Eventparticipent = () => {
           <div style={styles.statsContainer}>
             <div style={styles.statItem}>
               <span style={styles.statNumber}>{groups.length}</span>
-              <span style={styles.statLabel}>Total Members</span>
+              <span style={styles.statLabel}>Total Teams</span>
             </div>
           </div>
         </div>
