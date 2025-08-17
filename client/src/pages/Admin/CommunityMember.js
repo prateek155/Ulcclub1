@@ -61,7 +61,7 @@ const CommunityMember = () => {
   );
 
   return (
-    <Layout title={"All Community Members"}>
+    <div title={"All Community Members"}>
       <div className="community-container">
         <ToastContainer 
           position="top-right"
@@ -641,7 +641,7 @@ const CommunityMember = () => {
           transform: translateY(-2px);
         }
       `}</style>
-    </Layout>
+    </div>
   );
 };
 
