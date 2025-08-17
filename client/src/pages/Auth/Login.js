@@ -4,7 +4,6 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../../styles/AuthStyles.css";
 import { useAuth } from "../../context/auth";
 
 const MAX_ATTEMPTS = 3;
@@ -17,8 +16,71 @@ const Login = () => {
   const [auth, setAuth] = useAuth();
   const [isLocked, setIsLocked] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
+  const [digitalRain, setDigitalRain] = useState([]);
+  const [securityElements, setSecurityElements] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Generate digital rain effect
+  useEffect(() => {
+    const generateRainDrops = () => {
+      const characters = '0123456789ABCDEF';
+      const drops = [];
+      
+      for (let i = 0; i < 50; i++) {
+        drops.push({
+          id: i,
+          char: characters[Math.floor(Math.random() * characters.length)],
+          x: Math.random() * 100,
+          animationDuration: Math.random() * 3 + 2,
+          animationDelay: Math.random() * 2
+        });
+      }
+      setDigitalRain(drops);
+    };
+
+    const generateSecurityElements = () => {
+      const symbols = ['🔒', '🛡️', '⚠️', '🔐', '🔑'];
+      const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+      const elements = [];
+
+      // Add security symbols
+      for (let i = 0; i < 8; i++) {
+        elements.push({
+          id: `lock-${i}`,
+          content: symbols[Math.floor(Math.random() * symbols.length)],
+          x: Math.random() * 90,
+          y: Math.random() * 80,
+          animationDelay: Math.random() * 4,
+          type: 'lock'
+        });
+      }
+
+      // Add numbers
+      for (let i = 0; i < 15; i++) {
+        elements.push({
+          id: `num-${i}`,
+          content: numbers[Math.floor(Math.random() * numbers.length)],
+          x: Math.random() * 95,
+          y: Math.random() * 85,
+          animationDelay: Math.random() * 6,
+          type: 'number',
+          fontSize: Math.random() * 20 + 15
+        });
+      }
+
+      setSecurityElements(elements);
+    };
+
+    generateRainDrops();
+    generateSecurityElements();
+
+    const interval = setInterval(() => {
+      generateRainDrops();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const lockTime = localStorage.getItem("lockTime");
@@ -43,7 +105,6 @@ const Login = () => {
 
         return () => clearInterval(interval);
       } else {
-        // lock expired
         localStorage.removeItem("lockTime");
         localStorage.removeItem("failedAttempts");
       }
@@ -95,8 +156,7 @@ const Login = () => {
           localStorage.setItem("lockTime", lockUntil.toString());
           setIsLocked(true);
           setRemainingTime(Math.floor(LOCK_DURATION / 1000));
-          toast.error("Too many failed attempts. You are locked out for 5 minutes.");
-          navigate("/");
+          toast.error("Too many failed attempts. You are locked out for 30 seconds.");
         }
       }
     } catch (error) {
@@ -109,86 +169,354 @@ const Login = () => {
     <>
       <style>{`
         * {
-          box-sizing: border-box;
           margin: 0;
           padding: 0;
+          box-sizing: border-box;
         }
 
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          font-family: 'Courier New', monospace;
+          background: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #0f1419 100%);
+          overflow-x: hidden;
           min-height: 100vh;
         }
 
-        .modern-login-container {
+        .cybersecurity-login-container {
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
           position: relative;
+          overflow: hidden;
         }
 
-        .modern-login-container::before {
-          content: '';
+        /* Digital rain background */
+        .digital-rain-container {
           position: absolute;
           top: 0;
           left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-          backdrop-filter: blur(10px);
-        }
-
-        .login-card {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          border-radius: 24px;
-          box-shadow: 
-            0 20px 40px rgba(0, 0, 0, 0.1),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.7);
-          padding: 48px 40px;
           width: 100%;
-          max-width: 420px;
-          position: relative;
+          height: 100%;
+          pointer-events: none;
           z-index: 1;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .login-card:hover {
-          transform: translateY(-5px);
+        .rain-drop {
+          position: absolute;
+          color: #00ff88;
+          font-size: 18px;
+          font-weight: bold;
+          opacity: 0.7;
+          text-shadow: 0 0 10px #00ff88;
+          animation: rainFall linear infinite;
+        }
+
+        @keyframes rainFall {
+          0% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+
+        /* Security elements */
+        .security-elements-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        .security-element {
+          position: absolute;
+          color: #ffaa00;
+          opacity: 0.6;
+          text-shadow: 0 0 15px #ffaa00;
+        }
+
+        .security-element.lock {
+          font-size: 24px;
+          animation: lockFloat 8s ease-in-out infinite;
+        }
+
+        .security-element.number {
+          animation: numberFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes lockFloat {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+            opacity: 0.6;
+          }
+          50% {
+            transform: translateY(-30px) scale(1.1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes numberFloat {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0.6;
+          }
+          50% {
+            transform: translateY(-20px) rotate(5deg);
+            opacity: 0.9;
+          }
+        }
+
+        /* Circuit overlay */
+        .circuit-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: 
+            linear-gradient(90deg, transparent 98%, rgba(0, 255, 136, 0.1) 100%),
+            linear-gradient(transparent 98%, rgba(0, 255, 136, 0.1) 100%);
+          background-size: 100px 100px;
+          z-index: 3;
+          animation: circuitPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes circuitPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+        }
+
+        /* Hooded figure silhouette */
+        .hooded-figure {
+          position: absolute;
+          bottom: -50px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 400px;
+          height: 500px;
+          background: radial-gradient(ellipse at center top, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+          clip-path: polygon(
+            40% 0%, 60% 0%, 
+            65% 20%, 70% 40%, 
+            80% 60%, 85% 80%, 
+            90% 100%, 10% 100%, 
+            15% 80%, 20% 60%, 
+            30% 40%, 35% 20%
+          );
+          z-index: 4;
+          animation: figureGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes figureGlow {
+          0%, 100% {
+            background: radial-gradient(ellipse at center top, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+          }
+          50% {
+            background: radial-gradient(ellipse at center top, rgba(0, 255, 136, 0.2) 0%, transparent 70%);
+          }
+        }
+
+        /* Login panel */
+        .cyber-login-panel {
+          width: 450px;
+          max-width: 90vw;
+          background: rgba(0, 0, 0, 0.85);
+          backdrop-filter: blur(15px);
+          border: 2px solid rgba(0, 255, 136, 0.6);
+          border-radius: 8px;
+          position: relative;
+          padding: 40px;
+          z-index: 10;
           box-shadow: 
-            0 30px 60px rgba(0, 0, 0, 0.15),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            0 0 50px rgba(0, 255, 136, 0.3),
+            inset 0 0 50px rgba(0, 255, 136, 0.05);
+          animation: panelGlow 3s ease-in-out infinite;
         }
 
-        .login-title {
-          font-size: 32px;
-          font-weight: 700;
-          color: #1a202c;
-          text-align: center;
-          margin-bottom: 12px;
-          background: linear-gradient(135deg, #667eea, #764ba2);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+        @keyframes panelGlow {
+          0%, 100% {
+            border-color: rgba(0, 255, 136, 0.6);
+            box-shadow: 
+              0 0 50px rgba(0, 255, 136, 0.3),
+              inset 0 0 50px rgba(0, 255, 136, 0.05);
+          }
+          50% {
+            border-color: rgba(0, 255, 136, 0.9);
+            box-shadow: 
+              0 0 70px rgba(0, 255, 136, 0.5),
+              inset 0 0 70px rgba(0, 255, 136, 0.1);
+          }
         }
 
-        .login-subtitle {
-          color: #718096;
+        /* Panel corners */
+        .panel-corner {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          border: 3px solid #ffaa00;
+        }
+
+        .panel-corner.top-left {
+          top: -10px;
+          left: -10px;
+          border-right: none;
+          border-bottom: none;
+        }
+
+        .panel-corner.top-right {
+          top: -10px;
+          right: -10px;
+          border-left: none;
+          border-bottom: none;
+        }
+
+        .panel-corner.bottom-left {
+          bottom: -10px;
+          left: -10px;
+          border-right: none;
+          border-top: none;
+        }
+
+        .panel-corner.bottom-right {
+          bottom: -10px;
+          right: -10px;
+          border-left: none;
+          border-top: none;
+        }
+
+        /* Scanning line */
+        .scan-line {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #00ff88, transparent);
+          animation: scanMove 4s linear infinite;
+        }
+
+        @keyframes scanMove {
+          0% { transform: translateY(0); opacity: 1; }
+          100% { transform: translateY(400px); opacity: 0; }
+        }
+
+        /* Header styling */
+        .cyber-login-header {
           text-align: center;
           margin-bottom: 40px;
-          font-size: 16px;
-          font-weight: 400;
         }
 
-        .form-group {
-          margin-bottom: 24px;
+        .cyber-title {
+          font-size: 26px;
+          color: #00ff88;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+          text-shadow: 0 0 20px #00ff88;
+          margin-bottom: 8px;
+          animation: titleFlicker 2s ease-in-out infinite;
+        }
+
+        .cyber-subtitle {
+          font-size: 12px;
+          color: #ffaa00;
+          letter-spacing: 2px;
+          opacity: 0.8;
+        }
+
+        @keyframes titleFlicker {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.8; }
+        }
+
+        /* Security status */
+        .security-status {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          margin-bottom: 30px;
+          font-size: 10px;
+          color: #00ff88;
+        }
+
+        .status-item {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #00ff88;
+          animation: statusBlink 1.5s infinite;
+        }
+
+        @keyframes statusBlink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+
+        /* Form styling */
+        .cyber-form {
+          display: flex;
+          flex-direction: column;
+          gap: 25px;
+        }
+
+        .cyber-input-group {
           position: relative;
         }
 
+        .cyber-input-label {
+          display: block;
+          color: #00ff88;
+          font-size: 12px;
+          margin-bottom: 8px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .cyber-input-field {
+          width: 100%;
+          padding: 12px 15px;
+          background: rgba(0, 0, 0, 0.6);
+          border: 1px solid rgba(0, 255, 136, 0.5);
+          border-radius: 4px;
+          color: #00ff88;
+          font-family: 'Courier New', monospace;
+          font-size: 14px;
+          outline: none;
+          transition: all 0.3s ease;
+        }
+
+        .cyber-input-field::placeholder {
+          color: rgba(0, 255, 136, 0.4);
+        }
+
+        .cyber-input-field:focus {
+          border-color: #00ff88;
+          background: rgba(0, 255, 136, 0.05);
+          box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .cyber-input-field:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        /* Password toggle */
         .password-input-wrapper {
           position: relative;
           display: flex;
@@ -197,14 +525,14 @@ const Login = () => {
 
         .password-toggle {
           position: absolute;
-          right: 16px;
+          right: 15px;
           top: 50%;
           transform: translateY(-50%);
           background: none;
           border: none;
           cursor: pointer;
           padding: 4px;
-          color: #a0aec0;
+          color: #00ff88;
           transition: color 0.3s ease;
           z-index: 2;
           display: flex;
@@ -213,7 +541,7 @@ const Login = () => {
         }
 
         .password-toggle:hover {
-          color: #667eea;
+          color: #44ff99;
         }
 
         .password-toggle:disabled {
@@ -222,218 +550,219 @@ const Login = () => {
         }
 
         .eye-icon {
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
           stroke: currentColor;
           fill: none;
           stroke-width: 2;
         }
 
-        .form-input {
-          width: 100%;
-          padding: 16px 20px;
-          border: 2px solid #e2e8f0;
-          border-radius: 16px;
-          font-size: 16px;
-          font-weight: 500;
-          color: #2d3748;
-          background: rgba(255, 255, 255, 0.8);
-          transition: all 0.3s ease;
-          outline: none;
-        }
-
-        .form-input:focus {
-          border-color: #667eea;
-          background: rgba(255, 255, 255, 1);
-          box-shadow: 
-            0 0 0 3px rgba(102, 126, 234, 0.1),
-            0 4px 12px rgba(102, 126, 234, 0.15);
-          transform: translateY(-2px);
-        }
-
-        .form-input:disabled {
-          background-color: #f7fafc;
-          color: #a0aec0;
-          cursor: not-allowed;
-          opacity: 0.7;
-        }
-
-        .form-input::placeholder {
-          color: #a0aec0;
-          font-weight: 400;
-        }
-
+        /* Lockout warning */
         .lockout-warning {
-          background: linear-gradient(135deg, #fed7d7, #feb2b2);
-          border: 2px solid #fc8181;
-          border-radius: 12px;
+          background: rgba(255, 68, 68, 0.1);
+          border: 2px solid #ff4444;
+          border-radius: 8px;
           padding: 16px;
           margin-bottom: 24px;
           text-align: center;
-          animation: pulse 2s infinite;
+          animation: lockoutPulse 2s infinite;
         }
 
         .lockout-text {
-          color: #c53030;
+          color: #ff4444;
           font-weight: 600;
           margin: 0;
+          font-size: 14px;
         }
 
         .lockout-timer {
-          color: #e53e3e;
+          color: #ff6666;
           font-size: 18px;
           font-weight: 700;
           margin-top: 8px;
         }
 
-        @keyframes pulse {
+        @keyframes lockoutPulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.8; }
         }
 
-        .btn {
+        /* Buttons */
+        .cyber-btn {
           width: 100%;
-          padding: 16px 24px;
-          border: none;
-          border-radius: 16px;
-          font-size: 16px;
-          font-weight: 600;
+          padding: 15px;
+          border: 2px solid #00ff88;
+          border-radius: 4px;
+          color: #00ff88;
+          font-family: 'Courier New', monospace;
+          font-size: 14px;
+          font-weight: bold;
+          text-transform: uppercase;
+          letter-spacing: 2px;
           cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: none;
-          letter-spacing: 0.5px;
           position: relative;
           overflow: hidden;
+          transition: all 0.3s ease;
+          background: transparent;
         }
 
-        .btn::before {
+        .cyber-btn::before {
           content: '';
           position: absolute;
           top: 0;
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-          transition: left 0.5s;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          animation: buttonSweep 3s infinite;
         }
 
-        .btn:hover::before {
-          left: 100%;
+        @keyframes buttonSweep {
+          0% { left: -100%; }
+          50% { left: 100%; }
+          100% { left: -100%; }
         }
 
-        .btn-primary {
-          background: linear-gradient(135deg, #667eea, #764ba2);
-          color: white;
-          margin-top: 12px;
+        .cyber-btn-primary {
+          background: linear-gradient(45deg, rgba(0, 255, 136, 0.2) 0%, rgba(255, 170, 0, 0.2) 100%);
+          margin-top: 10px;
         }
 
-        .btn-primary:hover:not(:disabled) {
-          background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        .cyber-btn-primary:hover:not(:disabled) {
+          background: linear-gradient(45deg, rgba(0, 255, 136, 0.4) 0%, rgba(255, 170, 0, 0.4) 100%);
+          border-color: #44ff99;
+          box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
           transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-primary:active:not(:disabled) {
-          transform: translateY(0);
-          box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-          background: rgba(255, 255, 255, 0.9);
-          color: #667eea;
-          border: 2px solid #e2e8f0;
+        .cyber-btn-secondary {
+          background: rgba(0, 0, 0, 0.3);
           margin-bottom: 16px;
         }
 
-        .btn-secondary:hover:not(:disabled) {
-          background: rgba(102, 126, 234, 0.05);
-          border-color: #667eea;
+        .cyber-btn-secondary:hover:not(:disabled) {
+          background: rgba(0, 255, 136, 0.1);
+          border-color: #44ff99;
           transform: translateY(-1px);
-          box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15);
         }
 
-        .btn:disabled {
+        .cyber-btn:disabled {
           opacity: 0.6;
           cursor: not-allowed;
           transform: none !important;
           box-shadow: none !important;
         }
 
-        .floating-elements {
+        .cyber-btn:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        /* Warning message */
+        .warning-message {
           position: absolute;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-          pointer-events: none;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 10px;
+          color: #ff4444;
+          text-align: center;
+          z-index: 15;
+          animation: warningBlink 2s infinite;
         }
 
-        .floating-element {
-          position: absolute;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 50%;
-          animation: float 6s ease-in-out infinite;
+        @keyframes warningBlink {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
         }
 
-        .floating-element:nth-child(1) {
-          width: 80px;
-          height: 80px;
-          top: 10%;
-          left: 10%;
-          animation-delay: 0s;
+        /* Toast container styling */
+        .Toastify__toast-container {
+          font-family: 'Courier New', monospace;
         }
 
-        .floating-element:nth-child(2) {
-          width: 60px;
-          height: 60px;
-          top: 70%;
-          right: 10%;
-          animation-delay: 2s;
+        .Toastify__toast--success {
+          background: rgba(0, 255, 136, 0.1);
+          border: 1px solid #00ff88;
+          color: #00ff88;
         }
 
-        .floating-element:nth-child(3) {
-          width: 40px;
-          height: 40px;
-          bottom: 20%;
-          left: 20%;
-          animation-delay: 4s;
+        .Toastify__toast--error {
+          background: rgba(255, 68, 68, 0.1);
+          border: 1px solid #ff4444;
+          color: #ff4444;
         }
 
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-            opacity: 0.4;
-          }
-          50% {
-            transform: translateY(-20px) rotate(180deg);
-            opacity: 0.8;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .login-card {
-            padding: 32px 24px;
-            margin: 20px;
+        /* Responsive design */
+        @media (max-width: 500px) {
+          .cyber-login-panel {
+            width: 350px;
+            padding: 30px;
           }
           
-          .login-title {
-            font-size: 28px;
+          .cyber-title {
+            font-size: 22px;
           }
           
-          .form-input, .btn {
-            padding: 14px 18px;
+          .cyber-input-field, .cyber-btn {
+            padding: 12px;
           }
         }
       `}</style>
       
-      <Layout title="Login - M-Group app">
-        <div className="modern-login-container">
-          <div className="floating-elements">
-            <div className="floating-element"></div>
-            <div className="floating-element"></div>
-            <div className="floating-element"></div>
+      <Layout title="Secure Login - M-Group Portal">
+        <div className="cybersecurity-login-container">
+          {/* Digital rain background */}
+          <div className="digital-rain-container">
+            {digitalRain.map((drop) => (
+              <div
+                key={drop.id}
+                className="rain-drop"
+                style={{
+                  left: `${drop.x}%`,
+                  animationDuration: `${drop.animationDuration}s`,
+                  animationDelay: `${drop.animationDelay}s`
+                }}
+              >
+                {drop.char}
+              </div>
+            ))}
           </div>
-          
-          <div className="login-card">
+
+          {/* Security elements */}
+          <div className="security-elements-container">
+            {securityElements.map((element) => (
+              <div
+                key={element.id}
+                className={`security-element ${element.type}`}
+                style={{
+                  left: `${element.x}%`,
+                  top: `${element.y}%`,
+                  animationDelay: `${element.animationDelay}s`,
+                  fontSize: element.fontSize ? `${element.fontSize}px` : undefined
+                }}
+              >
+                {element.content}
+              </div>
+            ))}
+          </div>
+
+          {/* Circuit overlay */}
+          <div className="circuit-overlay"></div>
+
+          {/* Hooded figure silhouette */}
+          <div className="hooded-figure"></div>
+
+          {/* Login panel */}
+          <div className="cyber-login-panel">
+            {/* Panel corners */}
+            <div className="panel-corner top-left"></div>
+            <div className="panel-corner top-right"></div>
+            <div className="panel-corner bottom-left"></div>
+            <div className="panel-corner bottom-right"></div>
+
+            {/* Scanning line */}
+            <div className="scan-line"></div>
+
             <ToastContainer 
               position="top-right"
               autoClose={5000}
@@ -445,38 +774,59 @@ const Login = () => {
               draggable
               pauseOnHover
             />
-            
-            <form onSubmit={handleSubmit}>
-              <h1 className="login-title">Welcome Back</h1>
-              <p className="login-subtitle">Sign in to your account</p>
 
+            {/* Header */}
+            <div className="cyber-login-header">
+              <h1 className="cyber-title">SECURE ACCESS</h1>
+              <p className="cyber-subtitle">M-GROUP SECURITY PORTAL v4.2</p>
+            </div>
+
+            {/* Security status */}
+            <div className="security-status">
+              <div className="status-item">
+                <div className="status-dot"></div>
+                <span>ENCRYPTED</span>
+              </div>
+              <div className="status-item">
+                <div className="status-dot"></div>
+                <span>SECURE</span>
+              </div>
+              <div className="status-item">
+                <div className="status-dot"></div>
+                <span>PROTECTED</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="cyber-form">
               {isLocked && (
                 <div className="lockout-warning">
-                  <p className="lockout-text">Account temporarily locked</p>
-                  <div className="lockout-timer">Try again in {formatTime(remainingTime)}</div>
+                  <p className="lockout-text">ACCOUNT TEMPORARILY LOCKED</p>
+                  <div className="lockout-timer">RETRY IN {formatTime(remainingTime)}</div>
                 </div>
               )}
 
-              <div className="form-group">
+              <div className="cyber-input-group">
+                <label className="cyber-input-label">Security ID</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="form-input"
-                  placeholder="Enter your email address"
+                  className="cyber-input-field"
+                  placeholder="Enter your security identifier"
                   required
                   disabled={isLocked}
                 />
               </div>
 
-              <div className="form-group">
+              <div className="cyber-input-group">
+                <label className="cyber-input-label">Access Code</label>
                 <div className="password-input-wrapper">
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="form-input"
-                    placeholder="Enter your password"
+                    className="cyber-input-field"
+                    placeholder="Enter your access code"
                     required
                     disabled={isLocked}
                   />
@@ -503,17 +853,26 @@ const Login = () => {
 
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="cyber-btn cyber-btn-secondary"
                 onClick={() => navigate("/forgot-password")}
                 disabled={isLocked}
               >
-                Forgot Password?
+                Reset Access Code
               </button>
 
-              <button type="submit" className="btn btn-primary" disabled={isLocked}>
-                {isLocked ? 'Account Locked' : 'Sign In'}
+              <button 
+                type="submit" 
+                className="cyber-btn cyber-btn-primary" 
+                disabled={isLocked}
+              >
+                {isLocked ? 'ACCESS DENIED' : 'GRANT ACCESS'}
               </button>
             </form>
+          </div>
+
+          {/* Warning message */}
+          <div className="warning-message">
+            ⚠ UNAUTHORIZED ACCESS ATTEMPTS ARE MONITORED AND LOGGED ⚠
           </div>
         </div>
       </Layout>
