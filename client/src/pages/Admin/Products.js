@@ -657,19 +657,23 @@ const Products = () => {
         /* Modal Styles */
         .modal-backdrop {
           position: fixed;
-          inset: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
           background: rgba(0, 0, 0, 0.6);
           backdrop-filter: blur(8px);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1050;
+          z-index: 9999;
           padding: 1rem;
         }
 
         .modal-dialog {
           max-width: 500px;
           width: 100%;
+          z-index: 10000;
         }
 
         .modal-content-custom {
@@ -678,6 +682,7 @@ const Products = () => {
           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
           overflow: hidden;
           animation: modalSlideIn 0.3s ease;
+          z-index: 10001;
         }
 
         @keyframes modalSlideIn {
@@ -759,8 +764,10 @@ const Products = () => {
           border-radius: 12px;
           color: #475569;
           font-weight: 500;
-          cursor: pointer;
+          cursor: pointer !important;
           transition: all 0.2s ease;
+          position: relative;
+          z-index: 10002;
         }
 
         .btn-cancel:hover {
@@ -775,12 +782,14 @@ const Products = () => {
           border-radius: 12px;
           color: white;
           font-weight: 500;
-          cursor: pointer;
+          cursor: pointer !important;
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
+          position: relative;
+          z-index: 10002;
         }
 
         .btn-delete-confirm:hover:not(:disabled) {
@@ -789,7 +798,7 @@ const Products = () => {
 
         .btn-delete-confirm:disabled {
           opacity: 0.5;
-          cursor: not-allowed;
+          cursor: not-allowed !important;
         }
 
         .spinner {
@@ -1093,15 +1102,19 @@ const Products = () => {
                 
                 <div className="modal-actions">
                   <button
+                    type="button"
                     onClick={closeDeleteModal}
                     className="btn-cancel"
+                    style={{ cursor: 'pointer', zIndex: 9999 }}
                   >
                     Cancel
                   </button>
                   <button
+                    type="button"
                     onClick={deleteProduct}
                     disabled={loading || productNameInput !== selectedProduct?.name}
                     className="btn-delete-confirm"
+                    style={{ cursor: loading || productNameInput !== selectedProduct?.name ? 'not-allowed' : 'pointer', zIndex: 9999 }}
                   >
                     {loading ? (
                       <>
