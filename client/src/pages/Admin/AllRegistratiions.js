@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Trash2, Users, User, Phone, Building, UserCheck, Download, ChevronDown } from 'lucide-react';
+import { Trash2, Users, User, Phone, Building, UserCheck, Download, ChevronDown, Filter, Eye } from 'lucide-react';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -8,6 +8,9 @@ const AllRegistrations = () => {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDownloadMenu, setShowDownloadMenu] = useState(false);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [filterType, setFilterType] = useState('all');
+  const [viewMode, setViewMode] = useState('table'); // 'table' or 'card'
 
   const fetchRegistrations = async () => {
     try {
@@ -27,29 +30,31 @@ const AllRegistrations = () => {
   };
 
   const handleDelete = async (id) => {
-    try {
-      const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/registration/delete/${id}`);
-      if (data.success) {
-        toast.success("Registration deleted successfully");
-        fetchRegistrations();
-      } else {
-        toast.error("Failed to delete registration");
+    if (window.confirm('Are you sure you want to delete this registration?')) {
+      try {
+        const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/registration/delete/${id}`);
+        if (data.success) {
+          toast.success("Registration deleted successfully");
+          fetchRegistrations();
+        } else {
+          toast.error("Failed to delete registration");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Server error while deleting");
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("Server error while deleting");
     }
   };
 
   const downloadAsCSV = () => {
-    if (registrations.length === 0) {
+    if (filteredRegistrations.length === 0) {
       toast.warning("No data to download");
       return;
     }
 
     let csvContent = "Type,Name/Group Name,Department,Phone,Leader Name,Leader phone,Members Count,Member Details\n";
     
-    registrations.forEach(reg => {
+    filteredRegistrations.forEach(reg => {
       if (reg.type === 'individual') {
         csvContent += `Individual,"${reg.name}","${reg.department}","${reg.phone}",,1,\n`;
       } else {
@@ -70,12 +75,12 @@ const AllRegistrations = () => {
   };
 
   const downloadAsJSON = () => {
-    if (registrations.length === 0) {
+    if (filteredRegistrations.length === 0) {
       toast.warning("No data to download");
       return;
     }
 
-    const jsonContent = JSON.stringify(registrations, null, 2);
+    const jsonContent = JSON.stringify(filteredRegistrations, null, 2);
     const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
@@ -88,14 +93,14 @@ const AllRegistrations = () => {
   };
 
   const downloadAsXML = () => {
-    if (registrations.length === 0) {
+    if (filteredRegistrations.length === 0) {
       toast.warning("No data to download");
       return;
     }
 
     let xmlContent = '<?xml version="1.0" encoding="UTF-8"?>\n<registrations>\n';
     
-    registrations.forEach(reg => {
+    filteredRegistrations.forEach(reg => {
       xmlContent += '  <registration>\n';
       xmlContent += `    <type>${reg.type}</type>\n`;
       xmlContent += `    <id>${reg._id}</id>\n`;
@@ -136,7 +141,7 @@ const AllRegistrations = () => {
   };
 
   const downloadAsTXT = () => {
-    if (registrations.length === 0) {
+    if (filteredRegistrations.length === 0) {
       toast.warning("No data to download");
       return;
     }
@@ -144,11 +149,11 @@ const AllRegistrations = () => {
     let txtContent = "EVENT REGISTRATIONS REPORT\n";
     txtContent += "=".repeat(40) + "\n\n";
     txtContent += `Generated on: ${new Date().toLocaleDateString()}\n`;
-    txtContent += `Total Registrations: ${registrations.length}\n`;
-    txtContent += `Individual Registrations: ${registrations.filter(r => r.type === 'individual').length}\n`;
-    txtContent += `Group Registrations: ${registrations.filter(r => r.type === 'group').length}\n\n`;
+    txtContent += `Total Registrations: ${filteredRegistrations.length}\n`;
+    txtContent += `Individual Registrations: ${filteredRegistrations.filter(r => r.type === 'individual').length}\n`;
+    txtContent += `Group Registrations: ${filteredRegistrations.filter(r => r.type === 'group').length}\n\n`;
     
-    registrations.forEach((reg, index) => {
+    filteredRegistrations.forEach((reg, index) => {
       txtContent += `${index + 1}. ${reg.type.toUpperCase()} REGISTRATION\n`;
       txtContent += "-".repeat(30) + "\n";
       
@@ -159,7 +164,7 @@ const AllRegistrations = () => {
       } else {
         txtContent += `Group Name: ${reg.groupName}\n`;
         txtContent += `Leader: ${reg.leadername}\n`;
-        txtContent += `Leader: ${reg.leaderphone}\n`;
+        txtContent += `Leader Phone: ${reg.leaderphone}\n`;
         txtContent += `Members (${reg.members.length}):\n`;
         reg.members.forEach((member, i) => {
           txtContent += `  ${i + 1}. ${member.name} - ${member.department} (${member.phone})\n`;
@@ -184,6 +189,28 @@ const AllRegistrations = () => {
     fetchRegistrations();
   }, []);
 
+  // Filter registrations based on selected type
+  const filteredRegistrations = registrations.filter(reg => {
+    if (filterType === 'all') return true;
+    return reg.type === filterType;
+  });
+
+  const individualRegs = registrations.filter(reg => reg.type === 'individual');
+  const groupRegs = registrations.filter(reg => reg.type === 'group');
+
+  const filterOptions = [
+    { value: 'all', label: 'All Registrations', count: registrations.length },
+    { value: 'individual', label: 'Individual Only', count: individualRegs.length },
+    { value: 'group', label: 'Group Only', count: groupRegs.length }
+  ];
+
+  const downloadOptions = [
+    { label: 'Download as CSV', action: downloadAsCSV, icon: '📊' },
+    { label: 'Download as JSON', action: downloadAsJSON, icon: '🔧' },
+    { label: 'Download as XML', action: downloadAsXML, icon: '📋' },
+    { label: 'Download as TXT', action: downloadAsTXT, icon: '📄' }
+  ];
+
   const styles = {
     container: {
       minHeight: '100vh',
@@ -192,7 +219,7 @@ const AllRegistrations = () => {
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
     },
     content: {
-      maxWidth: '1000px',
+      maxWidth: '1400px',
       margin: '0 auto'
     },
     header: {
@@ -213,8 +240,98 @@ const AllRegistrations = () => {
     },
     actionBar: {
       display: 'flex',
-      justifyContent: 'center',
-      marginBottom: '30px'
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: '30px',
+      gap: '16px'
+    },
+    filterContainer: {
+      position: 'relative',
+      display: 'inline-block'
+    },
+    filterButton: {
+      background: 'rgba(255,255,255,0.2)',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255,255,255,0.3)',
+      color: '#ffffff',
+      padding: '14px 24px',
+      fontSize: '1rem',
+      fontWeight: '600',
+      borderRadius: '16px',
+      display: 'flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+      minWidth: '200px',
+      justifyContent: 'space-between'
+    },
+    filterButtonHover: {
+      background: 'rgba(255,255,255,0.3)',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 12px 25px rgba(0,0,0,0.15)'
+    },
+    filterMenu: {
+      position: 'absolute',
+      top: '100%',
+      left: '0',
+      right: '0',
+      background: 'rgba(255,255,255,0.95)',
+      backdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255,255,255,0.3)',
+      borderRadius: '16px',
+      marginTop: '8px',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+      zIndex: 1000,
+      overflow: 'hidden',
+      minWidth: '220px'
+    },
+    filterMenuItem: {
+      padding: '14px 20px',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      color: '#2d3748',
+      fontWeight: '500',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderBottom: '1px solid rgba(0,0,0,0.05)'
+    },
+    filterMenuItemHover: {
+      background: 'rgba(102,126,234,0.1)',
+      color: '#667eea'
+    },
+    rightControls: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '16px'
+    },
+    viewToggle: {
+      background: 'rgba(255,255,255,0.2)',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255,255,255,0.3)',
+      borderRadius: '16px',
+      padding: '4px',
+      display: 'flex'
+    },
+    viewToggleButton: {
+      padding: '10px 16px',
+      borderRadius: '12px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.9rem',
+      fontWeight: '600',
+      transition: 'all 0.2s ease'
+    },
+    viewToggleActive: {
+      background: '#ffffff',
+      color: '#667eea',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    },
+    viewToggleInactive: {
+      background: 'transparent',
+      color: '#ffffff'
     },
     downloadContainer: {
       position: 'relative',
@@ -245,7 +362,6 @@ const AllRegistrations = () => {
     downloadMenu: {
       position: 'absolute',
       top: '100%',
-      left: '0',
       right: '0',
       background: 'rgba(255,255,255,0.95)',
       backdropFilter: 'blur(20px)',
@@ -254,7 +370,8 @@ const AllRegistrations = () => {
       marginTop: '8px',
       boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
       zIndex: 1000,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      minWidth: '180px'
     },
     downloadMenuItem: {
       padding: '14px 20px',
@@ -271,31 +388,29 @@ const AllRegistrations = () => {
       color: '#667eea'
     },
     statsBar: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '30px',
-      marginBottom: '40px',
-      flexWrap: 'wrap'
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+      gap: '20px',
+      marginBottom: '40px'
     },
     statItem: {
       background: 'rgba(255,255,255,0.15)',
       backdropFilter: 'blur(10px)',
-      padding: '16px 24px',
+      padding: '20px',
       borderRadius: '16px',
       border: '1px solid rgba(255,255,255,0.2)',
-      textAlign: 'center',
-      minWidth: '120px'
+      textAlign: 'center'
     },
     statNumber: {
-      fontSize: '1.8rem',
+      fontSize: '2rem',
       fontWeight: '700',
       color: '#ffffff',
-      display: 'block'
+      display: 'block',
+      marginBottom: '8px'
     },
     statLabel: {
       fontSize: '0.9rem',
-      color: 'rgba(255,255,255,0.8)',
-      marginTop: '4px'
+      color: 'rgba(255,255,255,0.8)'
     },
     loadingContainer: {
       display: 'flex',
@@ -328,6 +443,134 @@ const AllRegistrations = () => {
       fontSize: '1rem',
       color: 'rgba(255,255,255,0.7)'
     },
+    // Table Styles
+    tableContainer: {
+      background: 'rgba(255,255,255,0.95)',
+      backdropFilter: 'blur(20px)',
+      borderRadius: '20px',
+      border: '1px solid rgba(255,255,255,0.3)',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+      overflow: 'hidden'
+    },
+    tableWrapper: {
+      overflowX: 'auto'
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse'
+    },
+    tableHeader: {
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      color: '#ffffff'
+    },
+    tableHeaderCell: {
+      padding: '16px 20px',
+      textAlign: 'left',
+      fontWeight: '600',
+      fontSize: '0.95rem',
+      borderBottom: '1px solid rgba(255,255,255,0.2)'
+    },
+    tableHeaderCellCenter: {
+      padding: '16px 20px',
+      textAlign: 'center',
+      fontWeight: '600',
+      fontSize: '0.95rem',
+      borderBottom: '1px solid rgba(255,255,255,0.2)'
+    },
+    tableBody: {
+      background: '#ffffff'
+    },
+    tableRow: {
+      transition: 'all 0.2s ease',
+      borderBottom: '1px solid #e2e8f0'
+    },
+    tableRowEven: {
+      background: 'rgba(248, 250, 252, 0.5)'
+    },
+    tableRowHover: {
+      background: 'rgba(102, 126, 234, 0.05)',
+      transform: 'scale(1.01)'
+    },
+    tableCell: {
+      padding: '16px 20px',
+      color: '#2d3748',
+      fontSize: '0.9rem',
+      verticalAlign: 'middle'
+    },
+    tableCellCenter: {
+      padding: '16px 20px',
+      textAlign: 'center',
+      verticalAlign: 'middle'
+    },
+    typeIcon: {
+      width: '32px',
+      height: '32px',
+      borderRadius: '8px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: '12px',
+      color: '#ffffff'
+    },
+    individualTypeIcon: {
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    },
+    groupTypeIcon: {
+      background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+    },
+    typeContainer: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    typeName: {
+      fontWeight: '600',
+      color: '#2d3748',
+      textTransform: 'capitalize'
+    },
+    nameCell: {
+      fontWeight: '600',
+      color: '#1a202c'
+    },
+    memberCount: {
+      fontWeight: '600',
+      color: '#1a202c'
+    },
+    memberPreview: {
+      fontSize: '0.8rem',
+      color: '#718096',
+      marginTop: '2px'
+    },
+    actionButtons: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px'
+    },
+    actionButton: {
+      padding: '8px',
+      border: 'none',
+      borderRadius: '8px',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    viewButton: {
+      color: '#667eea',
+      background: 'rgba(102, 126, 234, 0.1)'
+    },
+    viewButtonHover: {
+      background: 'rgba(102, 126, 234, 0.2)'
+    },
+    deleteButtonTable: {
+      color: '#e53e3e',
+      background: 'rgba(229, 62, 62, 0.1)'
+    },
+    deleteButtonTableHover: {
+      background: 'rgba(229, 62, 62, 0.2)'
+    },
+    // Card Styles (Original)
     card: {
       background: 'rgba(255,255,255,0.95)',
       backdropFilter: 'blur(20px)',
@@ -351,7 +594,7 @@ const AllRegistrations = () => {
       paddingBottom: '16px',
       borderBottom: '2px solid #f0f0f0'
     },
-    typeIcon: {
+    cardTypeIcon: {
       width: '48px',
       height: '48px',
       borderRadius: '12px',
@@ -364,10 +607,10 @@ const AllRegistrations = () => {
       color: '#ffffff',
       textShadow: '0 1px 2px rgba(0,0,0,0.1)'
     },
-    individualIcon: {
+    cardIndividualIcon: {
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
     },
-    groupIcon: {
+    cardGroupIcon: {
       background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
     },
     cardTitle: {
@@ -483,6 +726,20 @@ const AllRegistrations = () => {
       top: '20px',
       right: '20px',
       zIndex: 9999
+    },
+    chevronIcon: {
+      transition: 'transform 0.2s ease'
+    },
+    chevronRotated: {
+      transform: 'rotate(180deg)'
+    },
+    filterCount: {
+      background: 'rgba(102,126,234,0.1)',
+      color: '#667eea',
+      padding: '4px 8px',
+      borderRadius: '12px',
+      fontSize: '0.8rem',
+      fontWeight: '600'
     }
   };
 
@@ -492,16 +749,6 @@ const AllRegistrations = () => {
       100% { transform: rotate(360deg); }
     }
   `;
-
-  const individualRegs = registrations.filter(reg => reg.type === 'individual');
-  const groupRegs = registrations.filter(reg => reg.type === 'group');
-
-  const downloadOptions = [
-    { label: 'Download as CSV', action: downloadAsCSV, icon: '📊' },
-    { label: 'Download as JSON', action: downloadAsJSON, icon: '🔧' },
-    { label: 'Download as XML', action: downloadAsXML, icon: '📋' },
-    { label: 'Download as TXT', action: downloadAsTXT, icon: '📄' }
-  ];
 
   return (
     <>
@@ -529,13 +776,15 @@ const AllRegistrations = () => {
 
           {!loading && registrations.length > 0 && (
             <>
+              {/* Action Bar */}
               <div style={styles.actionBar}>
-                <div style={styles.downloadContainer}>
+                {/* Filter Dropdown */}
+                <div style={styles.filterContainer}>
                   <button
-                    style={styles.downloadButton}
-                    onClick={() => setShowDownloadMenu(!showDownloadMenu)}
+                    style={styles.filterButton}
+                    onClick={() => setShowFilterMenu(!showFilterMenu)}
                     onMouseEnter={(e) => {
-                      Object.assign(e.currentTarget.style, styles.downloadButtonHover);
+                      Object.assign(e.currentTarget.style, styles.filterButtonHover);
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
@@ -544,48 +793,134 @@ const AllRegistrations = () => {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Download size={20} style={{ marginRight: '8px' }} />
-                      Download Data
+                      <Filter size={20} style={{ marginRight: '8px' }} />
+                      {filterOptions.find(opt => opt.value === filterType)?.label}
                     </div>
-                    <ChevronDown size={16} style={{ 
-                      transform: showDownloadMenu ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.2s ease'
-                    }} />
+                    <ChevronDown 
+                      size={16} 
+                      style={{
+                        ...styles.chevronIcon,
+                        ...(showFilterMenu ? styles.chevronRotated : {})
+                      }}
+                    />
                   </button>
                   
-                  {showDownloadMenu && (
-                    <div style={styles.downloadMenu}>
-                      {downloadOptions.map((option, index) => (
+                  {showFilterMenu && (
+                    <div style={styles.filterMenu}>
+                      {filterOptions.map((option) => (
                         <div
-                          key={index}
-                          style={styles.downloadMenuItem}
+                          key={option.value}
+                          style={styles.filterMenuItem}
                           onClick={() => {
-                            option.action();
-                            setShowDownloadMenu(false);
+                            setFilterType(option.value);
+                            setShowFilterMenu(false);
                           }}
                           onMouseEnter={(e) => {
-                            Object.assign(e.currentTarget.style, styles.downloadMenuItemHover);
+                            Object.assign(e.currentTarget.style, styles.filterMenuItemHover);
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = 'transparent';
                             e.currentTarget.style.color = '#2d3748';
                           }}
                         >
-                          <span style={{ marginRight: '12px', fontSize: '1.1rem' }}>
-                            {option.icon}
-                          </span>
-                          {option.label}
+                          <span>{option.label}</span>
+                          <span style={styles.filterCount}>{option.count}</span>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
+
+                {/* Right Controls */}
+                <div style={styles.rightControls}>
+                  {/* View Toggle */}
+                  <div style={styles.viewToggle}>
+                    <button
+                      style={{
+                        ...styles.viewToggleButton,
+                        ...(viewMode === 'table' ? styles.viewToggleActive : styles.viewToggleInactive)
+                      }}
+                      onClick={() => setViewMode('table')}
+                    >
+                      Table
+                    </button>
+                    <button
+                      style={{
+                        ...styles.viewToggleButton,
+                        ...(viewMode === 'card' ? styles.viewToggleActive : styles.viewToggleInactive)
+                      }}
+                      onClick={() => setViewMode('card')}
+                    >
+                      Cards
+                    </button>
+                  </div>
+
+                  {/* Download Dropdown */}
+                  <div style={styles.downloadContainer}>
+                    <button
+                      style={styles.downloadButton}
+                      onClick={() => setShowDownloadMenu(!showDownloadMenu)}
+                      onMouseEnter={(e) => {
+                        Object.assign(e.currentTarget.style, styles.downloadButtonHover);
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Download size={20} style={{ marginRight: '8px' }} />
+                        Download Data
+                      </div>
+                      <ChevronDown 
+                        size={16} 
+                        style={{
+                          ...styles.chevronIcon,
+                          ...(showDownloadMenu ? styles.chevronRotated : {})
+                        }}
+                      />
+                    </button>
+                    
+                    {showDownloadMenu && (
+                      <div style={styles.downloadMenu}>
+                        {downloadOptions.map((option, index) => (
+                          <div
+                            key={index}
+                            style={styles.downloadMenuItem}
+                            onClick={() => {
+                              option.action();
+                              setShowDownloadMenu(false);
+                            }}
+                            onMouseEnter={(e) => {
+                              Object.assign(e.currentTarget.style, styles.downloadMenuItemHover);
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = 'transparent';
+                              e.currentTarget.style.color = '#2d3748';
+                            }}
+                          >
+                            <span style={{ marginRight: '12px', fontSize: '1.1rem' }}>
+                              {option.icon}
+                            </span>
+                            {option.label}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
+              {/* Statistics */}
               <div style={styles.statsBar}>
                 <div style={styles.statItem}>
-                  <span style={styles.statNumber}>{registrations.length}</span>
-                  <span style={styles.statLabel}>Total</span>
+                  <span style={styles.statNumber}>{filteredRegistrations.length}</span>
+                  <span style={styles.statLabel}>
+                    {filterType === 'all' ? 'Total Registrations' : 
+                     filterType === 'individual' ? 'Individual Registrations' : 
+                     'Group Registrations'}
+                  </span>
                 </div>
                 <div style={styles.statItem}>
                   <span style={styles.statNumber}>{individualRegs.length}</span>
@@ -599,129 +934,255 @@ const AllRegistrations = () => {
             </>
           )}
 
+          {/* Content */}
           {loading ? (
             <div style={styles.loadingContainer}>
               <div style={styles.spinner}></div>
             </div>
-          ) : registrations.length === 0 ? (
+          ) : filteredRegistrations.length === 0 ? (
             <div style={styles.emptyState}>
               <p style={styles.emptyText}>No registrations found</p>
-              <p style={styles.emptySubtext}>New registrations will appear here</p>
+              <p style={styles.emptySubtext}>
+                {filterType !== 'all' 
+                  ? `No ${filterType} registrations available` 
+                  : 'New registrations will appear here'
+                }
+              </p>
             </div>
-          ) : (
-            registrations.map((reg) => (
-              <div
-                key={reg._id}
-                style={styles.card}
-                onMouseEnter={(e) => {
-                  Object.assign(e.currentTarget.style, styles.cardHover);
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
-                }}
-              >
-                <div style={styles.cardHeader}>
-                  <div style={{
-                    ...styles.typeIcon,
-                    ...(reg.type === 'individual' ? styles.individualIcon : styles.groupIcon)
-                  }}>
-                    {reg.type === 'individual' ? <User size={20} /> : <Users size={20} />}
-                  </div>
-                  <div>
-                    <h3 style={styles.cardTitle}>
-                      {reg.type === 'individual' ? reg.name : reg.groupName}
-                    </h3>
-                    <p style={styles.cardSubtitle}>
-                      {reg.type === 'individual' ? 'Individual Registration' : 'Group Registration'}
-                    </p>
-                  </div>
-                </div>
-
-                {reg.type === 'individual' ? (
-                  <div style={styles.infoGrid}>
-                    <div style={styles.infoItem}>
-                      <Building size={16} style={styles.infoIcon} />
-                      <div>
-                        <div style={styles.infoLabel}>Department</div>
-                        <div style={styles.infoValue}>{reg.department}</div>
-                      </div>
-                    </div>
-                    <div style={styles.infoItem}>
-                      <Phone size={16} style={styles.infoIcon} />
-                      <div>
-                        <div style={styles.infoLabel}>Phone</div>
-                        <div style={styles.infoValue}>{reg.phone}</div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div style={styles.infoGrid}>
-                      <div style={styles.infoItem}>
-                        <UserCheck size={16} style={styles.infoIcon} />
-                        <div>
-                          <div style={styles.infoLabel}>Group Leader</div>
-                          <div style={styles.infoValue}>{reg.leadername}</div>
-                          <div style={styles.infoValue}>{reg.leaderphone}</div>
-                        </div>
-                      </div>
-                      <div style={styles.infoItem}>
-                        <Users size={16} style={styles.infoIcon} />
-                        <div>
-                          <div style={styles.infoLabel}>Members</div>
-                          <div style={styles.infoValue}>{reg.members.length} people</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div style={styles.memberSection}>
-                      <div style={styles.memberHeader}>
-                        <Users size={20} style={{ marginRight: '8px' }} />
-                        Team Members
-                      </div>
-                      <ul style={styles.memberList}>
-                        {reg.members.map((member, index) => (
-                          <li
-                            key={index}
-                            style={styles.memberItem}
-                            onMouseEnter={(e) => {
-                              Object.assign(e.currentTarget.style, styles.memberItemHover);
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = 'translateX(0)';
-                              e.currentTarget.style.boxShadow = 'none';
-                            }}
-                          >
-                            <User size={16} style={{ color: '#667eea' }} />
-                            <div style={styles.memberInfo}>
-                              <div style={styles.memberName}>{member.name}</div>
-                              <div style={styles.memberDetails}>
-                                {member.department} • {member.phone}
+          ) : viewMode === 'table' ? (
+            /* Table View */
+            <div style={styles.tableContainer}>
+              <div style={styles.tableWrapper}>
+                <table style={styles.table}>
+                  <thead style={styles.tableHeader}>
+                    <tr>
+                      <th style={styles.tableHeaderCell}>Type</th>
+                      <th style={styles.tableHeaderCell}>Name/Group</th>
+                      <th style={styles.tableHeaderCell}>Department/Leader</th>
+                      <th style={styles.tableHeaderCell}>Phone</th>
+                      <th style={styles.tableHeaderCell}>Members</th>
+                      <th style={styles.tableHeaderCellCenter}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody style={styles.tableBody}>
+                    {filteredRegistrations.map((reg, index) => (
+                      <tr 
+                        key={reg._id}
+                        style={{
+                          ...styles.tableRow,
+                          ...(index % 2 === 0 ? {} : styles.tableRowEven)
+                        }}
+                        onMouseEnter={(e) => {
+                          Object.assign(e.currentTarget.style, styles.tableRowHover);
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = index % 2 === 0 ? '#ffffff' : 'rgba(248, 250, 252, 0.5)';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        <td style={styles.tableCell}>
+                          <div style={styles.typeContainer}>
+                            <div style={{
+                              ...styles.typeIcon,
+                              ...(reg.type === 'individual' ? styles.individualTypeIcon : styles.groupTypeIcon)
+                            }}>
+                              {reg.type === 'individual' ? <User size={16} /> : <Users size={16} />}
+                            </div>
+                            <span style={styles.typeName}>{reg.type}</span>
+                          </div>
+                        </td>
+                        <td style={styles.tableCell}>
+                          <div style={styles.nameCell}>
+                            {reg.type === 'individual' ? reg.name : reg.groupName}
+                          </div>
+                        </td>
+                        <td style={styles.tableCell}>
+                          {reg.type === 'individual' ? reg.department : reg.leadername}
+                        </td>
+                        <td style={styles.tableCell}>
+                          {reg.type === 'individual' ? reg.phone : reg.leaderphone}
+                        </td>
+                        <td style={styles.tableCell}>
+                          {reg.type === 'individual' ? (
+                            <span style={{ color: '#718096' }}>-</span>
+                          ) : (
+                            <div>
+                              <div style={styles.memberCount}>
+                                {reg.members.length} members
+                              </div>
+                              <div style={styles.memberPreview}>
+                                {reg.members.slice(0, 2).map(m => m.name).join(', ')}
+                                {reg.members.length > 2 && ` +${reg.members.length - 2} more`}
                               </div>
                             </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </>
-                )}
-
-                <button
-                  style={styles.deleteButton}
-                  onClick={() => handleDelete(reg._id)}
+                          )}
+                        </td>
+                        <td style={styles.tableCellCenter}>
+                          <div style={styles.actionButtons}>
+                            {reg.type === 'group' && (
+                              <button 
+                                style={{
+                                  ...styles.actionButton,
+                                  ...styles.viewButton
+                                }}
+                                title="View Details"
+                                onClick={() => {
+                                  const memberDetails = reg.members.map((m, i) => 
+                                    `${i+1}. ${m.name} - ${m.department} (${m.phone})`
+                                  ).join('\n');
+                                  alert(`Group Details:\n\n${memberDetails}`);
+                                }}
+                                onMouseEnter={(e) => {
+                                  Object.assign(e.currentTarget.style, styles.viewButtonHover);
+                                }}
+                                onMouseLeave={(e) => {
+                                  Object.assign(e.currentTarget.style, styles.viewButton);
+                                }}
+                              >
+                                <Eye size={16} />
+                              </button>
+                            )}
+                            <button 
+                              style={{
+                                ...styles.actionButton,
+                                ...styles.deleteButtonTable
+                              }}
+                              title="Delete Registration"
+                              onClick={() => handleDelete(reg._id)}
+                              onMouseEnter={(e) => {
+                                Object.assign(e.currentTarget.style, styles.deleteButtonTableHover);
+                              }}
+                              onMouseLeave={(e) => {
+                                Object.assign(e.currentTarget.style, styles.deleteButtonTable);
+                              }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            /* Card View (Original Layout) */
+            <div>
+              {filteredRegistrations.map((reg) => (
+                <div
+                  key={reg._id}
+                  style={styles.card}
                   onMouseEnter={(e) => {
-                    Object.assign(e.currentTarget.style, styles.deleteButtonHover);
+                    Object.assign(e.currentTarget.style, styles.cardHover);
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,107,0.3)';
+                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
                   }}
                 >
-                  <Trash2 size={16} style={{ marginRight: '6px' }} />
-                  Delete
-                </button>
-              </div>
-            ))
+                  <div style={styles.cardHeader}>
+                    <div style={{
+                      ...styles.cardTypeIcon,
+                      ...(reg.type === 'individual' ? styles.cardIndividualIcon : styles.cardGroupIcon)
+                    }}>
+                      {reg.type === 'individual' ? <User size={20} /> : <Users size={20} />}
+                    </div>
+                    <div>
+                      <h3 style={styles.cardTitle}>
+                        {reg.type === 'individual' ? reg.name : reg.groupName}
+                      </h3>
+                      <p style={styles.cardSubtitle}>
+                        {reg.type === 'individual' ? 'Individual Registration' : 'Group Registration'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {reg.type === 'individual' ? (
+                    <div style={styles.infoGrid}>
+                      <div style={styles.infoItem}>
+                        <Building size={16} style={styles.infoIcon} />
+                        <div>
+                          <div style={styles.infoLabel}>Department</div>
+                          <div style={styles.infoValue}>{reg.department}</div>
+                        </div>
+                      </div>
+                      <div style={styles.infoItem}>
+                        <Phone size={16} style={styles.infoIcon} />
+                        <div>
+                          <div style={styles.infoLabel}>Phone</div>
+                          <div style={styles.infoValue}>{reg.phone}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={styles.infoGrid}>
+                        <div style={styles.infoItem}>
+                          <UserCheck size={16} style={styles.infoIcon} />
+                          <div>
+                            <div style={styles.infoLabel}>Group Leader</div>
+                            <div style={styles.infoValue}>{reg.leadername}</div>
+                            <div style={styles.infoValue}>{reg.leaderphone}</div>
+                          </div>
+                        </div>
+                        <div style={styles.infoItem}>
+                          <Users size={16} style={styles.infoIcon} />
+                          <div>
+                            <div style={styles.infoLabel}>Members</div>
+                            <div style={styles.infoValue}>{reg.members.length} people</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={styles.memberSection}>
+                        <div style={styles.memberHeader}>
+                          <Users size={20} style={{ marginRight: '8px' }} />
+                          Team Members
+                        </div>
+                        <ul style={styles.memberList}>
+                          {reg.members.map((member, index) => (
+                            <li
+                              key={index}
+                              style={styles.memberItem}
+                              onMouseEnter={(e) => {
+                                Object.assign(e.currentTarget.style, styles.memberItemHover);
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateX(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                              }}
+                            >
+                              <User size={16} style={{ color: '#667eea' }} />
+                              <div style={styles.memberInfo}>
+                                <div style={styles.memberName}>{member.name}</div>
+                                <div style={styles.memberDetails}>
+                                  {member.department} • {member.phone}
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  )}
+
+                  <button
+                    style={styles.deleteButton}
+                    onClick={() => handleDelete(reg._id)}
+                    onMouseEnter={(e) => {
+                      Object.assign(e.currentTarget.style, styles.deleteButtonHover);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,107,0.3)';
+                    }}
+                  >
+                    <Trash2 size={16} style={{ marginRight: '6px' }} />
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
