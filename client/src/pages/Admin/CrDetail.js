@@ -113,9 +113,70 @@ const CrDetail = () => {
     return name.includes('photo') || name.includes('image') || name.includes('picture') || name.includes('url');
   };
 
+  const convertToDirectImageUrl = (url) => {
+    if (!url || typeof url !== 'string') return url;
+    
+    // Google Drive URL conversion
+    if (url.includes('drive.google.com')) {
+      // Extract file ID from various Google Drive URL formats
+      let fileId = null;
+      
+      // Format: https://drive.google.com/open?id=FILE_ID
+      if (url.includes('open?id=')) {
+        fileId = url.match(/open\?id=([a-zA-Z0-9_-]+)/)?.[1];
+      }
+      // Format: https://drive.google.com/file/d/FILE_ID/view
+      else if (url.includes('/file/d/')) {
+        fileId = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+      }
+      // Format: https://drive.google.com/uc?id=FILE_ID
+      else if (url.includes('uc?id=')) {
+        fileId = url.match(/uc\?id=([a-zA-Z0-9_-]+)/)?.[1];
+      }
+      
+      if (fileId) {
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      }
+    }
+    
+    // Google Photos URL conversion
+    if (url.includes('photos.google.com') || url.includes('googleusercontent.com')) {
+      return url;
+    }
+    
+    // Dropbox URL conversion
+    if (url.includes('dropbox.com') && !url.includes('raw=1')) {
+      return url.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
+    }
+    
+    return url;
+  };
+
   const isImageUrl = (url) => {
     if (!url || typeof url !== 'string') return false;
-    return /\.(jpg|jpeg|png|gif|bmp|webp|svg)(\?.*)?$/i.test(url) || url.includes('image') || url.includes('photo');
+    
+    // Convert URL first
+    const convertedUrl = convertToDirectImageUrl(url);
+    
+    // Check for image file extensions
+    if (/\.(jpg|jpeg|png|gif|bmp|webp|svg)(\?.*)?$/i.test(convertedUrl)) {
+      return true;
+    }
+    
+    // Check for common image hosting services
+    if (convertedUrl.includes('drive.google.com/uc?export=view') ||
+        convertedUrl.includes('googleusercontent.com') ||
+        convertedUrl.includes('imgur.com') ||
+        convertedUrl.includes('cloudinary.com') ||
+        convertedUrl.includes('aws.amazon.com') ||
+        convertedUrl.includes('googleapis.com') ||
+        convertedUrl.includes('image') || 
+        convertedUrl.includes('photo') ||
+        convertedUrl.includes('picture')) {
+      return true;
+    }
+    
+    return false;
   };
 
   const renderTableView = () => {
@@ -168,7 +229,7 @@ const CrDetail = () => {
                           {editForm[header] && isImageUrl(editForm[header]) && (
                             <div className="image-preview-small">
                               <img 
-                                src={editForm[header]} 
+                                src={convertToDirectImageUrl(editForm[header])} 
                                 alt="Preview"
                                 onError={(e) => {
                                   e.target.style.display = 'none';
@@ -190,7 +251,7 @@ const CrDetail = () => {
                         {isImageField(header) && cr[header] && isImageUrl(cr[header]) ? (
                           <div className="table-image-container">
                             <img 
-                              src={cr[header]} 
+                              src={convertToDirectImageUrl(cr[header])} 
                               alt="CR Image"
                               className="table-image"
                               onError={(e) => {
@@ -303,7 +364,7 @@ const CrDetail = () => {
                           {editForm[key] && isImageUrl(editForm[key]) && (
                             <div className="card-image-preview">
                               <img 
-                                src={editForm[key]} 
+                                src={convertToDirectImageUrl(editForm[key])} 
                                 alt="Preview"
                                 onError={(e) => {
                                   e.target.style.display = 'none';
@@ -330,7 +391,7 @@ const CrDetail = () => {
                         {isImageField(key) && value && isImageUrl(value) ? (
                           <div className="card-image-container">
                             <img 
-                              src={value} 
+                              src={convertToDirectImageUrl(value)} 
                               alt="CR Image"
                               className="card-image"
                               onError={(e) => {
