@@ -6,6 +6,8 @@ import authRoutes from "./routes/authRoute.js";
 import productRoutes from "./routes/productRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import User from "./models/userModel.js";
 import communityRoutes from './routes/communityRoute.js';
 import sponsersRoute from "./routes/sponsersRoute.js";
@@ -19,6 +21,10 @@ dotenv.config();
 
 // Database config
 connectDB();
+
+// esmodule fix for dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Rest object
 const app = express();
@@ -106,9 +112,12 @@ app.put("/api/v1/users/:id", requireSignIn, isAdmin, async (req, res) => {
   }
 });
 
-// Rest API
-app.get("/", (req, res) => {
-  res.send("<h1>Welcome to ecommerce app</h1>");
+// static files for frontend
+app.use(express.static(path.join(__dirname, "./client/build")));
+
+// handle react routing, return all requests to React app
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
 // Port
