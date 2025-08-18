@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -368,9 +369,12 @@ const Dsocsa = () => {
               </div>
               <div className="section-items">
                 {section.items.map((item, itemIndex) => (
-                  <div
+                  <NavLink
                     key={item.path}
-                    className={`nav-item ${activeItem === item.path ? 'active' : ''}`}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `nav-item ${isActive ? 'active' : ''}`
+                    }
                     onClick={() => handleItemClick(item.path)}
                   >
                     <div className="nav-icon">
@@ -381,7 +385,7 @@ const Dsocsa = () => {
                       <div className="nav-description">{item.description}</div>
                     </div>
                     <ChevronRight className="nav-arrow" />
-                  </div>
+                  </NavLink>
                 ))}
               </div>
             </div>
