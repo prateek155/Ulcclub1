@@ -39,7 +39,7 @@ const Dsocsa = () => {
           description: "Detail Od Association Member's",
         },
         {
-          path: "/dashboard/admin/product",
+          path: "/dashboard/admin/Cr",
           icon: <Package />,
           title: "CR/LR",
           description: "Detail Of All Cr and Lr",
