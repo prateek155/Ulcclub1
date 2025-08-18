@@ -28,6 +28,8 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.469.0",
     "mern-stack": "file:",
+    "url": "^0.11.0",
+    "path": "^0.12.7",
     "moment": "^2.30.1",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0",
