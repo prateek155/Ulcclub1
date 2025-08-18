@@ -92,7 +92,7 @@ const Attendance = () => {
   // Mock API functions (replace with actual API calls)
   const saveAttendanceToBackend = async (date, attendance) => {
     try {
-      const { data }= await axios.post('https://ulcclub1.onrender.com/api/v1/attandance/attendance', {
+      const { data }= await axios.post('https://ulcclub1.onrender.com/api/v1/attendance/addattendance', {
     
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, attendance })
@@ -105,7 +105,7 @@ const Attendance = () => {
 
   const saveLockStatusToBackend = async (date, isLocked) => {
     try {
-      const { data } = await axios.post('https://ulcclub1.onrender.com/api/v1/attandance/attendance/lock', {
+      const { data } = await axios.post('https://ulcclub1.onrender.com/api/v1/attendance/lock-toggle', {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, isLocked })
       });
