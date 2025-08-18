@@ -92,7 +92,7 @@ const Attendance = () => {
   // Mock API functions (replace with actual API calls)
   const saveAttendanceToBackend = async (date, attendance) => {
     try {
-      const { data }= await axios.post('https://ulcclub1.onrender.com/api/v1/attendance/addattendance', {
+      const { data }= await axios.post('https://ulcclub1.onrender.com/api/v1/attendance/add-attendance', {
     
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, attendance })
