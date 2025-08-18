@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Trash2, Save, X, FileText, Calendar, User, Hash, CheckCircle } from 'lucide-react';
+import { Edit, Trash2, Save, X, FileText, Calendar, User, Hash, CheckCircle, Grid, List, Image } from 'lucide-react';
 
 const CrDetail = () => {
   const [crData, setCrData] = useState([]);
@@ -7,6 +7,7 @@ const CrDetail = () => {
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
 
   const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vReqReFYhCPifufwhRbClckxDQpX7iyw5cfo23mxyoWocY82HqGI9yATLuBew66yHEp9g8_2WyseZ64/pub?output=csv';
 
@@ -103,7 +104,258 @@ const CrDetail = () => {
     if (name.includes('name') || name.includes('user')) return <User className="field-icon" />;
     if (name.includes('id') || name.includes('number')) return <Hash className="field-icon" />;
     if (name.includes('status')) return <CheckCircle className="field-icon" />;
+    if (name.includes('photo') || name.includes('image') || name.includes('picture')) return <Image className="field-icon" />;
     return <FileText className="field-icon" />;
+  };
+
+  const isImageField = (fieldName) => {
+    const name = fieldName.toLowerCase();
+    return name.includes('photo') || name.includes('image') || name.includes('picture') || name.includes('url');
+  };
+
+  const isImageUrl = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    return /\.(jpg|jpeg|png|gif|bmp|webp|svg)(\?.*)?$/i.test(url) || url.includes('image') || url.includes('photo');
+  };
+
+  const renderTableView = () => {
+    if (filteredData.length === 0) {
+      return (
+        <div className="no-data">
+          <FileText className="no-data-icon" />
+          <p>No CR records found</p>
+        </div>
+      );
+    }
+
+    const headers = Object.keys(filteredData[0]).filter(key => key !== 'id');
+
+    return (
+      <div className="table-container">
+        <table className="cr-table">
+          <thead>
+            <tr>
+              <th>CR ID</th>
+              {headers.map(header => (
+                <th key={header}>
+                  <div className="header-content">
+                    {getFieldIcon(header)}
+                    <span>{header}</span>
+                  </div>
+                </th>
+              ))}
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.map((cr) => (
+              <tr key={cr.id} className={editingId === cr.id ? 'editing' : ''}>
+                <td>
+                  <span className="cr-id">CR #{cr.id}</span>
+                </td>
+                {headers.map(header => (
+                  <td key={header}>
+                    {editingId === cr.id ? (
+                      isImageField(header) ? (
+                        <div className="image-edit-container">
+                          <input
+                            type="text"
+                            value={editForm[header] || ''}
+                            onChange={(e) => handleInputChange(header, e.target.value)}
+                            className="field-input"
+                            placeholder="Image URL"
+                          />
+                          {editForm[header] && isImageUrl(editForm[header]) && (
+                            <div className="image-preview-small">
+                              <img 
+                                src={editForm[header]} 
+                                alt="Preview"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <input
+                          type="text"
+                          value={editForm[header] || ''}
+                          onChange={(e) => handleInputChange(header, e.target.value)}
+                          className="field-input"
+                        />
+                      )
+                    ) : (
+                      <div className="field-content">
+                        {isImageField(header) && cr[header] && isImageUrl(cr[header]) ? (
+                          <div className="table-image-container">
+                            <img 
+                              src={cr[header]} 
+                              alt="CR Image"
+                              className="table-image"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                              }}
+                            />
+                            <div className="image-fallback" style={{display: 'none'}}>
+                              <Image size={20} />
+                              <span>No Image</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="field-text">{cr[header] || 'N/A'}</span>
+                        )}
+                      </div>
+                    )}
+                  </td>
+                ))}
+                <td>
+                  <div className="table-actions">
+                    {editingId === cr.id ? (
+                      <>
+                        <button onClick={handleSave} className="save-btn">
+                          <Save size={16} />
+                        </button>
+                        <button onClick={handleCancel} className="cancel-btn">
+                          <X size={16} />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => handleEdit(cr)} className="edit-btn">
+                          <Edit size={16} />
+                        </button>
+                        <button onClick={() => handleDelete(cr.id)} className="delete-btn">
+                          <Trash2 size={16} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderCardView = () => {
+    if (filteredData.length === 0) {
+      return (
+        <div className="no-data">
+          <FileText className="no-data-icon" />
+          <p>No CR records found</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="cr-grid">
+        {filteredData.map((cr) => (
+          <div key={cr.id} className="cr-card">
+            <div className="card-header">
+              <span className="cr-id">CR #{cr.id}</span>
+              <div className="card-actions">
+                {editingId === cr.id ? (
+                  <>
+                    <button onClick={handleSave} className="save-btn">
+                      <Save size={16} />
+                    </button>
+                    <button onClick={handleCancel} className="cancel-btn">
+                      <X size={16} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => handleEdit(cr)} className="edit-btn">
+                      <Edit size={16} />
+                    </button>
+                    <button onClick={() => handleDelete(cr.id)} className="delete-btn">
+                      <Trash2 size={16} />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            
+            <div className="card-content">
+              {Object.entries(cr).map(([key, value]) => {
+                if (key === 'id') return null;
+                
+                return (
+                  <div key={key} className="field-row">
+                    <div className="field-label">
+                      {getFieldIcon(key)}
+                      <span>{key}</span>
+                    </div>
+                    {editingId === cr.id ? (
+                      isImageField(key) ? (
+                        <div className="image-edit-container">
+                          <input
+                            type="text"
+                            value={editForm[key] || ''}
+                            onChange={(e) => handleInputChange(key, e.target.value)}
+                            className="field-input"
+                            placeholder="Image URL"
+                          />
+                          {editForm[key] && isImageUrl(editForm[key]) && (
+                            <div className="card-image-preview">
+                              <img 
+                                src={editForm[key]} 
+                                alt="Preview"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  e.target.nextSibling.style.display = 'flex';
+                                }}
+                              />
+                              <div className="image-fallback" style={{display: 'none'}}>
+                                <Image size={24} />
+                                <span>Invalid Image</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <input
+                          type="text"
+                          value={editForm[key] || ''}
+                          onChange={(e) => handleInputChange(key, e.target.value)}
+                          className="field-input"
+                        />
+                      )
+                    ) : (
+                      <div className="field-value">
+                        {isImageField(key) && value && isImageUrl(value) ? (
+                          <div className="card-image-container">
+                            <img 
+                              src={value} 
+                              alt="CR Image"
+                              className="card-image"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                              }}
+                            />
+                            <div className="image-fallback" style={{display: 'none'}}>
+                              <Image size={24} />
+                              <span>No Image</span>
+                            </div>
+                          </div>
+                        ) : (
+                          value || 'N/A'
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   if (loading) {
@@ -142,81 +394,38 @@ const CrDetail = () => {
         </div>
       </div>
 
-      <div className="search-section">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search CR records..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
+      <div className="controls-section">
+        <div className="controls-container">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search CR records..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          <div className="view-toggle">
+            <button 
+              className={`toggle-btn ${viewMode === 'card' ? 'active' : ''}`}
+              onClick={() => setViewMode('card')}
+            >
+              <Grid size={20} />
+              Cards
+            </button>
+            <button 
+              className={`toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
+              onClick={() => setViewMode('table')}
+            >
+              <List size={20} />
+              Table
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="data-section">
-        {filteredData.length === 0 ? (
-          <div className="no-data">
-            <FileText className="no-data-icon" />
-            <p>No CR records found</p>
-          </div>
-        ) : (
-          <div className="cr-grid">
-            {filteredData.map((cr) => (
-              <div key={cr.id} className="cr-card">
-                <div className="card-header">
-                  <span className="cr-id">CR #{cr.id}</span>
-                  <div className="card-actions">
-                    {editingId === cr.id ? (
-                      <>
-                        <button onClick={handleSave} className="save-btn">
-                          <Save size={16} />
-                        </button>
-                        <button onClick={handleCancel} className="cancel-btn">
-                          <X size={16} />
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button onClick={() => handleEdit(cr)} className="edit-btn">
-                          <Edit size={16} />
-                        </button>
-                        <button onClick={() => handleDelete(cr.id)} className="delete-btn">
-                          <Trash2 size={16} />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="card-content">
-                  {Object.entries(cr).map(([key, value]) => {
-                    if (key === 'id') return null;
-                    
-                    return (
-                      <div key={key} className="field-row">
-                        <div className="field-label">
-                          {getFieldIcon(key)}
-                          <span>{key}</span>
-                        </div>
-                        {editingId === cr.id ? (
-                          <input
-                            type="text"
-                            value={editForm[key] || ''}
-                            onChange={(e) => handleInputChange(key, e.target.value)}
-                            className="field-input"
-                          />
-                        ) : (
-                          <div className="field-value">{value || 'N/A'}</div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        {viewMode === 'card' ? renderCardView() : renderTableView()}
       </div>
 
       <style jsx>{`
@@ -240,7 +449,7 @@ const CrDetail = () => {
         }
 
         .header-content {
-          max-width: 1200px;
+          max-width: 1400px;
           margin: 0 auto;
           display: flex;
           justify-content: space-between;
@@ -302,14 +511,24 @@ const CrDetail = () => {
           color: #b0c4de;
         }
 
-        .search-section {
+        .controls-section {
           padding: 2rem;
           background: rgba(0, 0, 0, 0.2);
         }
 
-        .search-container {
-          max-width: 1200px;
+        .controls-container {
+          max-width: 1400px;
           margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .search-container {
+          flex: 1;
+          min-width: 300px;
         }
 
         .search-input {
@@ -334,9 +553,41 @@ const CrDetail = () => {
           color: #888;
         }
 
+        .view-toggle {
+          display: flex;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          padding: 0.5rem;
+          backdrop-filter: blur(10px);
+        }
+
+        .toggle-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.5rem;
+          border: none;
+          background: transparent;
+          color: #b0c4de;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-weight: 500;
+        }
+
+        .toggle-btn.active {
+          background: #00d4ff;
+          color: #0f0f23;
+        }
+
+        .toggle-btn:hover:not(.active) {
+          background: rgba(0, 212, 255, 0.2);
+          color: #00d4ff;
+        }
+
         .data-section {
           padding: 2rem;
-          max-width: 1200px;
+          max-width: 1400px;
           margin: 0 auto;
         }
 
@@ -386,6 +637,7 @@ const CrDetail = () => {
           50% { transform: translate(-50%, -50%) scale(1.2); }
         }
 
+        /* Card View Styles */
         .cr-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -448,46 +700,6 @@ const CrDetail = () => {
           justify-content: center;
         }
 
-        .edit-btn {
-          background: rgba(0, 212, 255, 0.2);
-          color: #00d4ff;
-        }
-
-        .edit-btn:hover {
-          background: #00d4ff;
-          color: #0f0f23;
-        }
-
-        .delete-btn {
-          background: rgba(255, 69, 58, 0.2);
-          color: #ff453a;
-        }
-
-        .delete-btn:hover {
-          background: #ff453a;
-          color: white;
-        }
-
-        .save-btn {
-          background: rgba(52, 199, 89, 0.2);
-          color: #34c759;
-        }
-
-        .save-btn:hover {
-          background: #34c759;
-          color: white;
-        }
-
-        .cancel-btn {
-          background: rgba(255, 149, 0, 0.2);
-          color: #ff9500;
-        }
-
-        .cancel-btn:hover {
-          background: #ff9500;
-          color: white;
-        }
-
         .card-content {
           display: flex;
           flex-direction: column;
@@ -535,12 +747,216 @@ const CrDetail = () => {
           color: #e0e0e0;
           font-size: 1rem;
           transition: all 0.3s ease;
+          width: 100%;
         }
 
         .field-input:focus {
           outline: none;
           border-color: #00d4ff;
           box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Image Styles for Card View */
+        .card-image-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 80px;
+          height: 80px;
+          margin: 0 auto;
+        }
+
+        .card-image {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid #00d4ff;
+          box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .card-image-preview {
+          margin-top: 0.5rem;
+          display: flex;
+          justify-content: center;
+        }
+
+        .card-image-preview img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #00d4ff;
+        }
+
+        .image-edit-container {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        /* Table View Styles */
+        .table-container {
+          overflow-x: auto;
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(0, 212, 255, 0.2);
+          backdrop-filter: blur(10px);
+        }
+
+        .cr-table {
+          width: 100%;
+          border-collapse: collapse;
+          min-width: 800px;
+        }
+
+        .cr-table th {
+          background: rgba(0, 212, 255, 0.1);
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+          color: #00d4ff;
+          border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+          position: sticky;
+          top: 0;
+          z-index: 10;
+        }
+
+        .header-content {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .cr-table td {
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          color: #e0e0e0;
+          vertical-align: middle;
+        }
+
+        .cr-table tr:hover {
+          background: rgba(0, 212, 255, 0.05);
+        }
+
+        .cr-table tr.editing {
+          background: rgba(0, 212, 255, 0.1);
+        }
+
+        .table-actions {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+
+        .table-actions button {
+          padding: 0.5rem;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Image Styles for Table View */
+        .table-image-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 60px;
+        }
+
+        .table-image {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #00d4ff;
+          box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .image-preview-small {
+          margin-top: 0.5rem;
+          display: flex;
+          justify-content: center;
+        }
+
+        .image-preview-small img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #00d4ff;
+        }
+
+        .field-content {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .field-text {
+          word-break: break-word;
+          max-width: 200px;
+        }
+
+        .image-fallback {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.25rem;
+          color: #888;
+          font-size: 0.8rem;
+          padding: 0.5rem;
+          border: 1px dashed #555;
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          justify-content: center;
+        }
+
+        /* Button Styles */
+        .edit-btn {
+          background: rgba(0, 212, 255, 0.2);
+          color: #00d4ff;
+        }
+
+        .edit-btn:hover {
+          background: #00d4ff;
+          color: #0f0f23;
+        }
+
+        .delete-btn {
+          background: rgba(255, 69, 58, 0.2);
+          color: #ff453a;
+        }
+
+        .delete-btn:hover {
+          background: #ff453a;
+          color: white;
+        }
+
+        .save-btn {
+          background: rgba(52, 199, 89, 0.2);
+          color: #34c759;
+        }
+
+        .save-btn:hover {
+          background: #34c759;
+          color: white;
+        }
+
+        .cancel-btn {
+          background: rgba(255, 149, 0, 0.2);
+          color: #ff9500;
+        }
+
+        .cancel-btn:hover {
+          background: #ff9500;
+          color: white;
         }
 
         .no-data {
@@ -554,6 +970,41 @@ const CrDetail = () => {
           height: 4rem;
           margin-bottom: 1rem;
           color: #555;
+        }
+
+        @media (max-width: 1024px) {
+          .controls-container {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .search-container {
+            min-width: auto;
+          }
+
+          .view-toggle {
+            align-self: center;
+          }
+
+          .cr-table {
+            font-size: 0.9rem;
+          }
+
+          .cr-table th,
+          .cr-table td {
+            padding: 0.75rem 0.5rem;
+          }
+
+          .table-image,
+          .table-image-container {
+            width: 50px;
+            height: 50px;
+          }
+
+          .table-image {
+            width: 50px;
+            height: 50px;
+          }
         }
 
         @media (max-width: 768px) {
@@ -572,6 +1023,72 @@ const CrDetail = () => {
 
           .title-section h1 {
             font-size: 2rem;
+          }
+
+          .controls-section {
+            padding: 1rem;
+          }
+
+          .data-section {
+            padding: 1rem;
+          }
+
+          .table-container {
+            border-radius: 8px;
+          }
+
+          .cr-table {
+            font-size: 0.8rem;
+          }
+
+          .cr-table th,
+          .cr-table td {
+            padding: 0.5rem 0.25rem;
+          }
+
+          .field-text {
+            max-width: 150px;
+          }
+
+          .table-image,
+          .table-image-container {
+            width: 40px;
+            height: 40px;
+          }
+
+          .table-image {
+            width: 40px;
+            height: 40px;
+          }
+
+          .card-image,
+          .card-image-container {
+            width: 60px;
+            height: 60px;
+          }
+
+          .card-image {
+            width: 60px;
+            height: 60px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .table-container {
+            margin: -1rem;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+          }
+
+          .toggle-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+          }
+
+          .toggle-btn svg {
+            width: 16px;
+            height: 16px;
           }
         }
       `}</style>
