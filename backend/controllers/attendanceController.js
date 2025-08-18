@@ -1,4 +1,4 @@
-import attendanceModel from "../models/attendanceModel";
+import attendanceModel from "../models/attendanceModel.js";
 import moment from "moment";
 
 // Create or update attendance for a specific date
