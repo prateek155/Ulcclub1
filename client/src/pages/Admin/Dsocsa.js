@@ -30,49 +30,43 @@ const Dsocsa = () => {
       ]
     },
     {
-      title: "Event Management",
+      title: "Department Management",
       items: [
         {
           path: "/dashboard/admin/create-product",
           icon: <PlusCircle />,
-          title: "Create New Event",
-          description: "Add upcoming events",
+          title: "Association ",
+          description: "Detail Od Association Member's",
         },
         {
           path: "/dashboard/admin/product",
           icon: <Package />,
-          title: "All Events",
-          description: "Manage event catalog",
+          title: "CR/LR",
+          description: "Detail Of All Cr and Lr",
         },
         {
           path: "/dashboard/admin/all-registrations",
           icon: <ClipboardList />,
-          title: "Event Registrations",
-          description: "Registration management",
+          title: "Faculty",
+          description: "Faculty Detail's",
         }
       ]
     },
     {
-      title: "User Administration",
+      title: "Event Management",
       items: [
         {
           path: "/dashboard/admin/users",
           icon: <Users />,
-          title: "User Details",
-          description: "User account management",
+          title: "Event Approval's",
+          description: "Approved Events ",
         },
         {
           path: "/dashboard/admin/community-member",
           icon: <Users />,
-          title: "Community Members",
-          description: "Community oversight",
+          title: "Volunteer",
+          description: "Volunteer's Detail's",
         },
-        {
-          path: "/dashboard/admin/participent",
-          icon: <BookOpen />,
-          title: "Participants",
-          description: "Event participants",
-        }
       ]
     },
     {
@@ -81,14 +75,20 @@ const Dsocsa = () => {
         {
           path: "/dashboard/admin/feedback-management",
           icon: <MessageSquare />,
-          title: "Feedback Management",
-          description: "User feedback system",
+          title: "Meeting Sechdul's",
+          description: "Association meeting's",
         },
         {
           path: "/dashboard/admin/response",
           icon: <ClipboardList />,
-          title: "Response Analytics",
-          description: "Response tracking",
+          title: "Attandance",
+          description: "Members Attands",
+        },
+        {
+          path: "/dashboard/admin/participent",
+          icon: <BookOpen />,
+          title: "Topic",
+          description: "Agenda of the meetings",
         }
       ]
     },
@@ -98,14 +98,14 @@ const Dsocsa = () => {
         {
           path: "/dashboard/admin/sponser",
           icon: <Building2 />,
-          title: "Sponsor Management",
-          description: "Partnership oversight",
+          title: "Funds",
+          description: "department funds Approved by Treasurer",
         },
         {
           path: "/dashboard/admin/skills",
           icon: <BookOpen />,
-          title: "Skills Database",
-          description: "Competency framework",
+          title: "Action's",
+          description: "Take any action of any student",
         }
       ]
     }
