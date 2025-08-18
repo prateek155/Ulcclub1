@@ -13,7 +13,7 @@ import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // ✅ Create or Update attendance for a specific date
-router.post("/", requireSignIn, isAdmin, createOrUpdateAttendance);
+router.post("/add-attendance", requireSignIn, isAdmin, createOrUpdateAttendance);
 
 // ✅ Get attendance for a specific date
 router.get("/date/:date", requireSignIn, getAttendanceByDate);
