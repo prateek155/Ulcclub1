@@ -29,6 +29,7 @@ import Eventparticipent from "./pages/Eventparticipent.js";
 import Participent from "./pages/Admin/Participent.js";
 import Dsocsa from "./pages/Admin/Dsocsa.js";
 import Attendance from "./pages/Admin/Attendance.js";
+import CrDetail from "./pages/Admin/CrDetail.js";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               <Route path="admin/skills" element={<Skills />} />
               <Route path="admin/participent" element={<Participent />} />
               <Route path="admin/attendance" element={<Attendance />} />
+              <Route path="admin/Cr" element={<CrDetail />} />
             </Route>
 
             {/* Additional Routes */}
