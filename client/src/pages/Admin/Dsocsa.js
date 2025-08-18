@@ -13,7 +13,7 @@ import {
   Settings
 } from "lucide-react";
 
-const AdminMenu = () => {
+const Dsocsa = () => {
   const [activeItem, setActiveItem] = useState("/dashboard/admin");
 
   const menuSections = [
@@ -400,4 +400,4 @@ const AdminMenu = () => {
   );
 };
 
-export default AdminMenu;
+export default Dsocsa;
