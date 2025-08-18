@@ -27,6 +27,7 @@ import Response from "./pages/Admin/Response.js";
 import Skills from "./pages/Admin/Skills.js";
 import Eventparticipent from "./pages/Eventparticipent.js";
 import Participent from "./pages/Admin/Participent.js";
+import Dsocsa from "./pages/Admin/Dsocsa.js";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
 
             <Route path="/dashboard" element={<AdminRoute />}>
               <Route path="admin" element={<AdminDashboard />} />
+              <Route path="admin/Dsocsa" element={<Dsocsa />} />
               <Route path="admin/create-product" element={<CreateProduct />} />
               <Route path="admin/product" element={<Products />} />
               <Route path="admin/users" element={<User />} />
