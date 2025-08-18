@@ -79,7 +79,7 @@ const Dsocsa = () => {
           description: "Association meeting's",
         },
         {
-          path: "/dashboard/admin/response",
+          path: "/dashboard/admin/attendance",
           icon: <ClipboardList />,
           title: "Attandance",
           description: "Members Attands",
