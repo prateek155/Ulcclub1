@@ -8,6 +8,7 @@ import {
   PlusCircle,
   MessageSquare,
   ClipboardList,
+  Landmark,
   BookOpen
 } from "lucide-react";
 
@@ -17,6 +18,11 @@ const AdminMenu = () => {
       path: "/dashboard/admin",
       icon: <FolderPlus />,
       title: "Dashboard",
+    },
+    {
+      path: "/dashboard/admin/Dsocsa",
+      icon: <Landmark />,
+      title: "Dsocsa",
     },
     {
       path: "/dashboard/admin/create-product",
