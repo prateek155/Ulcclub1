@@ -62,7 +62,7 @@ const Dsocsa = () => {
           description: "Approved Events ",
         },
         {
-          path: "/dashboard/admin/community-member",
+          path: "/dashboard/admin/volunteer",
           icon: <Users />,
           title: "Volunteer",
           description: "Volunteer's Detail's",
