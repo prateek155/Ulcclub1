@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { DollarSign, BarChart2, PlusCircle, Trash2, ChevronDown, Download, Calendar, Clock, UserCheck, Tag, Info } from 'lucide-react'; // Added Calendar, Clock, Tag, Info icons
+import React, { useState, useEffect } from "react";
+import Layout from "./../../components/Layout/Layout"; // Assuming this handles the main app layout
+import AdminMenu from "./../../components/Layout/AdminMenu"; // Assuming this is your sidebar menu
+import { toast } from "react-toastify"; // No ToastContainer here, assumes global ToastContainer in App.js
+import axios from "axios";
+import { DollarSign, BarChart2, PlusCircle, Trash2, ChevronDown, Download, Calendar, Clock, UserCheck, Tag, Info } from 'lucide-react';
 
-// Add Fund Component (Integrated directly into Funds.js)
+// Separate component for the Add Fund Form for better organization
 const AddFundForm = ({ onFundAdded, onCancel }) => {
     const [formData, setFormData] = useState({
         date: '',
@@ -20,25 +21,27 @@ const AddFundForm = ({ onFundAdded, onCancel }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.date || !formData.time || !formData.approvedBy || !formData.amount) {
-            toast.error('Please fill in all required fields.');
+        // Frontend validation
+        if (!formData.date || !formData.time || !formData.approvedBy || !formData.amount || !formData.category || !formData.type) {
+            toast.error("Please fill in all required fields.");
             return;
         }
 
         try {
-            // Using the correct backend route for creating funds
-            const response = await axios.post('https://ulcclub1.onrender.com/api/v1/fund/create', formData);
-            if (response.data.success) {
-                toast.success("Fund entry added successfully!");
-                onFundAdded(); // Trigger refresh and switch view
+            // Send as JSON, not FormData, as there are no file uploads
+            const response = await axios.post(
+                'https://ulcclub1.onrender.com/api/v1/fund/create',
+                formData // Sending plain JSON object
+            );
+
+            if (response.data?.success) {
+                toast.success("Fund Entry Created Successfully");
+                onFundAdded(); // Call parent callback to refresh data and switch view
                 setFormData({ // Reset form after successful submission
                     date: '',
                     time: '',
@@ -49,11 +52,11 @@ const AddFundForm = ({ onFundAdded, onCancel }) => {
                     type: 'Income'
                 });
             } else {
-                toast.error("Failed to add fund entry.");
+                toast.error(response.data?.message || "Failed to create fund entry.");
             }
         } catch (error) {
             console.error(error);
-            toast.error("Server error while adding fund entry.");
+            toast.error("Something went wrong while creating fund entry.");
         }
     };
 
@@ -82,44 +85,48 @@ const AddFundForm = ({ onFundAdded, onCancel }) => {
             flexDirection: 'column'
         },
         label: {
-            fontSize: '14px',
-            fontWeight: 'bold',
-            marginBottom: '8px',
-            color: '#4a5568',
+            display: 'block',
+            fontSize: '0.95rem',
+            fontWeight: '600',
+            color: '#374151',
+            marginBottom: '0.5rem',
+            display: 'flex',
+            alignItems: 'center'
         },
         input: {
-            padding: '12px',
-            border: '1px solid #e2e8f0',
-            borderRadius: '10px',
-            fontSize: '16px',
-            background: '#edf2f7',
-            color: '#2d3748',
-            transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-            outline: 'none'
-        },
-        inputFocus: {
-            borderColor: '#667eea',
-            boxShadow: '0 0 0 3px rgba(102,126,234,0.3)'
+            width: '100%',
+            padding: '0.875rem 1rem',
+            border: '2px solid #e5e7eb',
+            borderRadius: '12px',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(10px)',
+            boxSizing: 'border-box'
         },
         select: {
-            padding: '12px',
-            border: '1px solid #e2e8f0',
-            borderRadius: '10px',
-            fontSize: '16px',
-            background: '#edf2f7',
-            color: '#2d3748',
-            outline: 'none'
+            width: '100%',
+            padding: '0.875rem 1rem',
+            border: '2px solid #e5e7eb',
+            borderRadius: '12px',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(10px)',
+            boxSizing: 'border-box'
         },
         textarea: {
-            padding: '12px',
-            border: '1px solid #e2e8f0',
-            borderRadius: '10px',
-            fontSize: '16px',
-            background: '#edf2f7',
-            color: '#2d3748',
-            minHeight: '80px',
+            width: '100%',
+            padding: '0.875rem 1rem',
+            border: '2px solid #e5e7eb',
+            borderRadius: '12px',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(10px)',
             resize: 'vertical',
-            outline: 'none'
+            minHeight: '100px',
+            boxSizing: 'border-box'
         },
         buttonGroup: {
             display: 'flex',
@@ -134,7 +141,7 @@ const AddFundForm = ({ onFundAdded, onCancel }) => {
             fontSize: '1rem',
             fontWeight: '600',
             cursor: 'pointer',
-            background: 'linear-gradient(45deg, #667eea, #764ba2)',
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             transition: 'all 0.3s ease',
             boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
@@ -150,135 +157,173 @@ const AddFundForm = ({ onFundAdded, onCancel }) => {
             color: '#4a5568',
             transition: 'all 0.3s ease',
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-        }
+        },
+        sectionTitle: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            fontSize: '1.4rem',
+            fontWeight: '600',
+            color: '#2d3748',
+            marginBottom: '1.5rem',
+            paddingBottom: '0.75rem',
+            borderBottom: '2px solid #e2e8f0'
+        },
+        formHeader: {
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            textAlign: 'center',
+            borderRadius: '15px 15px 0 0' // Rounded top corners for the header
+        },
+        headerTitle: {
+            fontSize: '2rem',
+            fontWeight: '700',
+            margin: '0 0 0.5rem 0',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        },
+        headerSubtitle: {
+            fontSize: '1rem',
+            opacity: 0.9,
+            margin: 0,
+        },
     };
 
     return (
         <div style={styles.formContainer}>
-            <h2 style={{ fontSize: '1.8rem', color: '#2d3748', marginBottom: '25px' }}>➕ Add New Fund Entry</h2>
-            <form style={styles.form} onSubmit={handleSubmit}>
-                <div style={styles.formRow}>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="date">
-                            <Calendar size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                            Date *
-                        </label>
-                        <input
-                            type="date"
-                            name="date"
-                            id="date"
-                            value={formData.date}
-                            onChange={handleInputChange}
-                            style={styles.input}
-                            required
-                        />
+            <div style={styles.formHeader}>
+                <h2 style={styles.headerTitle}>Add New Fund Entry</h2>
+                <p style={styles.headerSubtitle}>Input financial transaction details</p>
+            </div>
+            <form style={{ padding: '2.5rem' }} onSubmit={handleSubmit}>
+                {/* Basic Information */}
+                <div style={{ marginBottom: '3rem' }}>
+                    <h3 style={styles.sectionTitle}>
+                        <DollarSign size={20} color="#667eea" />
+                        Fund Details
+                    </h3>
+                    <div style={styles.formGrid}>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label} htmlFor="date">
+                                <Calendar size={16} style={{ marginRight: '5px' }} />
+                                Date *
+                            </label>
+                            <input
+                                style={styles.input}
+                                type="date"
+                                name="date" // Corrected name to lowercase 'd'
+                                id="date"
+                                value={formData.date}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label} htmlFor="time">
+                                <Clock size={16} style={{ marginRight: '5px' }} />
+                                Time *
+                            </label>
+                            <input
+                                style={styles.input}
+                                type="time"
+                                name="time" // Added time field
+                                id="time"
+                                value={formData.time}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label} htmlFor="amount">
+                                <DollarSign size={16} style={{ marginRight: '5px' }} />
+                                Amount *
+                            </label>
+                            <input
+                                style={styles.input}
+                                type="number"
+                                name="amount"
+                                id="amount"
+                                value={formData.amount}
+                                onChange={handleInputChange}
+                                placeholder="Enter amount"
+                                step="0.01"
+                                required
+                            />
+                        </div>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label} htmlFor="approvedBy">
+                                <UserCheck size={16} style={{ marginRight: '5px' }} />
+                                Approved By *
+                            </label>
+                            <input
+                                style={styles.input}
+                                type="text"
+                                name="approvedBy"
+                                id="approvedBy"
+                                value={formData.approvedBy}
+                                onChange={handleInputChange}
+                                placeholder="Enter approver name"
+                                required
+                            />
+                        </div>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label} htmlFor="type">
+                                <Tag size={16} style={{ marginRight: '5px' }} />
+                                Type *
+                            </label>
+                            <select
+                                style={styles.select}
+                                name="type"
+                                id="type"
+                                value={formData.type}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <option value="Income">Income</option>
+                                <option value="Expense">Expense</option>
+                            </select>
+                        </div>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label} htmlFor="category">
+                                <Tag size={16} style={{ marginRight: '5px' }} />
+                                Category *
+                            </label>
+                            <select
+                                style={styles.select}
+                                name="category"
+                                id="category"
+                                value={formData.category}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <option value="">Select category</option>
+                                {categories.map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
+                    
                     <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="time">
-                            <Clock size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                            Time *
+                        <label style={styles.label} htmlFor="description">
+                            <Info size={16} style={{ marginRight: '5px' }} />
+                            Description (Optional)
                         </label>
-                        <input
-                            type="time"
-                            name="time"
-                            id="time"
-                            value={formData.time}
+                        <textarea
+                            style={styles.textarea}
+                            name="description"
+                            id="description"
+                            value={formData.description}
                             onChange={handleInputChange}
-                            style={styles.input}
-                            required
+                            placeholder="Add a brief description of the fund entry"
+                            rows="3"
                         />
                     </div>
                 </div>
 
-                <div style={styles.formRow}>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="approvedBy">
-                            <UserCheck size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                            Approved By *
-                        </label>
-                        <input
-                            type="text"
-                            name="approvedBy"
-                            id="approvedBy"
-                            value={formData.approvedBy}
-                            onChange={handleInputChange}
-                            style={styles.input}
-                            placeholder="Enter approver name"
-                            required
-                        />
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="amount">
-                            <DollarSign size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                            Amount *
-                        </label>
-                        <input
-                            type="number"
-                            name="amount"
-                            id="amount"
-                            value={formData.amount}
-                            onChange={handleInputChange}
-                            style={styles.input}
-                            placeholder="Enter amount"
-                            step="0.01"
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div style={styles.formRow}>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="type">
-                            <Tag size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                            Type
-                        </label>
-                        <select
-                            name="type"
-                            id="type"
-                            value={formData.type}
-                            onChange={handleInputChange}
-                            style={styles.select}
-                        >
-                            <option value="Income">Income</option>
-                            <option value="Expense">Expense</option>
-                        </select>
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="category">
-                            <Tag size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                            Category
-                        </label>
-                        <select
-                            name="category"
-                            id="category"
-                            value={formData.category}
-                            onChange={handleInputChange}
-                            style={styles.select}
-                        >
-                            {categories.map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="description">
-                        <Info size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-                        Description
-                    </label>
-                    <textarea
-                        name="description"
-                        id="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        style={styles.textarea}
-                        placeholder="Enter description (optional)"
-                    />
-                </div>
-
+                {/* Submit Button */}
                 <div style={styles.buttonGroup}>
-                    <button type="button" onClick={onCancel} style={styles.cancelButton}>
+                    <button type="button" style={styles.cancelButton} onClick={onCancel}>
                         Cancel
                     </button>
                     <button type="submit" style={styles.submitButton}>
@@ -302,11 +347,11 @@ const Funds = () => {
     const fetchFunds = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get('https://ulcclub1.onrender.com/api/v1/fund/all-funds');
-            if (data.success) {
-                const fetchedFunds = data.funds;
-                setFunds(fetchedFunds);
-                calculateSummary(fetchedFunds);
+            // Corrected data access from backend response
+            const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/fund/all-funds"); 
+            if (data?.success) {
+                setFunds(data.funds); // Changed from data.users to data.funds
+                calculateSummary(data.funds);
             } else {
                 toast.error("Failed to fetch funds");
             }
@@ -321,11 +366,11 @@ const Funds = () => {
     const calculateSummary = (fundsList) => {
         const totalIncome = fundsList
             .filter(f => f.type === 'Income')
-            .reduce((sum, f) => sum + f.amount, 0);
+            .reduce((sum, f) => sum + parseFloat(f.amount), 0); // Ensure amount is parsed as float
 
         const totalExpenses = fundsList
             .filter(f => f.type === 'Expense')
-            .reduce((sum, f) => sum + f.amount, 0);
+            .reduce((sum, f) => sum + parseFloat(f.amount), 0); // Ensure amount is parsed as float
         
         setSummary({
             totalEntries: fundsList.length,
@@ -339,7 +384,7 @@ const Funds = () => {
             const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/fund/delete/${id}`);
             if (data.success) {
                 toast.success("Fund entry deleted successfully");
-                fetchFunds();
+                fetchFunds(); // Refresh the list
             } else {
                 toast.error("Failed to delete fund entry");
             }
@@ -350,7 +395,7 @@ const Funds = () => {
     };
 
     const handleFundAdded = () => {
-        setCurrentView('all'); // Switch back to 'all' view
+        setCurrentView('all'); // Switch back to 'all' view after adding
         fetchFunds(); // Refresh the funds list
     };
 
@@ -367,7 +412,7 @@ const Funds = () => {
                 `"${fund.approvedBy.replace(/"/g, '""')}"`,
                 fund.amount,
                 `"${fund.category.replace(/"/g, '""')}"`,
-                `"${fund.description.replace(/"/g, '""')}"`,
+                `"${fund.description ? fund.description.replace(/"/g, '""') : ''}"`, // Handle optional description
                 fund.type
             ].join(',');
             csvContent += row + '\n';
@@ -409,13 +454,13 @@ const Funds = () => {
         let xmlContent = '<?xml version="1.0" encoding="UTF-8"?>\n<funds>\n';
         funds.forEach(fund => {
             xmlContent += `  <fund>\n`;
-            xmlContent += `    <id>${fund._id}</id>\n`; // Include ID for consistency
+            xmlContent += `    <id>${fund._id}</id>\n`;
             xmlContent += `    <date>${fund.date}</date>\n`;
             xmlContent += `    <time>${fund.time}</time>\n`;
             xmlContent += `    <approvedBy>${fund.approvedBy}</approvedBy>\n`;
             xmlContent += `    <amount>${fund.amount}</amount>\n`;
             xmlContent += `    <category>${fund.category}</category>\n`;
-            xmlContent += `    <description>${fund.description}</description>\n`;
+            xmlContent += `    <description>${fund.description || ''}</description>\n`; // Handle optional description
             xmlContent += `    <type>${fund.type}</type>\n`;
             xmlContent += `  </fund>\n`;
         });
@@ -434,33 +479,54 @@ const Funds = () => {
 
     useEffect(() => {
         fetchFunds();
-    }, []);
+    }, []); // Only run on component mount
 
     const styles = {
-        container: {
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            padding: '40px 20px',
-            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        product: {
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            minHeight: "100vh",
+            padding: "20px",
         },
-        content: {
-            maxWidth: '1000px',
-            margin: '0 auto'
+        container: {
+            padding: '2rem',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            minHeight: '100vh',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        },
+        row: {
+            display: 'flex',
+            gap: '2rem',
+            maxWidth: '1400px',
+            margin: '0 auto',
+            flexWrap: 'wrap'
+        },
+        sidebarCol: {
+            flex: '0 0 250px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            padding: '1rem',
+            height: 'fit-content',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)'
+        },
+        mainContentCol: {
+            flex: '1',
+            minWidth: '600px'
         },
         header: {
             textAlign: 'center',
-            marginBottom: '40px'
+            marginBottom: '40px',
+            color: '#fff'
         },
         heading: {
             fontSize: '2.5rem',
             fontWeight: '700',
-            color: '#ffffff',
             marginBottom: '8px',
             textShadow: '0 2px 4px rgba(0,0,0,0.1)'
         },
         subtitle: {
             fontSize: '1.1rem',
-            color: 'rgba(255,255,255,0.9)',
+            opacity: 0.9,
             fontWeight: '400'
         },
         navBar: {
@@ -711,12 +777,6 @@ const Funds = () => {
         deleteButtonHover: {
             transform: 'translateY(-2px)',
             boxShadow: '0 6px 20px rgba(255,107,107,0.4)'
-        },
-        toastContainer: {
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            zIndex: 9999
         }
     };
 
@@ -734,208 +794,203 @@ const Funds = () => {
     ];
 
     return (
-        <>
+        <Layout title={"Fund Management"}> {/* Corrected title here */}
             <style>{keyframes}</style>
-            <div style={styles.container}>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={3000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="colored"
-                    style={styles.toastContainer}
-                />
-                
-                <div style={styles.content}>
-                    <div style={styles.header}>
-                        <h1 style={styles.heading}>Fund Management</h1>
-                        <p style={styles.subtitle}>Manage and view all financial transactions</p>
-                    </div>
+            <div style={styles.product}>
+                {/* ToastContainer should ideally be in App.js or a higher-level Layout */}
+                {/* <ToastContainer /> */} 
+                <div style={styles.container}>
+                    <div style={styles.row}> {/* Use flex container as defined in styles.row */}
+                        <div style={styles.sidebarCol}>
+                            <AdminMenu /> {/* Admin menu sidebar */}
+                        </div>
+                        <div style={styles.mainContentCol}>
+                            <div style={styles.header}>
+                                <h1 style={styles.heading}>Fund Management Dashboard</h1> {/* General dashboard heading */}
+                                <p style={styles.subtitle}>Oversee all financial transactions and summaries.</p>
+                            </div>
 
-                    <div style={styles.navBar}>
-                        <button
-                            style={{ ...styles.navButton, ...(currentView === 'all' ? styles.navButtonActive : {}) }}
-                            onClick={() => setCurrentView('all')}
-                        >
-                            <BarChart2 size={20} style={{ marginRight: '8px' }} />
-                            View All Funds
-                        </button>
-                        <button
-                            style={{ ...styles.navButton, ...(currentView === 'add' ? styles.navButtonActive : {}) }}
-                            onClick={() => setCurrentView('add')}
-                        >
-                            <PlusCircle size={20} style={{ marginRight: '8px' }} />
-                            Add New Fund
-                        </button>
-                    </div>
+                            <div style={styles.navBar}>
+                                <button
+                                    style={{ ...styles.navButton, ...(currentView === 'all' ? styles.navButtonActive : {}) }}
+                                    onClick={() => setCurrentView('all')}
+                                >
+                                    <BarChart2 size={20} style={{ marginRight: '8px' }} />
+                                    View All Funds
+                                </button>
+                                <button
+                                    style={{ ...styles.navButton, ...(currentView === 'add' ? styles.navButtonActive : {}) }}
+                                    onClick={() => setCurrentView('add')}
+                                >
+                                    <PlusCircle size={20} style={{ marginRight: '8px' }} />
+                                    Add New Fund
+                                </button>
+                            </div>
 
-                    {currentView === 'add' ? (
-                        <AddFundForm onFundAdded={handleFundAdded} onCancel={() => setCurrentView('all')} />
-                    ) : (
-                        <>
-                            {!loading && funds.length > 0 && (
+                            {currentView === 'add' ? (
+                                <AddFundForm onFundAdded={handleFundAdded} onCancel={() => setCurrentView('all')} />
+                            ) : (
                                 <>
-                                    <div style={styles.actionBar}>
-                                        <div style={styles.downloadContainer}>
-                                            <button
-                                                style={styles.downloadButton}
-                                                onClick={() => setShowDownloadMenu(!showDownloadMenu)}
-                                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.downloadButtonHover)}
+                                    {!loading && funds.length > 0 && (
+                                        <>
+                                            <div style={styles.actionBar}>
+                                                <div style={styles.downloadContainer}>
+                                                    <button
+                                                        style={styles.downloadButton}
+                                                        onClick={() => setShowDownloadMenu(!showDownloadMenu)}
+                                                        onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.downloadButtonHover)}
+                                                        onMouseLeave={(e) => {
+                                                            e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                                            e.currentTarget.style.transform = 'translateY(0)';
+                                                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
+                                                        }}
+                                                    >
+                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <Download size={20} style={{ marginRight: '8px' }} />
+                                                            Download Data
+                                                        </div>
+                                                        <ChevronDown size={16} style={{ 
+                                                            transform: showDownloadMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+                                                            transition: 'transform 0.2s ease'
+                                                        }} />
+                                                    </button>
+                                                    
+                                                    {showDownloadMenu && (
+                                                        <div style={styles.downloadMenu}>
+                                                            {downloadOptions.map((option, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    style={styles.downloadMenuItem}
+                                                                    onClick={() => {
+                                                                        option.action();
+                                                                        setShowDownloadMenu(false);
+                                                                    }}
+                                                                    onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.downloadMenuItemHover)}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.currentTarget.style.background = 'transparent';
+                                                                        e.currentTarget.style.color = '#2d3748';
+                                                                    }}
+                                                                >
+                                                                    {option.label}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div style={styles.statsBar}>
+                                                <div style={styles.statItem}>
+                                                    <span style={styles.statNumber}>₹{summary.totalIncome.toFixed(2)}</span>
+                                                    <span style={styles.statLabel}>Total Income</span>
+                                                </div>
+                                                <div style={styles.statItem}>
+                                                    <span style={styles.statNumber}>₹{summary.totalExpenses.toFixed(2)}</span>
+                                                    <span style={styles.statLabel}>Total Expenses</span>
+                                                </div>
+                                                <div style={styles.statItem}>
+                                                    <span style={styles.statNumber}>₹{(summary.totalIncome - summary.totalExpenses).toFixed(2)}</span>
+                                                    <span style={styles.statLabel}>Net Balance</span>
+                                                </div>
+                                                <div style={styles.statItem}>
+                                                    <span style={styles.statNumber}>{summary.totalEntries}</span>
+                                                    <span style={styles.statLabel}>Total Entries</span>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {loading ? (
+                                        <div style={styles.loadingContainer}>
+                                            <div style={styles.spinner}></div>
+                                        </div>
+                                    ) : funds.length === 0 ? (
+                                        <div style={styles.emptyState}>
+                                            <p style={styles.emptyText}>No fund entries found</p>
+                                            <p style={styles.emptySubtext}>Add new entries to view them here</p>
+                                        </div>
+                                    ) : (
+                                        funds.map((fund) => (
+                                            <div
+                                                key={fund._id}
+                                                style={styles.card}
+                                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
                                                 onMouseLeave={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
                                                     e.currentTarget.style.transform = 'translateY(0)';
-                                                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
+                                                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
                                                 }}
                                             >
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Download size={20} style={{ marginRight: '8px' }} />
-                                                    Download Data
+                                                <div style={styles.cardHeader}>
+                                                    <div style={{
+                                                        ...styles.typeIcon,
+                                                        ...(fund.type === 'Income' ? styles.incomeIcon : styles.expenseIcon)
+                                                    }}>
+                                                        {fund.type === 'Income' ? <PlusCircle size={20} /> : <BarChart2 size={20} />}
+                                                    </div>
+                                                    <div>
+                                                        <h3 style={styles.cardTitle}>
+                                                            {fund.type}
+                                                        </h3>
+                                                        <p style={styles.cardSubtitle}>
+                                                            {fund.category}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <ChevronDown size={16} style={{ 
-                                                    transform: showDownloadMenu ? 'rotate(180deg)' : 'rotate(0deg)',
-                                                    transition: 'transform 0.2s ease'
-                                                }} />
-                                            </button>
-                                            
-                                            {showDownloadMenu && (
-                                                <div style={styles.downloadMenu}>
-                                                    {downloadOptions.map((option, index) => (
-                                                        <div
-                                                            key={index}
-                                                            style={styles.downloadMenuItem}
-                                                            onClick={() => {
-                                                                option.action();
-                                                                setShowDownloadMenu(false);
-                                                            }}
-                                                            onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.downloadMenuItemHover)}
-                                                            onMouseLeave={(e) => {
-                                                                e.currentTarget.style.background = 'transparent';
-                                                                e.currentTarget.style.color = '#2d3748';
-                                                            }}
-                                                        >
-                                                            {option.label}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
 
-                                    <div style={styles.statsBar}>
-                                        <div style={styles.statItem}>
-                                            <span style={styles.statNumber}>₹{summary.totalIncome.toFixed(2)}</span>
-                                            <span style={styles.statLabel}>Total Income</span>
-                                        </div>
-                                        <div style={styles.statItem}>
-                                            <span style={styles.statNumber}>₹{summary.totalExpenses.toFixed(2)}</span>
-                                            <span style={styles.statLabel}>Total Expenses</span>
-                                        </div>
-                                        <div style={styles.statItem}>
-                                            <span style={styles.statNumber}>₹{(summary.totalIncome - summary.totalExpenses).toFixed(2)}</span>
-                                            <span style={styles.statLabel}>Net Balance</span>
-                                        </div>
-                                        <div style={styles.statItem}>
-                                            <span style={styles.statNumber}>{summary.totalEntries}</span>
-                                            <span style={styles.statLabel}>Total Entries</span>
-                                        </div>
-                                    </div>
+                                                <div style={styles.infoGrid}>
+                                                    <div style={styles.infoItem}>
+                                                        <DollarSign size={16} style={styles.infoIcon} />
+                                                        <div>
+                                                            <div style={styles.infoLabel}>Amount</div>
+                                                            <div style={styles.infoValue}>₹{fund.amount.toFixed(2)}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div style={styles.infoItem}>
+                                                        <Calendar size={16} style={{...styles.infoIcon, color: '#F063A4'}}/>
+                                                        <div>
+                                                            <div style={styles.infoLabel}>Date & Time</div>
+                                                            <div style={styles.infoValue}>{fund.date} at {fund.time}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div style={styles.infoItem}>
+                                                        <UserCheck size={16} style={{...styles.infoIcon, color: '#32D48B'}}/>
+                                                        <div>
+                                                            <div style={styles.infoLabel}>Approved By</div>
+                                                            <div style={styles.infoValue}>{fund.approvedBy}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {fund.description && (
+                                                    <div style={styles.infoItem}>
+                                                        <Info size={16} style={{...styles.infoIcon, color: '#FFBD59'}}/>
+                                                        <div>
+                                                            <div style={styles.infoLabel}>Description</div>
+                                                            <div style={styles.infoValue}>{fund.description}</div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <button
+                                                    style={styles.deleteButton}
+                                                    onClick={() => handleDelete(fund._id)}
+                                                    onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.deleteButtonHover)}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.transform = 'translateY(0)';
+                                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,107,0.3)';
+                                                    }}
+                                                >
+                                                    <Trash2 size={16} style={{ marginRight: '6px' }} />
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
                                 </>
                             )}
-
-                            {loading ? (
-                                <div style={styles.loadingContainer}>
-                                    <div style={styles.spinner}></div>
-                                </div>
-                            ) : funds.length === 0 ? (
-                                <div style={styles.emptyState}>
-                                    <p style={styles.emptyText}>No fund entries found</p>
-                                    <p style={styles.emptySubtext}>Add new entries to view them here</p>
-                                </div>
-                            ) : (
-                                funds.map((fund) => (
-                                    <div
-                                        key={fund._id}
-                                        style={styles.card}
-                                        onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.transform = 'translateY(0)';
-                                            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
-                                        }}
-                                    >
-                                        <div style={styles.cardHeader}>
-                                            <div style={{
-                                                ...styles.typeIcon,
-                                                ...(fund.type === 'Income' ? styles.incomeIcon : styles.expenseIcon)
-                                            }}>
-                                                {fund.type === 'Income' ? <PlusCircle size={20} /> : <BarChart2 size={20} />}
-                                            </div>
-                                            <div>
-                                                <h3 style={styles.cardTitle}>
-                                                    {fund.type}
-                                                </h3>
-                                                <p style={styles.cardSubtitle}>
-                                                    {fund.category}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div style={styles.infoGrid}>
-                                            <div style={styles.infoItem}>
-                                                <DollarSign size={16} style={styles.infoIcon} />
-                                                <div>
-                                                    <div style={styles.infoLabel}>Amount</div>
-                                                    <div style={styles.infoValue}>₹{fund.amount.toFixed(2)}</div>
-                                                </div>
-                                            </div>
-                                            <div style={styles.infoItem}>
-                                                <Calendar size={16} style={{...styles.infoIcon, color: '#F063A4'}}/>
-                                                <div>
-                                                    <div style={styles.infoLabel}>Date & Time</div>
-                                                    <div style={styles.infoValue}>{fund.date} at {fund.time}</div>
-                                                </div>
-                                            </div>
-                                            <div style={styles.infoItem}>
-                                                <UserCheck size={16} style={{...styles.infoIcon, color: '#32D48B'}}/>
-                                                <div>
-                                                    <div style={styles.infoLabel}>Approved By</div>
-                                                    <div style={styles.infoValue}>{fund.approvedBy}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {fund.description && (
-                                            <div style={styles.infoItem}>
-                                                <Info size={16} style={{...styles.infoIcon, color: '#FFBD59'}}/>
-                                                <div>
-                                                    <div style={styles.infoLabel}>Description</div>
-                                                    <div style={styles.infoValue}>{fund.description}</div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <button
-                                            style={styles.deleteButton}
-                                            onClick={() => handleDelete(fund._id)}
-                                            onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.deleteButtonHover)}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,107,0.3)';
-                                            }}
-                                        >
-                                            <Trash2 size={16} style={{ marginRight: '6px' }} />
-                                            Delete
-                                        </button>
-                                    </div>
-                                ))
-                            )}
-                        </>
-                    )}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </>
+        </Layout>
     );
 };
 
