@@ -96,7 +96,7 @@ const Dsocsa = () => {
       title: "Resources",
       items: [
         {
-          path: "/dashboard/admin/sponser",
+          path: "/dashboard/admin/funds",
           icon: <Building2 />,
           title: "Funds",
           description: "department funds Approved by Treasurer",
