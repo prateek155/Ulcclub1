@@ -1,1530 +1,823 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { PlusCircle, Trash2, Edit, Save, XCircle, FileText, Calendar, User, Hash, CheckCircle, Grid, List, Image, CloudOff, X } from 'lucide-react';
-import Papa from "papaparse"; // This line was causing a compilation error. PapaParse will be loaded via CDN.
+import React, { useEffect, useState } from "react";
+import Papa from "papaparse";
 
-// --- Utility Functions for CSV Parsing and Image Handling ---
+const VolunteerManager = () => {
+  const [allEventData, setAllEventData] = useState({});
+  const [currentEvent, setCurrentEvent] = useState("");
+  const [responses, setResponses] = useState([]);
+  const [filteredResponses, setFilteredResponses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchName, setSearchName] = useState("");
+  const [searchSkills, setSearchSkills] = useState("");
+  const [eventDataSources, setEventDataSources] = useState([
+    {
+      id: "event1",
+      name: "Tech Conference 2025",
+      csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
+      status: "active"
+    },
+    {
+      id: "event2", 
+      name: "Community Outreach",
+      csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
+      status: "active"
+    },
+    {
+      id: "event3",
+      name: "Annual Fundraiser",
+      csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
+      status: "upcoming"
+    }
+  ]);
+  const [showAddEvent, setShowAddEvent] = useState(false);
+  const [newEvent, setNewEvent] = useState({ name: "", csvUrl: "" });
 
-const getFieldIcon = (fieldName) => {
-    const name = fieldName.toLowerCase();
-    if (name.includes('timestamp') || name.includes('date') || name.includes('time')) return <Calendar className="field-icon" />;
-    if (name.includes('name') || name.includes('volunteer') || name.includes('person')) return <User className="field-icon" />;
-    if (name.includes('id') || name.includes('number') || name.includes('index')) return <Hash className="field-icon" />;
-    if (name.includes('status') || name.includes('approved')) return <CheckCircle className="field-icon" />;
-    if (name.includes('photo') || name.includes('image') || name.includes('picture') || name.includes('url')) return <Image className="field-icon" />;
-    return <FileText className="field-icon" />;
-};
+  // Load data for a specific event
+  const loadEventData = async (eventId) => {
+    const event = eventDataSources.find(e => e.id === eventId);
+    if (!event) return;
 
-const isImageField = (fieldName) => {
-    const name = fieldName.toLowerCase();
-    return name.includes('photo') || name.includes('image') || name.includes('picture') || name.includes('url');
-};
-
-const convertToDirectImageUrl = (url) => {
-    if (!url || typeof url !== 'string') return url;
-
-    // Google Drive URL conversion
-    if (url.includes('drive.google.com')) {
-        let fileId = null;
-        if (url.includes('open?id=')) {
-            fileId = url.match(/open\?id=([a-zA-Z0-9_-]+)/)?.[1];
-        } else if (url.includes('/file/d/')) {
-            fileId = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-        } else if (url.includes('uc?id=')) {
-            fileId = url.match(/uc\?id=([a-zA-Z0-9_-]+)/)?.[1];
-        }
-        if (fileId) {
-            return `https://drive.google.com/uc?export=view&id=${fileId}`;
-        }
+    // Check if we already have this data cached
+    if (allEventData[eventId]) {
+      setResponses(allEventData[eventId]);
+      setFilteredResponses(allEventData[eventId]);
+      return;
     }
 
-    // Google Photos or Googleusercontent (often direct image already)
-    if (url.includes('photos.google.com') || url.includes('googleusercontent.com')) {
-        return url;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(event.csvUrl);
+      const data = await response.text();
+      const parsedData = Papa.parse(data, { 
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: (header) => header.trim()
+      });
+      
+      // Cache the data
+      setAllEventData(prev => ({
+        ...prev,
+        [eventId]: parsedData.data
+      }));
+      
+      setResponses(parsedData.data);
+      setFilteredResponses(parsedData.data);
+    } catch (err) {
+      console.error("Error fetching sheet:", err);
+      setError(`Failed to load data for ${event.name}. Please check the CSV URL.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load first event on component mount
+  useEffect(() => {
+    if (eventDataSources.length > 0 && !currentEvent) {
+      const firstEvent = eventDataSources[0];
+      setCurrentEvent(firstEvent.id);
+      loadEventData(firstEvent.id);
+    }
+  }, [eventDataSources]);
+
+  // Handle event change
+  const handleEventChange = (eventId) => {
+    setCurrentEvent(eventId);
+    setSearchName("");
+    setSearchSkills("");
+    loadEventData(eventId);
+  };
+
+  // Add new event
+  const addNewEvent = () => {
+    if (!newEvent.name.trim() || !newEvent.csvUrl.trim()) {
+      alert("Please enter both event name and CSV URL");
+      return;
     }
 
-    // Dropbox URL conversion
-    if (url.includes('dropbox.com') && !url.includes('raw=1')) {
-        return url.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '?raw=1');
+    const newId = `event${Date.now()}`;
+    setEventDataSources(prev => [...prev, {
+      id: newId,
+      name: newEvent.name,
+      csvUrl: newEvent.csvUrl,
+      status: "active"
+    }]);
+    
+    setNewEvent({ name: "", csvUrl: "" });
+    setShowAddEvent(false);
+    setCurrentEvent(newId);
+    loadEventData(newId);
+  };
+
+  // Remove event
+  const removeEvent = (eventId) => {
+    if (eventDataSources.length <= 1) {
+      alert("Cannot remove the last event");
+      return;
+    }
+    
+    setEventDataSources(prev => prev.filter(e => e.id !== eventId));
+    setAllEventData(prev => {
+      const newData = { ...prev };
+      delete newData[eventId];
+      return newData;
+    });
+    
+    if (currentEvent === eventId) {
+      const remainingEvents = eventDataSources.filter(e => e.id !== eventId);
+      if (remainingEvents.length > 0) {
+        handleEventChange(remainingEvents[0].id);
+      }
+    }
+  };
+
+  // Filter responses based on search criteria
+  useEffect(() => {
+    if (!searchName && !searchSkills) {
+      setFilteredResponses(responses);
+      return;
     }
 
-    return url;
-};
+    const filtered = responses.filter((response) => {
+      const nameMatch = searchName ? 
+        Object.values(response).some(value => 
+          value && value.toString().toLowerCase().includes(searchName.toLowerCase())
+        ) : true;
+      
+      const skillsMatch = searchSkills ?
+        Object.values(response).some(value => 
+          value && value.toString().toLowerCase().includes(searchSkills.toLowerCase())
+        ) : true;
 
-const isImageUrl = (url) => {
-    if (!url || typeof url !== 'string') return false;
-    const convertedUrl = convertToDirectImageUrl(url);
+      return nameMatch && skillsMatch;
+    });
 
-    if (/\.(jpg|jpeg|png|gif|bmp|webp|svg)(\?.*)?$/i.test(convertedUrl)) {
-        return true;
-    }
+    setFilteredResponses(filtered);
+  }, [searchName, searchSkills, responses]);
 
-    if (convertedUrl.includes('drive.google.com/uc?export=view') ||
-        convertedUrl.includes('googleusercontent.com') ||
-        convertedUrl.includes('imgur.com') ||
-        convertedUrl.includes('cloudinary.com') ||
-        convertedUrl.includes('aws.amazon.com') ||
-        convertedUrl.includes('googleapis.com')) {
-        return true;
-    }
-    return false;
-};
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      padding: '2rem',
+      fontFamily: '"Inter", "Segoe UI", "Roboto", sans-serif',
+    },
+    card: {
+      background: 'rgba(255, 255, 255, 0.95)',
+      backdropFilter: 'blur(10px)',
+      borderRadius: '20px',
+      padding: '2rem',
+      maxWidth: '1400px',
+      margin: '0 auto',
+      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+    },
+    header: {
+      textAlign: 'center',
+      marginBottom: '2rem',
+    },
+    title: {
+      fontSize: '2.5rem',
+      fontWeight: '700',
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      marginBottom: '0.5rem',
+    },
+    subtitle: {
+      color: '#64748b',
+      fontSize: '1.1rem',
+      fontWeight: '400',
+    },
+    eventSelector: {
+      background: '#ffffff',
+      borderRadius: '16px',
+      padding: '1.5rem',
+      marginBottom: '1rem',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e2e8f0',
+    },
+    eventSelectorTitle: {
+      fontSize: '1.2rem',
+      fontWeight: '600',
+      color: '#334155',
+      marginBottom: '1rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    eventTabs: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '0.5rem',
+      marginBottom: '1rem',
+    },
+    eventTab: {
+      padding: '0.75rem 1.5rem',
+      borderRadius: '12px',
+      border: '2px solid #e2e8f0',
+      background: '#ffffff',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      fontSize: '0.9rem',
+      fontWeight: '500',
+      position: 'relative',
+    },
+    eventTabActive: {
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      color: '#ffffff',
+      border: '2px solid transparent',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+    },
+    eventTabHover: {
+      borderColor: '#667eea',
+      transform: 'translateY(-1px)',
+    },
+    statusBadge: {
+      position: 'absolute',
+      top: '-8px',
+      right: '-8px',
+      background: '#10b981',
+      color: '#ffffff',
+      borderRadius: '50%',
+      width: '20px',
+      height: '20px',
+      fontSize: '0.7rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontWeight: '600',
+    },
+    statusBadgeUpcoming: {
+      background: '#f59e0b',
+    },
+    addEventButton: {
+      background: 'linear-gradient(135deg, #10b981, #059669)',
+      color: '#ffffff',
+      border: 'none',
+      padding: '0.75rem 1.5rem',
+      borderRadius: '12px',
+      fontSize: '0.9rem',
+      fontWeight: '500',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+    },
+    addEventForm: {
+      background: '#f8fafc',
+      borderRadius: '12px',
+      padding: '1.5rem',
+      marginTop: '1rem',
+      border: '1px solid #e2e8f0',
+    },
+    addEventGrid: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr auto',
+      gap: '1rem',
+      alignItems: 'end',
+    },
+    input: {
+      padding: '0.75rem 1rem',
+      fontSize: '0.9rem',
+      border: '2px solid #e2e8f0',
+      borderRadius: '8px',
+      outline: 'none',
+      transition: 'all 0.2s ease',
+    },
+    inputFocus: {
+      borderColor: '#667eea',
+      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+    },
+    button: {
+      padding: '0.75rem 1.5rem',
+      borderRadius: '8px',
+      border: 'none',
+      fontSize: '0.9rem',
+      fontWeight: '500',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+    },
+    primaryButton: {
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      color: '#ffffff',
+    },
+    secondaryButton: {
+      background: '#f1f5f9',
+      color: '#64748b',
+      border: '1px solid #cbd5e1',
+    },
+    removeButton: {
+      background: '#ef4444',
+      color: '#ffffff',
+      fontSize: '0.8rem',
+      padding: '0.5rem',
+      borderRadius: '6px',
+      border: 'none',
+      cursor: 'pointer',
+      opacity: '0.7',
+      transition: 'all 0.2s ease',
+    },
+    searchContainer: {
+      background: '#ffffff',
+      borderRadius: '16px',
+      padding: '1.5rem',
+      marginBottom: '2rem',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e2e8f0',
+    },
+    searchTitle: {
+      fontSize: '1.2rem',
+      fontWeight: '600',
+      color: '#334155',
+      marginBottom: '1rem',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+    },
+    searchGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      gap: '1rem',
+    },
+    searchInputContainer: {
+      position: 'relative',
+    },
+    searchInput: {
+      width: '100%',
+      padding: '0.75rem 1rem',
+      fontSize: '1rem',
+      border: '2px solid #e2e8f0',
+      borderRadius: '12px',
+      outline: 'none',
+      transition: 'all 0.2s ease',
+      background: '#f8fafc',
+    },
+    searchInputFocus: {
+      borderColor: '#667eea',
+      background: '#ffffff',
+      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+    },
+    searchLabel: {
+      position: 'absolute',
+      top: '-0.5rem',
+      left: '1rem',
+      background: '#ffffff',
+      padding: '0 0.5rem',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      color: '#667eea',
+    },
+    clearButton: {
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      color: '#ffffff',
+      border: 'none',
+      padding: '0.75rem 1.5rem',
+      borderRadius: '12px',
+      fontSize: '0.9rem',
+      fontWeight: '500',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      marginTop: '1rem',
+    },
+    resultsInfo: {
+      background: '#f0f9ff',
+      border: '1px solid #0ea5e9',
+      borderRadius: '12px',
+      padding: '1rem',
+      marginBottom: '1rem',
+      color: '#0369a1',
+      fontSize: '0.95rem',
+      fontWeight: '500',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+    },
+    tableContainer: {
+      background: '#ffffff',
+      borderRadius: '16px',
+      overflow: 'hidden',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e2e8f0',
+      overflowX: 'auto',
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      fontSize: '0.95rem',
+      minWidth: '600px',
+    },
+    thead: {
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+    },
+    th: {
+      padding: '1rem',
+      textAlign: 'left',
+      fontWeight: '600',
+      color: '#ffffff',
+      fontSize: '0.9rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px',
+      borderBottom: 'none',
+      whiteSpace: 'nowrap',
+    },
+    tbody: {
+      background: '#ffffff',
+    },
+    tr: {
+      transition: 'all 0.2s ease',
+      borderBottom: '1px solid #f1f5f9',
+    },
+    trHover: {
+      background: '#f8fafc',
+      transform: 'translateY(-1px)',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+    },
+    td: {
+      padding: '1rem',
+      color: '#334155',
+      lineHeight: '1.5',
+      verticalAlign: 'top',
+      maxWidth: '200px',
+      wordBreak: 'break-word',
+    },
+    loadingContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '4rem',
+    },
+    spinner: {
+      width: '50px',
+      height: '50px',
+      border: '3px solid #f3f4f6',
+      borderTop: '3px solid #667eea',
+      borderRadius: '50%',
+      animation: 'spin 1s linear infinite',
+      marginBottom: '1rem',
+    },
+    loadingText: {
+      color: '#64748b',
+      fontSize: '1.1rem',
+      fontWeight: '500',
+    },
+    errorContainer: {
+      textAlign: 'center',
+      padding: '2rem',
+      color: '#dc2626',
+      background: '#fef2f2',
+      borderRadius: '12px',
+      border: '1px solid #fecaca',
+    },
+    errorIcon: {
+      fontSize: '3rem',
+      marginBottom: '1rem',
+    },
+    errorText: {
+      fontSize: '1.1rem',
+      fontWeight: '500',
+    },
+    badge: {
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      color: '#ffffff',
+      padding: '0.5rem 1rem',
+      borderRadius: '20px',
+      fontSize: '0.9rem',
+      fontWeight: '500',
+      display: 'inline-block',
+      marginBottom: '1rem',
+    },
+    noResults: {
+      textAlign: 'center',
+      padding: '3rem',
+      color: '#64748b',
+      fontSize: '1.1rem',
+      background: '#f8fafc',
+      borderRadius: '12px',
+      border: '1px solid #e2e8f0',
+    },
+  };
 
-// --- Main App Component ---
-// Renamed from 'Volunteer' to 'App' for Canvas compatibility
-function App() {
-    // Events are now stored in local state, not persisted by Firebase
-    const [events, setEvents] = useState([]);
-    const [loadingApp, setLoadingApp] = useState(false); // Only for initial app load, not data fetching
-    const [appError, setAppError] = useState(null); // General app error, not specific to data fetch
-    const [isAddingEvent, setIsAddingEvent] = useState(false);
-    const [newEventForm, setNewEventForm] = useState({ name: '', date: '', description: '', googleSheetCSVUrl: '' });
-    const [eventCreationError, setEventCreationError] = useState(null);
-
-    // Initial app loading state (no Firebase dependencies)
-    useEffect(() => {
-        setLoadingApp(false); // App is ready as soon as component mounts
-    }, []);
-
-    // --- CRUD Operations for Events (now local to the session) ---
-    const handleAddEvent = (e) => {
-        e.preventDefault();
-        setEventCreationError(null);
-
-        if (!newEventForm.name || !newEventForm.date || !newEventForm.description || !newEventForm.googleSheetCSVUrl) {
-            setEventCreationError("All fields are required.");
-            return;
-        }
-
-        try {
-            const newEvent = {
-                id: `event-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`, // Unique ID
-                ...newEventForm,
-                timestamp: Date.now(),
-            };
-            setEvents(prevEvents => [newEvent, ...prevEvents]); // Add new event to top of list
-            setNewEventForm({ name: '', date: '', description: '', googleSheetCSVUrl: '' });
-            setIsAddingEvent(false);
-        } catch (error) {
-            console.error("Error adding event locally:", error);
-            setEventCreationError("Failed to add event. Please check your input and try again.");
-        }
+  // Add CSS animation keyframes
+  useEffect(() => {
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .fade-in {
+        animation: fadeIn 0.6s ease-out;
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    return () => {
+      document.head.removeChild(styleSheet);
     };
+  }, []);
 
-    const handleDeleteEvent = (eventId) => {
-        // IMPORTANT: For a production app, replace window.confirm with a custom modal UI.
-        if (window.confirm('Are you sure you want to delete this event? This action is local to the app and will not persist.')) {
-            setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
-            console.log("Event deleted locally!");
-        }
-    };
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [hoveredTab, setHoveredTab] = useState(null);
 
-    // --- Loading and Error States for the overall App ---
-    if (loadingApp) {
-        return (
-            <div className="loading-container">
-                <div className="ai-loader">
-                    <div className="loader-core"></div>
-                    <div className="loader-ring"></div>
-                </div>
-                <p className="loading-text">Starting Volunteer Hub...</p>
-            </div>
-        );
-    }
+  const clearSearch = () => {
+    setSearchName("");
+    setSearchSkills("");
+  };
 
-    if (appError) {
-        return (
-            <div className="error-container">
-                <CloudOff size={64} className="error-icon" />
-                <h2 className="error-title">Oops! Something went wrong.</h2>
-                <p className="error-message">{appError}</p>
-                <p className="error-tip">Please try refreshing the page.</p>
-            </div>
-        );
-    }
+  const currentEventData = eventDataSources.find(e => e.id === currentEvent);
 
+  if (loading) {
     return (
-        <div className="cr-container">
-            <style jsx>{`
-                /* Load PapaParse from CDN */
-                @import url('https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js');
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-                body {
-                    font-family: 'Inter', sans-serif;
-                }
-                * {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                }
-
-                .cr-container {
-                    min-height: 100vh;
-                    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-                    color: #e0e0e0;
-                    font-family: 'Inter', sans-serif;
-                    padding-bottom: 3rem; /* Space for footer/bottom content */
-                }
-
-                .header-section {
-                    background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
-                    padding: 2rem;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-                }
-
-                .header-content {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 2rem;
-                }
-
-                .title-section {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                }
-
-                .main-icon {
-                    width: 3rem;
-                    height: 3rem;
-                    color: #00d4ff;
-                }
-
-                .title-section h1 {
-                    font-size: 2.5rem;
-                    font-weight: 700;
-                    background: linear-gradient(45deg, #00d4ff, #90e0ef);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                }
-
-                .title-section p {
-                    font-size: 1.1rem;
-                    color: #b0c4de;
-                    margin-top: 0.5rem;
-                }
-
-                .stats-grid {
-                    display: flex;
-                    gap: 1.5rem;
-                }
-
-                .stat-card {
-                    background: rgba(255, 255, 255, 0.1);
-                    backdrop-filter: blur(10px);
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    text-align: center;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                }
-
-                .stat-number {
-                    display: block;
-                    font-size: 2rem;
-                    font-weight: 700;
-                    color: #00d4ff;
-                }
-
-                .stat-label {
-                    font-size: 0.9rem;
-                    color: #b0c4de;
-                }
-
-                .controls-section {
-                    padding: 2rem;
-                    background: rgba(0, 0, 0, 0.2);
-                    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-                }
-
-                .controls-container {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                }
-
-                .add-event-btn {
-                    width: 100%;
-                    padding: 1rem 1.5rem;
-                    background: linear-gradient(45deg, #8a2be2, #4b0082); /* Darker purple */
-                    color: white;
-                    border: none;
-                    border-radius: 12px;
-                    font-size: 1.1rem;
-                    font-weight: 600;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.75rem;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
-                }
-
-                .add-event-btn:hover {
-                    background: linear-gradient(45deg, #9932cc, #6a5acd);
-                    transform: translateY(-3px);
-                    box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
-                }
-
-                .add-event-form {
-                    background: rgba(255, 255, 255, 0.08);
-                    border: 1px solid rgba(138, 43, 226, 0.4);
-                    border-radius: 16px;
-                    padding: 2rem;
-                    margin-top: 2rem;
-                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-                    backdrop-filter: blur(10px);
-                }
-
-                .add-event-form h2 {
-                    font-size: 1.8rem;
-                    font-weight: 700;
-                    color: #00d4ff;
-                    margin-bottom: 1.5rem;
-                    text-align: center;
-                }
-
-                .form-group {
-                    margin-bottom: 1.25rem;
-                }
-
-                .form-group label {
-                    display: block;
-                    font-size: 0.95rem;
-                    font-weight: 500;
-                    color: #b0c4de;
-                    margin-bottom: 0.5rem;
-                }
-
-                .form-group input,
-                .form-group textarea {
-                    width: 100%;
-                    padding: 0.9rem 1.25rem;
-                    background: rgba(255, 255, 255, 0.15);
-                    border: 1px solid rgba(0, 212, 255, 0.3);
-                    border-radius: 10px;
-                    color: #e0e0e0;
-                    font-size: 1rem;
-                    transition: all 0.3s ease;
-                }
-
-                .form-group input:focus,
-                .form-group textarea:focus {
-                    outline: none;
-                    border-color: #00d4ff;
-                    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-                }
-
-                .form-group input::placeholder,
-                .form-group textarea::placeholder {
-                    color: #888;
-                }
-
-                .form-actions {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 1rem;
-                    margin-top: 1.5rem;
-                }
-
-                .form-actions button {
-                    padding: 0.8rem 1.8rem;
-                    border: none;
-                    border-radius: 10px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-                }
-
-                .form-actions .submit-btn {
-                    background: linear-gradient(45deg, #00d4ff, #90e0ef);
-                    color: #1a1a2e;
-                }
-
-                .form-actions .submit-btn:hover {
-                    opacity: 0.9;
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 15px rgba(0, 212, 255, 0.3);
-                }
-
-                .form-actions .cancel-btn {
-                    background: #555;
-                    color: white;
-                }
-
-                .form-actions .cancel-btn:hover {
-                    background: #777;
-                    transform: translateY(-2px);
-                }
-
-                .error-message-inline {
-                    color: #ff453a;
-                    font-size: 0.9rem;
-                    margin-top: 0.5rem;
-                }
-
-                .data-section {
-                    padding: 2rem;
-                    max-width: 1400px;
-                    margin: 0 auto;
-                }
-
-                .loading-container, .error-container {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 100vh;
-                    gap: 2rem;
-                    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-                    color: #e0e0e0;
-                }
-
-                .ai-loader {
-                    position: relative;
-                    width: 80px;
-                    height: 80px;
-                }
-
-                .loader-core {
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(45deg, #00d4ff, #90e0ef);
-                    border-radius: 50%;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    animation: pulse 2s infinite;
-                }
-
-                .loader-ring {
-                    width: 80px;
-                    height: 80px;
-                    border: 3px solid transparent;
-                    border-top: 3px solid #00d4ff;
-                    border-radius: 50%;
-                    animation: spin 1s linear infinite;
-                }
-
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-
-                @keyframes pulse {
-                    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-                    50% { transform: translate(-50%, -50%) scale(1.2); }
-                }
-
-                .loading-text {
-                    font-size: 1.2rem;
-                    color: #b0c4de;
-                }
-
-                .error-icon {
-                    color: #ff453a;
-                    margin-bottom: 1rem;
-                }
-
-                .error-title {
-                    font-size: 2rem;
-                    color: #ff453a;
-                    margin-bottom: 1rem;
-                }
-
-                .error-message {
-                    font-size: 1.1rem;
-                    color: #e0e0e0;
-                    text-align: center;
-                    max-width: 600px;
-                }
-
-                .error-tip {
-                    font-size: 0.9rem;
-                    color: #b0c4de;
-                    margin-top: 1rem;
-                }
-
-                /* Event Card Styles */
-                .event-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-                    gap: 3rem;
-                }
-
-                .event-card {
-                    background: rgba(255, 255, 255, 0.05);
-                    border: 1px solid rgba(0, 212, 255, 0.2);
-                    border-radius: 16px;
-                    padding: 2rem;
-                    backdrop-filter: blur(10px);
-                    transition: all 0.3s ease;
-                    position: relative;
-                    overflow: hidden;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .event-card::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    height: 5px;
-                    background: linear-gradient(90deg, #00d4ff, #90e0ef);
-                }
-
-                .event-card:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 15px 40px rgba(0, 212, 255, 0.25);
-                    border-color: #00d4ff;
-                }
-
-                .event-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    margin-bottom: 1.5rem;
-                }
-
-                .event-title-group h2 {
-                    font-size: 2.2rem;
-                    font-weight: 700;
-                    color: #00d4ff;
-                    margin-bottom: 0.5rem;
-                }
-
-                .event-date {
-                    font-size: 1rem;
-                    color: #b0c4de;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                }
-
-                .event-description {
-                    font-size: 1rem;
-                    color: #b0c4de;
-                    margin-bottom: 1.5rem;
-                    line-height: 1.6;
-                }
-
-                .event-actions-top {
-                    display: flex;
-                    gap: 0.75rem;
-                    align-items: center;
-                }
-
-                .event-actions-top button {
-                    background: rgba(255, 255, 255, 0.15);
-                    border: 1px solid rgba(0, 212, 255, 0.3);
-                    color: #00d4ff;
-                    padding: 0.75rem 1rem;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    transition: all 0.3s ease;
-                }
-
-                .event-actions-top button:hover {
-                    background: #00d4ff;
-                    color: #1a1a2e;
-                    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
-                }
-
-                .event-actions-top .delete-btn-event {
-                    background: rgba(255, 69, 58, 0.2);
-                    color: #ff453a;
-                    border-color: rgba(255, 69, 58, 0.4);
-                }
-                .event-actions-top .delete-btn-event:hover {
-                    background: #ff453a;
-                    color: white;
-                }
-
-                .view-toggle-event {
-                    display: flex;
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 12px;
-                    padding: 0.5rem;
-                    backdrop-filter: blur(10px);
-                    margin-bottom: 1.5rem;
-                    align-self: flex-start; /* Align to the start within flex column */
-                }
-
-                .toggle-btn-event {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.75rem 1.5rem;
-                    border: none;
-                    background: transparent;
-                    color: #b0c4de;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    font-weight: 500;
-                }
-
-                .toggle-btn-event.active {
-                    background: #00d4ff;
-                    color: #0f0f23;
-                }
-
-                .toggle-btn-event:hover:not(.active) {
-                    background: rgba(0, 212, 255, 0.2);
-                    color: #00d4ff;
-                }
-
-                .no-data {
-                    text-align: center;
-                    padding: 3rem 0;
-                    color: #888;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 1rem;
-                    font-size: 1.1rem;
-                }
-
-                .no-data-icon {
-                    width: 3rem;
-                    height: 3rem;
-                    color: #555;
-                }
-
-                /* Shared styles for Cards & Table */
-                .cr-grid { /* For cards */
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-top: 1.5rem;
-                }
-
-                .cr-card {
-                    background: rgba(255, 255, 255, 0.08);
-                    border: 1px solid rgba(0, 212, 255, 0.25);
-                    border-radius: 12px;
-                    padding: 1.25rem;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                    transition: all 0.2s ease;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .cr-card:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.15);
-                }
-
-                .card-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 1rem;
-                }
-
-                .cr-id {
-                    font-weight: 600;
-                    color: #00d4ff;
-                    font-size: 1rem;
-                }
-
-                .card-actions {
-                    display: flex;
-                    gap: 0.4rem;
-                }
-
-                .card-actions button, .table-actions button {
-                    padding: 0.4rem;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: rgba(255, 255, 255, 0.1);
-                    color: #00d4ff;
-                }
-                .card-actions button:hover, .table-actions button:hover {
-                    background: #00d4ff;
-                    color: #1a1a2e;
-                }
-
-                .card-content {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.8rem;
-                }
-
-                .field-row {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.4rem;
-                }
-
-                .field-label {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.4rem;
-                    font-weight: 500;
-                    color: #b0c4de;
-                    font-size: 0.85rem;
-                    text-transform: capitalize;
-                }
-
-                .field-icon {
-                    width: 14px;
-                    height: 14px;
-                    color: #90e0ef;
-                }
-
-                .field-value {
-                    background: rgba(255, 255, 255, 0.1);
-                    padding: 0.6rem 0.8rem;
-                    border-radius: 8px;
-                    color: #e0e0e0;
-                    min-height: 2.5rem;
-                    display: flex;
-                    align-items: center;
-                    word-break: break-word;
-                    line-height: 1.4;
-                    font-size: 0.9rem;
-                }
-
-                .field-input {
-                    background: rgba(255, 255, 255, 0.15);
-                    border: 1px solid rgba(0, 212, 255, 0.3);
-                    border-radius: 8px;
-                    padding: 0.6rem 0.8rem;
-                    color: #e0e0e0;
-                    font-size: 0.9rem;
-                    transition: all 0.2s ease;
-                    width: 100%;
-                }
-
-                .field-input:focus {
-                    outline: none;
-                    border-color: #00d4ff;
-                    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
-                }
-
-                .image-edit-container {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.4rem;
-                }
-
-                .card-image-preview {
-                    margin-top: 0.5rem;
-                    display: flex;
-                    justify-content: center;
-                }
-
-                .card-image-preview img {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    border: 2px solid #00d4ff;
-                }
-
-                .card-image-container {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 70px;
-                    height: 70px;
-                    margin: 0.5rem auto;
-                }
-
-                .card-image {
-                    width: 70px;
-                    height: 70px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    border: 3px solid #00d4ff;
-                    box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
-                }
-
-                /* Table View Styles */
-                .table-container {
-                    overflow-x: auto;
-                    border-radius: 12px;
-                    background: rgba(255, 255, 255, 0.05);
-                    border: 1px solid rgba(0, 212, 255, 0.2);
-                    backdrop-filter: blur(10px);
-                    margin-top: 1.5rem;
-                }
-
-                .cr-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    min-width: 700px;
-                }
-
-                .cr-table th {
-                    background: rgba(0, 212, 255, 0.1);
-                    padding: 0.8rem;
-                    text-align: left;
-                    font-weight: 600;
-                    color: #00d4ff;
-                    border-bottom: 2px solid rgba(0, 212, 255, 0.3);
-                    position: sticky;
-                    top: 0;
-                    z-index: 10;
-                    font-size: 0.9rem;
-                }
-
-                .cr-table td {
-                    padding: 0.8rem;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                    color: #e0e0e0;
-                    vertical-align: middle;
-                    font-size: 0.9rem;
-                }
-
-                .cr-table tr:hover {
-                    background: rgba(0, 212, 255, 0.05);
-                }
-
-                .cr-table tr.editing {
-                    background: rgba(0, 212, 255, 0.1);
-                }
-
-                .table-actions {
-                    display: flex;
-                    gap: 0.4rem;
-                    justify-content: center;
-                }
-
-                .field-content {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.4rem;
-                }
-
-                .field-text {
-                    word-break: break-word;
-                    max-width: 180px;
-                }
-
-                .table-image-container {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 50px;
-                    height: 50px;
-                }
-
-                .table-image {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    border: 2px solid #00d4ff;
-                }
-
-                .image-fallback {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.25rem;
-                    color: #888;
-                    font-size: 0.75rem;
-                    padding: 0.5rem;
-                    border: 1px dashed #555;
-                    border-radius: 50%;
-                    width: 50px;
-                    height: 50px;
-                }
-                .image-fallback svg {
-                    width: 20px;
-                    height: 20px;
-                }
-
-                /* Responsive Adjustments */
-                @media (max-width: 1024px) {
-                    .header-content {
-                        flex-direction: column;
-                        align-items: center;
-                        text-align: center;
-                    }
-                    .stats-grid {
-                        justify-content: center;
-                    }
-                    .event-grid {
-                        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-                        gap: 2rem;
-                    }
-                    .cr-table {
-                        min-width: 600px;
-                    }
-                }
-
-                @media (max-width: 768px) {
-                    .title-section h1 {
-                        font-size: 2rem;
-                    }
-                    .title-section p {
-                        font-size: 1rem;
-                    }
-                    .header-section, .controls-section, .data-section {
-                        padding: 1.5rem;
-                    }
-                    .event-grid {
-                        grid-template-columns: 1fr;
-                        gap: 1.5rem;
-                    }
-                    .event-card {
-                        padding: 1.5rem;
-                    }
-                    .event-title-group h2 {
-                        font-size: 1.8rem;
-                    }
-                    .cr-card {
-                        padding: 1rem;
-                    }
-                    .cr-id {
-                        font-size: 0.9rem;
-                    }
-                    .field-label {
-                        font-size: 0.8rem;
-                    }
-                    .field-value, .field-input {
-                        font-size: 0.85rem;
-                        padding: 0.5rem 0.7rem;
-                    }
-                    .cr-table th, .cr-table td {
-                        font-size: 0.8rem;
-                        padding: 0.6rem;
-                    }
-                    .table-image, .table-image-container, .image-fallback {
-                        width: 40px;
-                        height: 40px;
-                    }
-                    .card-image, .card-image-container, .card-image-preview img {
-                        width: 60px;
-                        height: 60px;
-                    }
-                }
-
-                @media (max-width: 480px) {
-                    .header-section, .controls-section, .data-section {
-                        padding: 1rem;
-                    }
-                    .event-header {
-                        flex-direction: column;
-                        align-items: flex-start;
-                        gap: 1rem;
-                    }
-                    .event-actions-top {
-                        width: 100%;
-                        justify-content: space-between;
-                    }
-                    .add-event-btn {
-                        font-size: 1rem;
-                        padding: 0.8rem;
-                    }
-                    .form-actions {
-                        flex-direction: column;
-                        gap: 0.75rem;
-                    }
-                    .form-actions button {
-                        width: 100%;
-                    }
-                    .cr-table {
-                        font-size: 0.7rem;
-                        min-width: unset; /* Allow table to shrink more on very small screens */
-                    }
-                }
-            `}</style>
-
-            <div className="header-section">
-                <div className="header-content">
-                    <div className="title-section">
-                        <FileText className="main-icon" />
-                        <div>
-                            <h1>Multi-Event Volunteer Hub</h1>
-                            <p>Organize volunteers across various initiatives</p>
-                        </div>
-                    </div>
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <span className="stat-number">{events.length}</span>
-                            <span className="stat-label">Total Events</span>
-                        </div>
-                        <div className="stat-card">
-                            {/* Calculate total volunteers from all events */}
-                            <span className="stat-number">
-                                {events.reduce((acc, event) => acc + (event.volunteers?.length || 0), 0)}
-                            </span>
-                            <span className="stat-label">Total Volunteers (fetched)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="controls-section">
-                <div className="controls-container">
-                    <button
-                        onClick={() => setIsAddingEvent(!isAddingEvent)}
-                        className="add-event-btn"
-                    >
-                        <PlusCircle size={24} /> {isAddingEvent ? 'Close Event Form' : 'Add New Event'}
-                    </button>
-                    {isAddingEvent && (
-                        <div className="add-event-form">
-                            <h2>Create New Volunteer Event</h2>
-                            {eventCreationError && <p className="error-message-inline">{eventCreationError}</p>}
-                            <form onSubmit={handleAddEvent}>
-                                <div className="form-group">
-                                    <label htmlFor="eventName">Event Name:</label>
-                                    <input
-                                        type="text"
-                                        id="eventName"
-                                        value={newEventForm.name}
-                                        onChange={(e) => setNewEventForm({ ...newEventForm, name: e.target.value })}
-                                        placeholder="e.g., Annual Beach Cleanup"
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="eventDate">Event Date:</label>
-                                    <input
-                                        type="date"
-                                        id="eventDate"
-                                        value={newEventForm.date}
-                                        onChange={(e) => setNewEventForm({ ...newEventForm, date: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="eventDescription">Description:</label>
-                                    <textarea
-                                        id="eventDescription"
-                                        value={newEventForm.description}
-                                        onChange={(e) => setNewEventForm({ ...newEventForm, description: e.target.value })}
-                                        placeholder="Brief description of the event..."
-                                        rows="3"
-                                        required
-                                    ></textarea>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="googleSheetCSVUrl">Google Sheet CSV Public URL:</label>
-                                    <input
-                                        type="url"
-                                        id="googleSheetCSVUrl"
-                                        value={newEventForm.googleSheetCSVUrl}
-                                        onChange={(e) => setNewEventForm({ ...newEventForm, googleSheetCSVUrl: e.target.value })}
-                                        placeholder="e.g., https://docs.google.com/spreadsheets/d/.../pub?output=csv"
-                                        required
-                                    />
-                                    <p className="text-sm text-gray-400 mt-1">
-                                        (Go to Google Sheet &gt; File &gt; Share &gt; Publish to web &gt; Choose sheet &gt; Select CSV)
-                                    </p>
-                                </div>
-                                <div className="form-actions">
-                                    <button type="submit" className="submit-btn">
-                                        <Save size={20} /> Create Event
-                                    </button>
-                                    <button type="button" onClick={() => { setIsAddingEvent(false); setEventCreationError(null); setNewEventForm({ name: '', date: '', description: '', googleSheetCSVUrl: '' }); }} className="cancel-btn">
-                                        <XCircle size={20} /> Cancel
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <div className="data-section">
-                {events.length === 0 ? (
-                    <div className="no-data">
-                        <FileText className="no-data-icon" />
-                        <p>No volunteer events created yet. Add one above to get started!</p>
-                    </div>
-                ) : (
-                    <div className="event-grid">
-                        {events.map(event => (
-                            <EventCard
-                                key={event.id}
-                                event={event}
-                                onDeleteEvent={handleDeleteEvent}
-                            />
-                        ))}
-                    </div>
-                )}
-            </div>
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <div style={styles.loadingContainer}>
+            <div style={styles.spinner}></div>
+            <p style={styles.loadingText}>Loading volunteer data...</p>
+          </div>
         </div>
+      </div>
     );
-}
+  }
 
-// --- EventCard Component ---
-const EventCard = ({ event, onDeleteEvent }) => {
-    const [volunteers, setVolunteers] = useState([]);
-    const [loadingVolunteers, setLoadingVolunteers] = useState(false);
-    const [volunteerLoadError, setVolunteerLoadError] = useState(null);
-    const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
-    const [editingId, setEditingId] = useState(null);
-    const [editForm, setEditForm] = useState({});
-    const [searchTerm, setSearchTerm] = useState('');
+  return (
+    <div style={styles.container}>
+      <div style={styles.card} className="fade-in">
+        <div style={styles.header}>
+          <h1 style={styles.title}>Volunteer Management</h1>
+          <p style={styles.subtitle}>Manage volunteers across multiple events</p>
+          {currentEventData && (
+            <span style={styles.badge}>
+              {responses.length} Volunteer{responses.length !== 1 ? 's' : ''} • {currentEventData.name}
+            </span>
+          )}
+        </div>
 
-    const fetchVolunteers = useCallback((csvUrl) => {
-        if (!csvUrl) {
-            setVolunteers([]);
-            setLoadingVolunteers(false);
-            return;
-        }
-        setLoadingVolunteers(true);
-        setVolunteerLoadError(null);
-
-        // Assuming Papa is globally available
-        if (typeof Papa === 'undefined') {
-            setVolunteerLoadError('PapaParse library is not loaded. Cannot fetch CSV data. Please ensure the PapaParse CDN is included.');
-            setLoadingVolunteers(false);
-            return;
-        }
-
-        Papa.parse(csvUrl, {
-            download: true, // PapaParse will fetch the URL
-            header: true,   // Parse the first row as headers
-            complete: (results) => {
-                if (results.data && results.data.length > 0) {
-                    const parsedDataWithId = results.data.map((row, index) => {
-                        // Ensure each row has a unique ID for React's key prop and local editing
-                        // Use existing 'id' field if available, otherwise generate a unique one
-                        const rowId = row.id || `csv-${index}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`;
-                        return { id: rowId, ...row };
-                    }).filter(Boolean); // Filter out any empty rows that PapaParse might produce
-                    setVolunteers(parsedDataWithId);
-                    setLoadingVolunteers(false);
-                } else {
-                    setVolunteerLoadError('No data found in the CSV or parsing failed. Sheet might be empty or URL is incorrect.');
-                    setVolunteers([]);
-                    setLoadingVolunteers(false);
-                }
-            },
-            error: (err) => {
-                console.error(`Error fetching or parsing volunteers for event ${event.name}:`, err);
-                setVolunteerLoadError(`Failed to load volunteers: ${err.message || 'Unknown error'}. Please check the CSV URL or sheet permissions.`);
-                setVolunteers([]);
-                setLoadingVolunteers(false);
-            }
-        });
-    }, [event.name]); // Dependency on event.name for error logging context
-
-    useEffect(() => {
-        fetchVolunteers(event.googleSheetCSVUrl);
-    }, [event.googleSheetCSVUrl, fetchVolunteers]);
-
-    const handleEdit = (volunteer) => {
-        setEditingId(volunteer.id);
-        setEditForm({ ...volunteer });
-    };
-
-    const handleSave = () => {
-        setVolunteers(prevVolunteers =>
-            prevVolunteers.map(vol =>
-                vol.id === editingId ? { ...editForm } : vol
-            )
-        );
-        setEditingId(null);
-        setEditForm({});
-    };
-
-    const handleDeleteLocal = (id) => {
-        // IMPORTANT: For a production app, replace window.confirm with a custom modal UI.
-        if (window.confirm('Are you sure you want to delete this volunteer? This action is local to the app and will not affect the Google Sheet.')) {
-            setVolunteers(prevVolunteers => prevVolunteers.filter(vol => vol.id !== id));
-        }
-    };
-
-    const handleCancel = () => {
-        setEditingId(null);
-        setEditForm({});
-    };
-
-    const handleInputChange = (field, value) => {
-        setEditForm(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    };
-
-    const handleAddLocalVolunteer = () => {
-        // Create a new empty volunteer object based on existing headers
-        const firstVolunteer = volunteers[0];
-        const newVolunteer = { id: `local-${Date.now()}-${Math.random().toString(36).substring(2, 9)}` }; // Ensure truly unique ID for local adds
-        if (firstVolunteer) {
-            Object.keys(firstVolunteer).forEach(key => {
-                if (key !== 'id') { // Exclude the 'id' field itself from being copied as a data field
-                    newVolunteer[key] = '';
-                }
-            });
-        } else {
-             // Default fields if no existing volunteers to infer headers from
-            newVolunteer['Timestamp'] = new Date().toLocaleString();
-            newVolunteer['Volunteer Name'] = '';
-            newVolunteer['Email Address'] = '';
-            newVolunteer['Phone Number'] = '';
-            newVolunteer['Skills'] = '';
-            // Add a placeholder if the CSV is empty, so there's at least one row to edit
-            setVolunteers([newVolunteer]);
-        }
-        // Only add if volunteers array was not empty, otherwise it was added above
-        if (volunteers.length > 0) {
-            setVolunteers(prev => [newVolunteer, ...prev]); // Add to top
-        }
-        setEditingId(newVolunteer.id); // Start editing the new entry
-        setEditForm(newVolunteer);
-    };
-
-
-    const filteredVolunteers = volunteers.filter(volunteer =>
-        Object.values(volunteer).some(value =>
-            value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    );
-
-    const renderTableView = () => {
-        if (filteredVolunteers.length === 0) {
-            return (
-                <div className="no-data">
-                    <FileText className="no-data-icon" />
-                    <p>No volunteer records found for this event.</p>
-                </div>
-            );
-        }
-
-        // Dynamically get headers from the first filtered volunteer, if any
-        const headers = filteredVolunteers.length > 0
-            ? Object.keys(filteredVolunteers[0]).filter(key => key !== 'id')
-            : [];
-
-        if (headers.length === 0) {
-            return (
-                <div className="no-data">
-                    <FileText className="no-data-icon" />
-                    <p>No valid headers found in volunteer data.</p>
-                </div>
-            );
-        }
-
-        return (
-            <div className="table-container">
-                <table className="cr-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            {headers.map(header => (
-                                <th key={header}>
-                                    <div className="header-content">
-                                        {getFieldIcon(header)}
-                                        <span>{header}</span>
-                                    </div>
-                                </th>
-                            ))}
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredVolunteers.map((vol) => (
-                            <tr key={vol.id} className={editingId === vol.id ? 'editing' : ''}>
-                                <td>
-                                    {/* Display only the unique part of the ID for brevity */}
-                                    <span className="cr-id">#{vol.id.startsWith('csv-') || vol.id.startsWith('local-') ? vol.id.split('-')[1] : vol.id}</span>
-                                </td>
-                                {headers.map(header => (
-                                    <td key={header}>
-                                        {editingId === vol.id ? (
-                                            isImageField(header) ? (
-                                                <div className="image-edit-container">
-                                                    <input
-                                                        type="text"
-                                                        value={editForm[header] || ''}
-                                                        onChange={(e) => handleInputChange(header, e.target.value)}
-                                                        className="field-input"
-                                                        placeholder="Image URL"
-                                                    />
-                                                    {editForm[header] && isImageUrl(editForm[header]) && (
-                                                        <div className="image-preview-small">
-                                                            <img
-                                                                src={convertToDirectImageUrl(editForm[header])}
-                                                                alt="Preview"
-                                                                onError={(e) => {
-                                                                    e.target.style.display = 'none';
-                                                                    e.target.nextSibling.style.display = 'flex';
-                                                                }}
-                                                            />
-                                                            <div className="image-fallback" style={{ display: 'none' }}>
-                                                                <Image size={16} /><span>Invalid</span>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    value={editForm[header] || ''}
-                                                    onChange={(e) => handleInputChange(header, e.target.value)}
-                                                    className="field-input"
-                                                />
-                                            )
-                                        ) : (
-                                            <div className="field-content">
-                                                {isImageField(header) && vol[header] && isImageUrl(vol[header]) ? (
-                                                    <div className="table-image-container">
-                                                        <img
-                                                            src={convertToDirectImageUrl(vol[header])}
-                                                            alt="Volunteer Image"
-                                                            className="table-image"
-                                                            onError={(e) => {
-                                                                e.target.style.display = 'none';
-                                                                e.target.nextSibling.style.display = 'flex';
-                                                            }}
-                                                        />
-                                                        <div className="image-fallback" style={{ display: 'none' }}>
-                                                            <Image size={16} /><span>No Image</span>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <span className="field-text">{vol[header] || 'N/A'}</span>
-                                                )}
-                                            </div>
-                                        )}
-                                    </td>
-                                ))}
-                                <td>
-                                    <div className="table-actions">
-                                        {editingId === vol.id ? (
-                                            <>
-                                                <button onClick={handleSave} className="save-btn" title="Save">
-                                                    <Save size={16} />
-                                                </button>
-                                                <button onClick={handleCancel} className="cancel-btn" title="Cancel">
-                                                    <X size={16} />
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button onClick={() => handleEdit(vol)} className="edit-btn" title="Edit">
-                                                    <Edit size={16} />
-                                                </button>
-                                                <button onClick={() => handleDeleteLocal(vol.id)} className="delete-btn" title="Delete Locally">
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    };
-
-    const renderCardView = () => {
-        if (filteredVolunteers.length === 0) {
-            return (
-                <div className="no-data">
-                    <FileText className="no-data-icon" />
-                    <p>No volunteer records found for this event.</p>
-                </div>
-            );
-        }
-
-        return (
-            <div className="cr-grid">
-                {filteredVolunteers.map((vol) => (
-                    <div key={vol.id} className="cr-card">
-                        <div className="card-header">
-                            {/* Display only the unique part of the ID for brevity */}
-                            <span className="cr-id">Volunteer #{vol.id.startsWith('csv-') || vol.id.startsWith('local-') ? vol.id.split('-')[1] : vol.id}</span>
-                            <div className="card-actions">
-                                {editingId === vol.id ? (
-                                    <>
-                                        <button onClick={handleSave} className="save-btn" title="Save">
-                                            <Save size={16} />
-                                        </button>
-                                        <button onClick={handleCancel} className="cancel-btn" title="Cancel">
-                                            <X size={16} />
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button onClick={() => handleEdit(vol)} className="edit-btn" title="Edit">
-                                            <Edit size={16} />
-                                        </button>
-                                        <button onClick={() => handleDeleteLocal(vol.id)} className="delete-btn" title="Delete Locally">
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="card-content">
-                            {Object.entries(vol).map(([key, value]) => {
-                                if (key === 'id') return null; // Don't render the internal 'id' field as a data point
-
-                                return (
-                                    <div key={key} className="field-row">
-                                        <div className="field-label">
-                                            {getFieldIcon(key)}
-                                            <span>{key}</span>
-                                        </div>
-                                        {editingId === vol.id ? (
-                                            isImageField(key) ? (
-                                                <div className="image-edit-container">
-                                                    <input
-                                                        type="text"
-                                                        value={editForm[key] || ''}
-                                                        onChange={(e) => handleInputChange(key, e.target.value)}
-                                                        className="field-input"
-                                                        placeholder="Image URL"
-                                                    />
-                                                    {editForm[key] && isImageUrl(editForm[key]) && (
-                                                        <div className="card-image-preview">
-                                                            <img
-                                                                src={convertToDirectImageUrl(editForm[key])}
-                                                                alt="Preview"
-                                                                onError={(e) => {
-                                                                    e.target.style.display = 'none';
-                                                                    e.target.nextSibling.style.display = 'flex';
-                                                                }}
-                                                            />
-                                                            <div className="image-fallback" style={{ display: 'none' }}>
-                                                                <Image size={24} /><span>Invalid</span>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    value={editForm[key] || ''}
-                                                    onChange={(e) => handleInputChange(key, e.target.value)}
-                                                    className="field-input"
-                                                />
-                                            )
-                                        ) : (
-                                            <div className="field-value">
-                                                {isImageField(key) && value && isImageUrl(value) ? (
-                                                    <div className="card-image-container">
-                                                        <img
-                                                            src={convertToDirectImageUrl(value)}
-                                                            alt="Volunteer Image"
-                                                            className="card-image"
-                                                            onError={(e) => {
-                                                                e.target.style.display = 'none';
-                                                                e.target.nextSibling.style.display = 'flex';
-                                                            }}
-                                                        />
-                                                        <div className="image-fallback" style={{ display: 'none' }}>
-                                                            <Image size={24} /><span>No Image</span>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    value || 'N/A'
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        );
-    };
-
-    return (
-        <div className="event-card">
-            <div className="event-header">
-                <div className="event-title-group">
-                    <h2>{event.name}</h2>
-                    <p className="event-date">
-                        <Calendar size={16} /> {event.date}
-                    </p>
-                </div>
-                <div className="event-actions-top">
-                    <button onClick={() => onDeleteEvent(event.id)} className="delete-btn-event" title="Delete Event">
-                        <Trash2 size={20} /> Delete Event
-                    </button>
-                </div>
-            </div>
-            <p className="event-description">{event.description}</p>
-            <p className="text-sm text-gray-400 mb-4 break-words">
-                CSV Source: <a href={event.googleSheetCSVUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{event.googleSheetCSVUrl}</a>
-            </p>
-
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <div className="view-toggle-event">
-                    <button
-                        className={`toggle-btn-event ${viewMode === 'card' ? 'active' : ''}`}
-                        onClick={() => setViewMode('card')}
-                    >
-                        <Grid size={20} /> Cards
-                    </button>
-                    <button
-                        className={`toggle-btn-event ${viewMode === 'table' ? 'active' : ''}`}
-                        onClick={() => setViewMode('table')}
-                    >
-                        <List size={20} /> Table
-                    </button>
-                </div>
-                <input
-                    type="text"
-                    placeholder="Search volunteers..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="field-input max-w-[250px]"
-                />
-                <button
-                    onClick={handleAddLocalVolunteer}
-                    className="add-local-volunteer-btn add-event-btn" // Re-using styling from event add button
-                    style={{ background: 'linear-gradient(45deg, #34d399, #10b981)', boxShadow: '0 5px 15px rgba(52, 211, 153, 0.3)' }}
+        {/* Event Selection */}
+        <div style={styles.eventSelector}>
+          <div style={styles.eventSelectorTitle}>
+            🎯 Select Event
+            <button
+              style={styles.addEventButton}
+              onClick={() => setShowAddEvent(!showAddEvent)}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
+              ➕ Add Event
+            </button>
+          </div>
+          
+          <div style={styles.eventTabs}>
+            {eventDataSources.map((event) => (
+              <div key={event.id} style={{ position: 'relative' }}>
+                <div
+                  style={{
+                    ...styles.eventTab,
+                    ...(currentEvent === event.id ? styles.eventTabActive : {}),
+                    ...(hoveredTab === event.id && currentEvent !== event.id ? styles.eventTabHover : {}),
+                  }}
+                  onClick={() => handleEventChange(event.id)}
+                  onMouseEnter={() => setHoveredTab(event.id)}
+                  onMouseLeave={() => setHoveredTab(null)}
                 >
-                    <PlusCircle size={20} /> Add Local Volunteer
+                  {event.name}
+                  <div
+                    style={{
+                      ...styles.statusBadge,
+                      ...(event.status === 'upcoming' ? styles.statusBadgeUpcoming : {}),
+                    }}
+                    title={event.status}
+                  >
+                    {event.status === 'active' ? '●' : '○'}
+                  </div>
+                  {eventDataSources.length > 1 && (
+                    <button
+                      style={styles.removeButton}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeEvent(event.id);
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.opacity = '1';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.opacity = '0.7';
+                      }}
+                      title="Remove event"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Add New Event Form */}
+          {showAddEvent && (
+            <div style={styles.addEventForm}>
+              <h4 style={{ margin: '0 0 1rem 0', color: '#334155' }}>Add New Event</h4>
+              <div style={styles.addEventGrid}>
+                <input
+                  type="text"
+                  placeholder="Event Name"
+                  value={newEvent.name}
+                  onChange={(e) => setNewEvent(prev => ({ ...prev, name: e.target.value }))}
+                  style={{
+                    ...styles.input,
+                    ...(focusedInput === 'newName' ? styles.inputFocus : {}),
+                  }}
+                  onFocus={() => setFocusedInput('newName')}
+                  onBlur={() => setFocusedInput(null)}
+                />
+                <input
+                  type="url"
+                  placeholder="Google Sheets CSV URL"
+                  value={newEvent.csvUrl}
+                  onChange={(e) => setNewEvent(prev => ({ ...prev, csvUrl: e.target.value }))}
+                  style={{
+                    ...styles.input,
+                    ...(focusedInput === 'newUrl' ? styles.inputFocus : {}),
+                  }}
+                  onFocus={() => setFocusedInput('newUrl')}
+                  onBlur={() => setFocusedInput(null)}
+                />
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    style={{ ...styles.button, ...styles.primaryButton }}
+                    onClick={addNewEvent}
+                  >
+                    Add
+                  </button>
+                  <button
+                    style={{ ...styles.button, ...styles.secondaryButton }}
+                    onClick={() => {
+                      setShowAddEvent(false);
+                      setNewEvent({ name: "", csvUrl: "" });
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {error && (
+          <div style={styles.errorContainer}>
+            <div style={styles.errorIcon}>⚠️</div>
+            <p style={styles.errorText}>{error}</p>
+          </div>
+        )}
+
+        {!error && responses.length > 0 && (
+          <>
+            {/* Search Section */}
+            <div style={styles.searchContainer}>
+              <div style={styles.searchTitle}>
+                🔍 Search & Filter Volunteers
+              </div>
+              <div style={styles.searchGrid}>
+                <div style={styles.searchInputContainer}>
+                  <label style={styles.searchLabel}>Search by Name</label>
+                  <input
+                    type="text"
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                    placeholder="Enter name to search..."
+                    style={{
+                      ...styles.searchInput,
+                      ...(focusedInput === 'name' ? styles.searchInputFocus : {}),
+                    }}
+                    onFocus={() => setFocusedInput('name')}
+                    onBlur={() => setFocusedInput(null)}
+                  />
+                </div>
+                <div style={styles.searchInputContainer}>
+                  <label style={styles.searchLabel}>Search by Skills</label>
+                  <input
+                    type="text"
+                    value={searchSkills}
+                    onChange={(e) => setSearchSkills(e.target.value)}
+                    placeholder="Enter skills to search..."
+                    style={{
+                      ...styles.searchInput,
+                      ...(focusedInput === 'skills' ? styles.searchInputFocus : {}),
+                    }}
+                    onFocus={() => setFocusedInput('skills')}
+                    onBlur={() => setFocusedInput(null)}
+                  />
+                </div>
+              </div>
+              {(searchName || searchSkills) && (
+                <button
+                  style={styles.clearButton}
+                  onClick={clearSearch}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'translateY(-2px)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                >
+                  Clear Search
                 </button>
+              )}
             </div>
 
-
-            {loadingVolunteers ? (
-                <div className="loading-container" style={{ minHeight: '150px', gap: '1rem', background: 'none' }}>
-                    <div className="ai-loader" style={{ width: '40px', height: '40px' }}>
-                        <div className="loader-core" style={{ width: '20px', height: '20px' }}></div>
-                        <div className="loader-ring" style={{ width: '40px', height: '40px', borderWidth: '2px' }}></div>
-                    </div>
-                    <p className="loading-text" style={{ fontSize: '0.9rem' }}>Loading volunteers from Google Sheet...</p>
-                </div>
-            ) : volunteerLoadError ? (
-                <div className="error-container" style={{ minHeight: '150px', gap: '0.5rem', background: 'none', padding: '1rem' }}>
-                    <CloudOff size={32} className="error-icon" />
-                    <p className="error-message" style={{ fontSize: '0.9rem' }}>{volunteerLoadError}</p>
-                </div>
-            ) : (
-                viewMode === 'card' ? renderCardView() : renderTableView()
+            {/* Results Info */}
+            {(searchName || searchSkills) && (
+              <div style={styles.resultsInfo}>
+                📊 Showing {filteredResponses.length} of {responses.length} volunteers
+                {searchName && ` • Name: "${searchName}"`}
+                {searchSkills && ` • Skills: "${searchSkills}"`}
+              </div>
             )}
-        </div>
-    );
+
+            {/* Results Table */}
+            {filteredResponses.length > 0 ? (
+              <div style={styles.tableContainer}>
+                <table style={styles.table}>
+                  <thead style={styles.thead}>
+                    <tr>
+                      {Object.keys(filteredResponses[0]).map((key, idx) => (
+                        <th key={idx} style={styles.th}>
+                          {key}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody style={styles.tbody}>
+                    {filteredResponses.map((row, i) => (
+                      <tr
+                        key={i}
+                        style={{
+                          ...styles.tr,
+                          ...(hoveredRow === i ? styles.trHover : {}),
+                        }}
+                        onMouseEnter={() => setHoveredRow(i)}
+                        onMouseLeave={() => setHoveredRow(null)}
+                      >
+                        {Object.values(row).map((val, j) => (
+                          <td key={j} style={styles.td}>
+                            {val || '—'}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div style={styles.noResults}>
+                {searchName || searchSkills ? (
+                  <>
+                    <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
+                    <p>No volunteers match your search criteria for {currentEventData?.name}.</p>
+                    <p>Try adjusting your search terms or clearing the filters.</p>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>👥</div>
+                    <p>No volunteer data found for {currentEventData?.name}</p>
+                  </>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {!error && responses.length === 0 && !loading && (
+          <div style={styles.noResults}>
+            <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📝</div>
+            <p>No volunteer responses found.</p>
+            <p>Make sure the CSV URL is correct and accessible.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
-export default App;
+export default VolunteerManager;
