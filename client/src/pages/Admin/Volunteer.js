@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { PlusCircle, Trash2, Edit, Save, XCircle, FileText, Calendar, User, Hash, CheckCircle, Grid, List, Image, CloudOff, X } from 'lucide-react';
-import Papa from "papaparse";
-// import Papa from 'papaparse'; // Removed: Assuming Papa is globally available
+import Papa from "papaparse"; // This line was causing a compilation error. PapaParse will be loaded via CDN.
 
 // --- Utility Functions for CSV Parsing and Image Handling ---
 
@@ -70,8 +69,9 @@ const isImageUrl = (url) => {
     return false;
 };
 
-// --- Main Volunteer Component ---
-function Volunteer() {
+// --- Main App Component ---
+// Renamed from 'Volunteer' to 'App' for Canvas compatibility
+function App() {
     // Events are now stored in local state, not persisted by Firebase
     const [events, setEvents] = useState([]);
     const [loadingApp, setLoadingApp] = useState(false); // Only for initial app load, not data fetching
@@ -145,6 +145,8 @@ function Volunteer() {
     return (
         <div className="cr-container">
             <style jsx>{`
+                /* Load PapaParse from CDN */
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js');
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
                 body {
                     font-family: 'Inter', sans-serif;
@@ -1062,7 +1064,6 @@ function Volunteer() {
                                 key={event.id}
                                 event={event}
                                 onDeleteEvent={handleDeleteEvent}
-                                // userId prop is no longer necessary as Firebase Auth is removed
                             />
                         ))}
                     </div>
@@ -1093,7 +1094,7 @@ const EventCard = ({ event, onDeleteEvent }) => {
 
         // Assuming Papa is globally available
         if (typeof Papa === 'undefined') {
-            setVolunteerLoadError('PapaParse library is not loaded. Cannot fetch CSV data.');
+            setVolunteerLoadError('PapaParse library is not loaded. Cannot fetch CSV data. Please ensure the PapaParse CDN is included.');
             setLoadingVolunteers(false);
             return;
         }
@@ -1526,4 +1527,4 @@ const EventCard = ({ event, onDeleteEvent }) => {
     );
 };
 
-export default Volunteer;
+export default App;
