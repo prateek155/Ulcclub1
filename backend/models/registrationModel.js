@@ -14,11 +14,6 @@ const memberSchema = new mongoose.Schema({
     required: true,
     match: /^[0-9]{10}$/,
   },
-  email: {
-    type: String,
-    required: true,
-    match: /.+\@.+\..+/
-  }
 }, { _id: false });
 
 const registrationSchema = new mongoose.Schema({
