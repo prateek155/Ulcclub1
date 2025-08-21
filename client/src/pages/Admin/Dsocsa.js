@@ -33,10 +33,10 @@ const Dsocsa = () => {
       title: "Department Management",
       items: [
         {
-          path: "/dashboard/admin/create-product",
+          path: "/association",
           icon: <PlusCircle />,
           title: "Association ",
-          description: "Detail Od Association Member's",
+          description: "Detail All Association Member's",
         },
         {
           path: "/dashboard/admin/Cr",
