@@ -22,6 +22,7 @@ import FeedbackManagement from "./pages/Admin/FeedManagement.js";
 import AllRegistrations from "./pages/Admin/AllRegistratiions.js";
 import Event from "./pages/Event.js";
 import Registration from "./pages/Registration.js";
+import Association from "./pages/Association.js";
 import Sponsers from "./pages/Admin/Sponsers.js";
 import Response from "./pages/Admin/Response.js";
 import Skills from "./pages/Admin/Skills.js";
@@ -76,6 +77,7 @@ function App() {
             <Route path="/Event" element={<Event />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/eventparticipent" element={<Eventparticipent />} />
+            <Route path="/association" element={<Association />} />
             <Route path="*" element={<Pagenotfound />} /> 
 
           </Routes>
