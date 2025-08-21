@@ -57,24 +57,55 @@ const Registration = () => {
     setMessage('');
 
     try {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setMessage('Registration successful! AI processing complete.');
-      setFormData({
-        name: '',
-        email:'',
-        department: '',
-        phone: '',
-        groupName: '',
-        leadername: '',
-        leaderemail:'',
-        leaderphone:'',
-        members: [{ name: '', department: '', phone: '' }]
+      const registrationData =
+        registrationType === "individual"
+          ? {
+              type: "individual",
+              name: formData.name,
+              email: formData.email, 
+              department: formData.department,
+              phone: formData.phone,
+              registrationDate: new Date().toISOString()
+            }
+          : {
+              type: "group",
+              groupName: formData.groupName,
+              leadername: formData.leadername,
+              leaderemail: formData.leaderemail,
+              leaderphone: formData.leaderphone,
+              members: formData.members,
+              registrationDate: new Date().toISOString()
+            };
+
+      const response = await fetch('https://ulcclub1.onrender.com/api/v1/registration/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registrationData),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setMessage('Registration successful! Neural network processing complete. Confirmation email dispatched.');
+        setFormData({
+          name: '',
+          email:'',
+          department: '',
+          phone: '',
+          groupName: '',
+          leadername: '',
+          leaderemail:'',
+          leaderphone:'',
+          members: [{ name: '', department: '', phone: '' }]
+        });
+      } else {
+        setMessage('Neural network registration failed. Please recalibrate and try again.');
+      }
     } catch (error) {
-      console.error(error);
-      setMessage('Neural network error. Please try again.');
+      console.error('Registration error:', error);
+      setMessage('Connection to AI mainframe lost. Please check your network and try again.');
     } finally {
       setLoading(false);
     }
@@ -93,9 +124,12 @@ const Registration = () => {
       <div style={styles.header}>
         <div style={styles.aiIcon}>🤖</div>
         <h1 style={styles.title}>
-           Event Registration
+          AI Event Registration
           <span style={styles.glitch}>AI Event Registration</span>
         </h1>
+        <p style={styles.subtitle}>
+          Neural network powered event management system
+        </p>
         <div style={styles.scanLine}></div>
       </div>
 
