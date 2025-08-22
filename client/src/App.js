@@ -64,7 +64,7 @@ function App() {
               <Route path="admin/attendance" element={<Attendance />} />
               <Route path="admin/Cr" element={<CrDetail />} />
               <Route path="admin/fund" element={<Funds />} />
-              <Route path="admin/volunteer" alement={<Volunteer />} />
+              <Route path="admin/volunteer" element={<Volunteer />} />
             </Route>
 
             {/* Additional Routes */}
