@@ -15,21 +15,21 @@ const AIFormResponses = () => {
     {
       id: 0,
       name: "AI Training Dataset",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
+      url: "",
       icon: "🤖",
       color: "#00d4ff"
     },
     {
       id: 1,
       name: "Machine Learning Survey",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzwg2gC3NfIyqwom9zyrhw6-QRDg_S4HOv_CC97lxCyZd8OPOus9ei53S8Fqz4T_Wp64y4yf7EQ5rJ/pub?output=csv",
+      url: "",
       icon: "🧠",
       color: "#ff6b6b"
     },
     {
       id: 2,
       name: "Neural Network Feedback",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_tAXjcwH6Ng/pub?output=csv",
+      url: "",
       icon: "⚡",
       color: "#4ecdc4"
     }
