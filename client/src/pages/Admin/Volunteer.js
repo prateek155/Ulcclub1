@@ -1,137 +1,65 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
 
-const VolunteerManager = () => {
-  const [allEventData, setAllEventData] = useState({});
-  const [currentEvent, setCurrentEvent] = useState("");
+const AIFormResponses = () => {
   const [responses, setResponses] = useState([]);
   const [filteredResponses, setFilteredResponses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchName, setSearchName] = useState("");
   const [searchSkills, setSearchSkills] = useState("");
-  const [eventDataSources, setEventDataSources] = useState([
+  const [activeForm, setActiveForm] = useState(0);
+
+  // Three different Google Form spreadsheet URLs
+  const FORM_CONFIGS = [
     {
-      id: "event1",
-      name: "Tech Conference 2025",
-      csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
-      status: "active"
+      id: 0,
+      name: "AI Training Dataset",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
+      icon: "🤖",
+      color: "#00d4ff"
     },
     {
-      id: "event2", 
-      name: "Community Outreach",
-      csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
-      status: "active"
+      id: 1,
+      name: "Machine Learning Survey",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzwg2gC3NfIyqwom9zyrhw6-QRDg_S4HOv_CC97lxCyZd8OPOus9ei53S8Fqz4T_Wp64y4yf7EQ5rJ/pub?output=csv",
+      icon: "🧠",
+      color: "#ff6b6b"
     },
     {
-      id: "event3",
-      name: "Annual Fundraiser",
-      csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_t8SSigegcp6c7UDqGDPzxlL5j8c1oMbXSLqYEafnJJpKWlSFkCoF-kktP_-TeopAXjcwH6Ng/pub?output=csv",
-      status: "upcoming"
+      id: 2,
+      name: "Neural Network Feedback",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSG6gr_tAXjcwH6Ng/pub?output=csv",
+      icon: "⚡",
+      color: "#4ecdc4"
     }
-  ]);
-  const [showAddEvent, setShowAddEvent] = useState(false);
-  const [newEvent, setNewEvent] = useState({ name: "", csvUrl: "" });
+  ];
 
-  // Load data for a specific event
-  const loadEventData = async (eventId) => {
-    const event = eventDataSources.find(e => e.id === eventId);
-    if (!event) return;
-
-    // Check if we already have this data cached
-    if (allEventData[eventId]) {
-      setResponses(allEventData[eventId]);
-      setFilteredResponses(allEventData[eventId]);
-      return;
-    }
-
+  const loadFormData = (formIndex) => {
     setLoading(true);
     setError(null);
-
-    try {
-      const response = await fetch(event.csvUrl);
-      const data = await response.text();
-      const parsedData = Papa.parse(data, { 
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: (header) => header.trim()
+    setActiveForm(formIndex);
+    
+    const formUrl = FORM_CONFIGS[formIndex].url;
+    
+    fetch(formUrl)
+      .then((res) => res.text())
+      .then((data) => {
+        const parsedData = Papa.parse(data, { header: true });
+        setResponses(parsedData.data);
+        setFilteredResponses(parsedData.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching sheet:", err);
+        setError("Neural network connection failed. Retrying data transmission...");
+        setLoading(false);
       });
-      
-      // Cache the data
-      setAllEventData(prev => ({
-        ...prev,
-        [eventId]: parsedData.data
-      }));
-      
-      setResponses(parsedData.data);
-      setFilteredResponses(parsedData.data);
-    } catch (err) {
-      console.error("Error fetching sheet:", err);
-      setError(`Failed to load data for ${event.name}. Please check the CSV URL.`);
-    } finally {
-      setLoading(false);
-    }
   };
 
-  // Load first event on component mount
   useEffect(() => {
-    if (eventDataSources.length > 0 && !currentEvent) {
-      const firstEvent = eventDataSources[0];
-      setCurrentEvent(firstEvent.id);
-      loadEventData(firstEvent.id);
-    }
-  }, [eventDataSources]);
-
-  // Handle event change
-  const handleEventChange = (eventId) => {
-    setCurrentEvent(eventId);
-    setSearchName("");
-    setSearchSkills("");
-    loadEventData(eventId);
-  };
-
-  // Add new event
-  const addNewEvent = () => {
-    if (!newEvent.name.trim() || !newEvent.csvUrl.trim()) {
-      alert("Please enter both event name and CSV URL");
-      return;
-    }
-
-    const newId = `event${Date.now()}`;
-    setEventDataSources(prev => [...prev, {
-      id: newId,
-      name: newEvent.name,
-      csvUrl: newEvent.csvUrl,
-      status: "active"
-    }]);
-    
-    setNewEvent({ name: "", csvUrl: "" });
-    setShowAddEvent(false);
-    setCurrentEvent(newId);
-    loadEventData(newId);
-  };
-
-  // Remove event
-  const removeEvent = (eventId) => {
-    if (eventDataSources.length <= 1) {
-      alert("Cannot remove the last event");
-      return;
-    }
-    
-    setEventDataSources(prev => prev.filter(e => e.id !== eventId));
-    setAllEventData(prev => {
-      const newData = { ...prev };
-      delete newData[eventId];
-      return newData;
-    });
-    
-    if (currentEvent === eventId) {
-      const remainingEvents = eventDataSources.filter(e => e.id !== eventId);
-      if (remainingEvents.length > 0) {
-        handleEventChange(remainingEvents[0].id);
-      }
-    }
-  };
+    loadFormData(0); // Load first form by default
+  }, []);
 
   // Filter responses based on search criteria
   useEffect(() => {
@@ -160,181 +88,130 @@ const VolunteerManager = () => {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '2rem',
-      fontFamily: '"Inter", "Segoe UI", "Roboto", sans-serif',
+      background: 'radial-gradient(ellipse at center, #0f0f23 0%, #000000 70%)',
+      position: 'relative',
+      overflow: 'hidden',
+      fontFamily: '"JetBrains Mono", "Courier New", monospace',
+      color: '#ffffff',
     },
-    card: {
-      background: 'rgba(255, 255, 255, 0.95)',
-      backdropFilter: 'blur(10px)',
-      borderRadius: '20px',
+    backgroundPattern: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundImage: `
+        radial-gradient(circle at 25% 25%, #00d4ff20 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, #ff6b6b20 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, #4ecdc420 0%, transparent 50%)
+      `,
+      animation: 'pulse 4s ease-in-out infinite alternate',
+      zIndex: 1,
+    },
+    content: {
+      position: 'relative',
+      zIndex: 2,
       padding: '2rem',
       maxWidth: '1400px',
       margin: '0 auto',
-      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
     },
     header: {
       textAlign: 'center',
-      marginBottom: '2rem',
-    },
-    title: {
-      fontSize: '2.5rem',
-      fontWeight: '700',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      marginBottom: '0.5rem',
-    },
-    subtitle: {
-      color: '#64748b',
-      fontSize: '1.1rem',
-      fontWeight: '400',
-    },
-    eventSelector: {
-      background: '#ffffff',
-      borderRadius: '16px',
-      padding: '1.5rem',
-      marginBottom: '1rem',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e2e8f0',
-    },
-    eventSelectorTitle: {
-      fontSize: '1.2rem',
-      fontWeight: '600',
-      color: '#334155',
-      marginBottom: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    eventTabs: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: '0.5rem',
-      marginBottom: '1rem',
-    },
-    eventTab: {
-      padding: '0.75rem 1.5rem',
-      borderRadius: '12px',
-      border: '2px solid #e2e8f0',
-      background: '#ffffff',
-      cursor: 'pointer',
-      transition: 'all 0.2s ease',
-      fontSize: '0.9rem',
-      fontWeight: '500',
+      marginBottom: '3rem',
       position: 'relative',
     },
-    eventTabActive: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      color: '#ffffff',
-      border: '2px solid transparent',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+    title: {
+      fontSize: '3.5rem',
+      fontWeight: '900',
+      background: 'linear-gradient(45deg, #00d4ff, #ff6b6b, #4ecdc4)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundSize: '200% 200%',
+      animation: 'gradientShift 3s ease infinite',
+      marginBottom: '1rem',
+      textShadow: '0 0 30px rgba(0, 212, 255, 0.3)',
     },
-    eventTabHover: {
-      borderColor: '#667eea',
-      transform: 'translateY(-1px)',
+    subtitle: {
+      fontSize: '1.2rem',
+      color: '#8892b0',
+      marginBottom: '2rem',
+      opacity: 0.9,
     },
-    statusBadge: {
-      position: 'absolute',
-      top: '-8px',
-      right: '-8px',
-      background: '#10b981',
-      color: '#ffffff',
-      borderRadius: '50%',
-      width: '20px',
-      height: '20px',
-      fontSize: '0.7rem',
+    formSelector: {
       display: 'flex',
-      alignItems: 'center',
       justifyContent: 'center',
-      fontWeight: '600',
+      gap: '1rem',
+      marginBottom: '3rem',
+      flexWrap: 'wrap',
     },
-    statusBadgeUpcoming: {
-      background: '#f59e0b',
-    },
-    addEventButton: {
-      background: 'linear-gradient(135deg, #10b981, #059669)',
+    formButton: {
+      background: 'rgba(255, 255, 255, 0.05)',
+      border: '2px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '15px',
+      padding: '1rem 2rem',
       color: '#ffffff',
-      border: 'none',
-      padding: '0.75rem 1.5rem',
-      borderRadius: '12px',
-      fontSize: '0.9rem',
-      fontWeight: '500',
       cursor: 'pointer',
-      transition: 'all 0.2s ease',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      position: 'relative',
+      overflow: 'hidden',
+      minWidth: '200px',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       gap: '0.5rem',
     },
-    addEventForm: {
-      background: '#f8fafc',
-      borderRadius: '12px',
-      padding: '1.5rem',
-      marginTop: '1rem',
-      border: '1px solid #e2e8f0',
+    formButtonActive: {
+      border: '2px solid #00d4ff',
+      background: 'rgba(0, 212, 255, 0.1)',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 10px 30px rgba(0, 212, 255, 0.3)',
     },
-    addEventGrid: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 2fr auto',
-      gap: '1rem',
-      alignItems: 'end',
+    formButtonIcon: {
+      fontSize: '2rem',
+      marginBottom: '0.5rem',
     },
-    input: {
-      padding: '0.75rem 1rem',
-      fontSize: '0.9rem',
-      border: '2px solid #e2e8f0',
-      borderRadius: '8px',
-      outline: 'none',
-      transition: 'all 0.2s ease',
+    formButtonText: {
+      fontWeight: '600',
+      fontSize: '1rem',
+      textAlign: 'center',
     },
-    inputFocus: {
-      borderColor: '#667eea',
-      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
-    },
-    button: {
-      padding: '0.75rem 1.5rem',
-      borderRadius: '8px',
-      border: 'none',
-      fontSize: '0.9rem',
-      fontWeight: '500',
-      cursor: 'pointer',
-      transition: 'all 0.2s ease',
-    },
-    primaryButton: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      color: '#ffffff',
-    },
-    secondaryButton: {
-      background: '#f1f5f9',
-      color: '#64748b',
-      border: '1px solid #cbd5e1',
-    },
-    removeButton: {
-      background: '#ef4444',
-      color: '#ffffff',
+    formButtonSubtext: {
       fontSize: '0.8rem',
-      padding: '0.5rem',
-      borderRadius: '6px',
-      border: 'none',
-      cursor: 'pointer',
-      opacity: '0.7',
-      transition: 'all 0.2s ease',
+      opacity: 0.7,
+    },
+    card: {
+      background: 'rgba(255, 255, 255, 0.02)',
+      backdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '20px',
+      padding: '2rem',
+      marginBottom: '2rem',
+      boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
+      position: 'relative',
+      overflow: 'hidden',
+    },
+    cardGlow: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '2px',
+      background: 'linear-gradient(90deg, #00d4ff, #ff6b6b, #4ecdc4)',
+      backgroundSize: '200% 100%',
+      animation: 'gradientSlide 2s ease infinite',
     },
     searchContainer: {
-      background: '#ffffff',
-      borderRadius: '16px',
-      padding: '1.5rem',
+      background: 'rgba(255, 255, 255, 0.03)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '15px',
+      padding: '2rem',
       marginBottom: '2rem',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e2e8f0',
     },
     searchTitle: {
-      fontSize: '1.2rem',
-      fontWeight: '600',
-      color: '#334155',
-      marginBottom: '1rem',
+      fontSize: '1.3rem',
+      fontWeight: '700',
+      color: '#00d4ff',
+      marginBottom: '1.5rem',
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
@@ -342,108 +219,112 @@ const VolunteerManager = () => {
     searchGrid: {
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-      gap: '1rem',
+      gap: '1.5rem',
     },
     searchInputContainer: {
       position: 'relative',
     },
     searchInput: {
       width: '100%',
-      padding: '0.75rem 1rem',
+      padding: '1rem 1.5rem',
       fontSize: '1rem',
-      border: '2px solid #e2e8f0',
+      background: 'rgba(255, 255, 255, 0.05)',
+      border: '2px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '12px',
+      color: '#ffffff',
       outline: 'none',
-      transition: 'all 0.2s ease',
-      background: '#f8fafc',
+      transition: 'all 0.3s ease',
+      fontFamily: 'inherit',
     },
     searchInputFocus: {
-      borderColor: '#667eea',
-      background: '#ffffff',
-      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+      borderColor: '#00d4ff',
+      background: 'rgba(0, 212, 255, 0.05)',
+      boxShadow: '0 0 20px rgba(0, 212, 255, 0.2)',
     },
     searchLabel: {
       position: 'absolute',
-      top: '-0.5rem',
+      top: '-0.7rem',
       left: '1rem',
-      background: '#ffffff',
-      padding: '0 0.5rem',
-      fontSize: '0.875rem',
-      fontWeight: '500',
-      color: '#667eea',
+      background: 'rgba(15, 15, 35, 0.9)',
+      padding: '0.3rem 0.8rem',
+      fontSize: '0.85rem',
+      fontWeight: '600',
+      color: '#00d4ff',
+      borderRadius: '6px',
+      border: '1px solid rgba(0, 212, 255, 0.3)',
     },
     clearButton: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      background: 'linear-gradient(135deg, #ff6b6b, #ff8e8e)',
       color: '#ffffff',
       border: 'none',
-      padding: '0.75rem 1.5rem',
+      padding: '1rem 2rem',
       borderRadius: '12px',
-      fontSize: '0.9rem',
-      fontWeight: '500',
+      fontSize: '1rem',
+      fontWeight: '600',
       cursor: 'pointer',
-      transition: 'all 0.2s ease',
-      marginTop: '1rem',
+      transition: 'all 0.3s ease',
+      marginTop: '1.5rem',
+      position: 'relative',
+      overflow: 'hidden',
     },
     resultsInfo: {
-      background: '#f0f9ff',
-      border: '1px solid #0ea5e9',
+      background: 'rgba(0, 212, 255, 0.1)',
+      border: '1px solid rgba(0, 212, 255, 0.3)',
       borderRadius: '12px',
-      padding: '1rem',
-      marginBottom: '1rem',
-      color: '#0369a1',
-      fontSize: '0.95rem',
+      padding: '1rem 1.5rem',
+      marginBottom: '2rem',
+      color: '#00d4ff',
+      fontSize: '1rem',
       fontWeight: '500',
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
     },
     tableContainer: {
-      background: '#ffffff',
-      borderRadius: '16px',
+      background: 'rgba(255, 255, 255, 0.02)',
+      borderRadius: '15px',
       overflow: 'hidden',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e2e8f0',
-      overflowX: 'auto',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
     },
     table: {
       width: '100%',
       borderCollapse: 'collapse',
       fontSize: '0.95rem',
-      minWidth: '600px',
     },
     thead: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      background: 'rgba(0, 212, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
     },
     th: {
-      padding: '1rem',
+      padding: '1.5rem 1rem',
       textAlign: 'left',
-      fontWeight: '600',
-      color: '#ffffff',
+      fontWeight: '700',
+      color: '#00d4ff',
       fontSize: '0.9rem',
       textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      borderBottom: 'none',
-      whiteSpace: 'nowrap',
+      letterSpacing: '1px',
+      borderBottom: '2px solid rgba(0, 212, 255, 0.3)',
+      position: 'relative',
     },
     tbody: {
-      background: '#ffffff',
+      background: 'transparent',
     },
     tr: {
-      transition: 'all 0.2s ease',
-      borderBottom: '1px solid #f1f5f9',
+      transition: 'all 0.3s ease',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+      position: 'relative',
     },
     trHover: {
-      background: '#f8fafc',
-      transform: 'translateY(-1px)',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+      background: 'rgba(0, 212, 255, 0.05)',
+      boxShadow: '0 5px 15px rgba(0, 212, 255, 0.1)',
     },
     td: {
-      padding: '1rem',
-      color: '#334155',
-      lineHeight: '1.5',
+      padding: '1.5rem 1rem',
+      color: '#e6f1ff',
+      lineHeight: '1.6',
       verticalAlign: 'top',
-      maxWidth: '200px',
-      wordBreak: 'break-word',
+      position: 'relative',
     },
     loadingContainer: {
       display: 'flex',
@@ -453,99 +334,134 @@ const VolunteerManager = () => {
       padding: '4rem',
     },
     spinner: {
-      width: '50px',
-      height: '50px',
-      border: '3px solid #f3f4f6',
-      borderTop: '3px solid #667eea',
+      width: '60px',
+      height: '60px',
+      border: '3px solid rgba(255, 255, 255, 0.1)',
+      borderTop: '3px solid #00d4ff',
+      borderRight: '3px solid #ff6b6b',
       borderRadius: '50%',
-      animation: 'spin 1s linear infinite',
-      marginBottom: '1rem',
+      animation: 'neuralSpin 1.5s linear infinite',
+      marginBottom: '2rem',
     },
     loadingText: {
-      color: '#64748b',
-      fontSize: '1.1rem',
-      fontWeight: '500',
+      color: '#00d4ff',
+      fontSize: '1.2rem',
+      fontWeight: '600',
+      animation: 'pulse 2s ease-in-out infinite',
     },
     errorContainer: {
       textAlign: 'center',
-      padding: '2rem',
-      color: '#dc2626',
-      background: '#fef2f2',
-      borderRadius: '12px',
-      border: '1px solid #fecaca',
+      padding: '3rem',
+      color: '#ff6b6b',
+      background: 'rgba(255, 107, 107, 0.1)',
+      borderRadius: '15px',
+      border: '1px solid rgba(255, 107, 107, 0.3)',
     },
     errorIcon: {
-      fontSize: '3rem',
+      fontSize: '4rem',
       marginBottom: '1rem',
+      filter: 'drop-shadow(0 0 10px rgba(255, 107, 107, 0.5))',
     },
     errorText: {
-      fontSize: '1.1rem',
-      fontWeight: '500',
+      fontSize: '1.2rem',
+      fontWeight: '600',
     },
     badge: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      color: '#ffffff',
-      padding: '0.5rem 1rem',
-      borderRadius: '20px',
-      fontSize: '0.9rem',
-      fontWeight: '500',
+      background: 'linear-gradient(135deg, #00d4ff, #4ecdc4)',
+      color: '#000000',
+      padding: '0.8rem 1.5rem',
+      borderRadius: '25px',
+      fontSize: '1rem',
+      fontWeight: '700',
       display: 'inline-block',
-      marginBottom: '1rem',
+      marginBottom: '2rem',
+      boxShadow: '0 5px 15px rgba(0, 212, 255, 0.3)',
     },
     noResults: {
       textAlign: 'center',
-      padding: '3rem',
-      color: '#64748b',
-      fontSize: '1.1rem',
-      background: '#f8fafc',
-      borderRadius: '12px',
-      border: '1px solid #e2e8f0',
+      padding: '4rem',
+      color: '#8892b0',
+      fontSize: '1.2rem',
+      background: 'rgba(255, 255, 255, 0.02)',
+      borderRadius: '15px',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
     },
   };
 
-  // Add CSS animation keyframes
-  useEffect(() => {
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = `
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      
-      .fade-in {
-        animation: fadeIn 0.6s ease-out;
-      }
-    `;
-    document.head.appendChild(styleSheet);
+  // Add CSS animations
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = `
+    @keyframes neuralSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
     
-    return () => {
-      document.head.removeChild(styleSheet);
-    };
-  }, []);
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes gradientSlide {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+  `;
+  document.head.appendChild(styleSheet);
 
   const [hoveredRow, setHoveredRow] = useState(null);
   const [focusedInput, setFocusedInput] = useState(null);
-  const [hoveredTab, setHoveredTab] = useState(null);
 
   const clearSearch = () => {
     setSearchName("");
     setSearchSkills("");
   };
 
-  const currentEventData = eventDataSources.find(e => e.id === currentEvent);
-
   if (loading) {
     return (
       <div style={styles.container}>
-        <div style={styles.card}>
-          <div style={styles.loadingContainer}>
-            <div style={styles.spinner}></div>
-            <p style={styles.loadingText}>Loading volunteer data...</p>
+        <div style={styles.backgroundPattern}></div>
+        <div style={styles.content}>
+          <div style={styles.card}>
+            <div style={styles.loadingContainer}>
+              <div style={styles.spinner}></div>
+              <p style={styles.loadingText}>Processing neural data streams...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={styles.container}>
+        <div style={styles.backgroundPattern}></div>
+        <div style={styles.content}>
+          <div style={styles.card}>
+            <div style={styles.errorContainer}>
+              <div style={styles.errorIcon}>⚠️</div>
+              <p style={styles.errorText}>{error}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -554,270 +470,167 @@ const VolunteerManager = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.card} className="fade-in">
+      <div style={styles.backgroundPattern}></div>
+      <div style={styles.content} className="fade-in">
         <div style={styles.header}>
-          <h1 style={styles.title}>Volunteer Management</h1>
-          <p style={styles.subtitle}>Manage volunteers across multiple events</p>
-          {currentEventData && (
-            <span style={styles.badge}>
-              {responses.length} Volunteer{responses.length !== 1 ? 's' : ''} • {currentEventData.name}
-            </span>
-          )}
+          <h1 style={styles.title}>Volunteer Data </h1>
+          <p style={styles.subtitle}>Advanced Neural Response Processing System</p>
         </div>
 
-        {/* Event Selection */}
-        <div style={styles.eventSelector}>
-          <div style={styles.eventSelectorTitle}>
-            🎯 Select Event
+        {/* Form Selection Buttons */}
+        <div style={styles.formSelector}>
+          {FORM_CONFIGS.map((form, index) => (
             <button
-              style={styles.addEventButton}
-              onClick={() => setShowAddEvent(!showAddEvent)}
+              key={form.id}
+              style={{
+                ...styles.formButton,
+                ...(activeForm === index ? styles.formButtonActive : {}),
+              }}
+              onClick={() => loadFormData(index)}
               onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+                if (activeForm !== index) {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = `0 5px 20px ${form.color}30`;
+                }
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
+                if (activeForm !== index) {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }
               }}
             >
-              ➕ Add Event
-            </button>
-          </div>
-          
-          <div style={styles.eventTabs}>
-            {eventDataSources.map((event) => (
-              <div key={event.id} style={{ position: 'relative' }}>
-                <div
-                  style={{
-                    ...styles.eventTab,
-                    ...(currentEvent === event.id ? styles.eventTabActive : {}),
-                    ...(hoveredTab === event.id && currentEvent !== event.id ? styles.eventTabHover : {}),
-                  }}
-                  onClick={() => handleEventChange(event.id)}
-                  onMouseEnter={() => setHoveredTab(event.id)}
-                  onMouseLeave={() => setHoveredTab(null)}
-                >
-                  {event.name}
-                  <div
-                    style={{
-                      ...styles.statusBadge,
-                      ...(event.status === 'upcoming' ? styles.statusBadgeUpcoming : {}),
-                    }}
-                    title={event.status}
-                  >
-                    {event.status === 'active' ? '●' : '○'}
-                  </div>
-                  {eventDataSources.length > 1 && (
-                    <button
-                      style={styles.removeButton}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeEvent(event.id);
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.opacity = '1';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.opacity = '0.7';
-                      }}
-                      title="Remove event"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
+              <div style={styles.formButtonIcon}>{form.icon}</div>
+              <div style={styles.formButtonText}>{form.name}</div>
+              <div style={styles.formButtonSubtext}>
+                {responses.length} records
               </div>
-            ))}
-          </div>
+            </button>
+          ))}
+        </div>
 
-          {/* Add New Event Form */}
-          {showAddEvent && (
-            <div style={styles.addEventForm}>
-              <h4 style={{ margin: '0 0 1rem 0', color: '#334155' }}>Add New Event</h4>
-              <div style={styles.addEventGrid}>
+        <div style={styles.card}>
+          <div style={styles.cardGlow}></div>
+          
+          <span style={styles.badge}>
+            {FORM_CONFIGS[activeForm].icon} {responses.length} Neural Patterns Detected
+          </span>
+
+          {/* Search Section */}
+          <div style={styles.searchContainer}>
+            <div style={styles.searchTitle}>
+              🔍 Data Pattern Recognition
+            </div>
+            <div style={styles.searchGrid}>
+              <div style={styles.searchInputContainer}>
+                <label style={styles.searchLabel}>Identity Scan</label>
                 <input
                   type="text"
-                  placeholder="Event Name"
-                  value={newEvent.name}
-                  onChange={(e) => setNewEvent(prev => ({ ...prev, name: e.target.value }))}
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                  placeholder="Enter neural signature..."
                   style={{
-                    ...styles.input,
-                    ...(focusedInput === 'newName' ? styles.inputFocus : {}),
+                    ...styles.searchInput,
+                    ...(focusedInput === 'name' ? styles.searchInputFocus : {}),
                   }}
-                  onFocus={() => setFocusedInput('newName')}
+                  onFocus={() => setFocusedInput('name')}
                   onBlur={() => setFocusedInput(null)}
                 />
-                <input
-                  type="url"
-                  placeholder="Google Sheets CSV URL"
-                  value={newEvent.csvUrl}
-                  onChange={(e) => setNewEvent(prev => ({ ...prev, csvUrl: e.target.value }))}
-                  style={{
-                    ...styles.input,
-                    ...(focusedInput === 'newUrl' ? styles.inputFocus : {}),
-                  }}
-                  onFocus={() => setFocusedInput('newUrl')}
-                  onBlur={() => setFocusedInput(null)}
-                />
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button
-                    style={{ ...styles.button, ...styles.primaryButton }}
-                    onClick={addNewEvent}
-                  >
-                    Add
-                  </button>
-                  <button
-                    style={{ ...styles.button, ...styles.secondaryButton }}
-                    onClick={() => {
-                      setShowAddEvent(false);
-                      setNewEvent({ name: "", csvUrl: "" });
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
               </div>
+              <div style={styles.searchInputContainer}>
+                <label style={styles.searchLabel}>Skill Matrix</label>
+                <input
+                  type="text"
+                  value={searchSkills}
+                  onChange={(e) => setSearchSkills(e.target.value)}
+                  placeholder="Analyze capabilities..."
+                  style={{
+                    ...styles.searchInput,
+                    ...(focusedInput === 'skills' ? styles.searchInputFocus : {}),
+                  }}
+                  onFocus={() => setFocusedInput('skills')}
+                  onBlur={() => setFocusedInput(null)}
+                />
+              </div>
+            </div>
+            {(searchName || searchSkills) && (
+              <button
+                style={styles.clearButton}
+                onClick={clearSearch}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 8px 25px rgba(255, 107, 107, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                Reset Neural Filters
+              </button>
+            )}
+          </div>
+
+          {/* Results Info */}
+          {(searchName || searchSkills) && (
+            <div style={styles.resultsInfo}>
+              📊 Neural Match: {filteredResponses.length} / {responses.length} patterns
+              {searchName && ` • ID: "${searchName}"`}
+              {searchSkills && ` • Skills: "${searchSkills}"`}
+            </div>
+          )}
+
+          {/* Results Table */}
+          {filteredResponses.length > 0 ? (
+            <div style={styles.tableContainer}>
+              <table style={styles.table}>
+                <thead style={styles.thead}>
+                  <tr>
+                    {Object.keys(filteredResponses[0]).map((key, idx) => (
+                      <th key={idx} style={styles.th}>
+                        {key}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody style={styles.tbody}>
+                  {filteredResponses.map((row, i) => (
+                    <tr
+                      key={i}
+                      style={{
+                        ...styles.tr,
+                        ...(hoveredRow === i ? styles.trHover : {}),
+                      }}
+                      onMouseEnter={() => setHoveredRow(i)}
+                      onMouseLeave={() => setHoveredRow(null)}
+                    >
+                      {Object.values(row).map((val, j) => (
+                        <td key={j} style={styles.td}>
+                          {val || '—'}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div style={styles.noResults}>
+              {searchName || searchSkills ? (
+                <>
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
+                  <p>No neural patterns match the specified parameters.</p>
+                  <p>Recalibrating search algorithms...</p>
+                </>
+              ) : (
+                <p>No data streams detected</p>
+              )}
             </div>
           )}
         </div>
-
-        {error && (
-          <div style={styles.errorContainer}>
-            <div style={styles.errorIcon}>⚠️</div>
-            <p style={styles.errorText}>{error}</p>
-          </div>
-        )}
-
-        {!error && responses.length > 0 && (
-          <>
-            {/* Search Section */}
-            <div style={styles.searchContainer}>
-              <div style={styles.searchTitle}>
-                🔍 Search & Filter Volunteers
-              </div>
-              <div style={styles.searchGrid}>
-                <div style={styles.searchInputContainer}>
-                  <label style={styles.searchLabel}>Search by Name</label>
-                  <input
-                    type="text"
-                    value={searchName}
-                    onChange={(e) => setSearchName(e.target.value)}
-                    placeholder="Enter name to search..."
-                    style={{
-                      ...styles.searchInput,
-                      ...(focusedInput === 'name' ? styles.searchInputFocus : {}),
-                    }}
-                    onFocus={() => setFocusedInput('name')}
-                    onBlur={() => setFocusedInput(null)}
-                  />
-                </div>
-                <div style={styles.searchInputContainer}>
-                  <label style={styles.searchLabel}>Search by Skills</label>
-                  <input
-                    type="text"
-                    value={searchSkills}
-                    onChange={(e) => setSearchSkills(e.target.value)}
-                    placeholder="Enter skills to search..."
-                    style={{
-                      ...styles.searchInput,
-                      ...(focusedInput === 'skills' ? styles.searchInputFocus : {}),
-                    }}
-                    onFocus={() => setFocusedInput('skills')}
-                    onBlur={() => setFocusedInput(null)}
-                  />
-                </div>
-              </div>
-              {(searchName || searchSkills) && (
-                <button
-                  style={styles.clearButton}
-                  onClick={clearSearch}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-2px)';
-                    e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = 'none';
-                  }}
-                >
-                  Clear Search
-                </button>
-              )}
-            </div>
-
-            {/* Results Info */}
-            {(searchName || searchSkills) && (
-              <div style={styles.resultsInfo}>
-                📊 Showing {filteredResponses.length} of {responses.length} volunteers
-                {searchName && ` • Name: "${searchName}"`}
-                {searchSkills && ` • Skills: "${searchSkills}"`}
-              </div>
-            )}
-
-            {/* Results Table */}
-            {filteredResponses.length > 0 ? (
-              <div style={styles.tableContainer}>
-                <table style={styles.table}>
-                  <thead style={styles.thead}>
-                    <tr>
-                      {Object.keys(filteredResponses[0]).map((key, idx) => (
-                        <th key={idx} style={styles.th}>
-                          {key}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody style={styles.tbody}>
-                    {filteredResponses.map((row, i) => (
-                      <tr
-                        key={i}
-                        style={{
-                          ...styles.tr,
-                          ...(hoveredRow === i ? styles.trHover : {}),
-                        }}
-                        onMouseEnter={() => setHoveredRow(i)}
-                        onMouseLeave={() => setHoveredRow(null)}
-                      >
-                        {Object.values(row).map((val, j) => (
-                          <td key={j} style={styles.td}>
-                            {val || '—'}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div style={styles.noResults}>
-                {searchName || searchSkills ? (
-                  <>
-                    <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
-                    <p>No volunteers match your search criteria for {currentEventData?.name}.</p>
-                    <p>Try adjusting your search terms or clearing the filters.</p>
-                  </>
-                ) : (
-                  <>
-                    <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>👥</div>
-                    <p>No volunteer data found for {currentEventData?.name}</p>
-                  </>
-                )}
-              </div>
-            )}
-          </>
-        )}
-
-        {!error && responses.length === 0 && !loading && (
-          <div style={styles.noResults}>
-            <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📝</div>
-            <p>No volunteer responses found.</p>
-            <p>Make sure the CSV URL is correct and accessible.</p>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-export default VolunteerManager;
+export default AIFormResponses;
