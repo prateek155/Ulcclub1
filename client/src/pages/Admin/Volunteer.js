@@ -59,7 +59,7 @@ const AIFormResponses = () => {
 
   useEffect(() => {
     loadFormData(0); // Load first form by default
-  }, );
+  }, []);
 
   // Filter responses based on search criteria
   useEffect(() => {
