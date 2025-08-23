@@ -403,5 +403,4 @@ const Dsocsa = () => {
     </>
   );
 };
-<P>hello friends </p>
 export default Dsocsa;
