@@ -100,6 +100,7 @@ const AdminDashboard = () => {
           {/* Main Content */}
           <div className="main-content">
             {/* Welcome Card - Institutional Style */}
+          <div className="section">
             <div className="welcome-card">
               <div className="welcome-header">
                 <div className="welcome-icon">
@@ -252,6 +253,7 @@ const AdminDashboard = () => {
                 )}
               </div>
             </div>
+           </div>       
           </div>
         </div>
       </div>
@@ -312,6 +314,10 @@ const AdminDashboard = () => {
           background: #f8fafc;
           overflow-y: auto;
         }
+
+        .section {
+           padding: 20px;
+         }  
 
         /* Welcome Card - Institutional Style */
         .welcome-card {
