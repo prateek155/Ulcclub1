@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout/Layout";
-import AdminMenu from "./../../components/Layout/AdminMenu";
 import { toast , ToastContainer} from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -305,9 +304,6 @@ const CreateProduct = () => {
         <div style={styles.container}>
         <div className="row">
        <div style={styles.row}>
-         <div style={styles.sidebarCol}>
-          <AdminMenu />
-        </div>
         <div style={styles.mainContentCol}>
           <div style={styles.eventFormCard}>
             <div style={styles.formHeader}>
