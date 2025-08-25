@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
 import Swal from "sweetalert2"; // Import SweetAlert2
@@ -971,9 +970,7 @@ const Products = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">
-              <div className="admin-menu-wrapper">
-                <AdminMenu />
-              </div>
+              
             </div>
             
             <div className="col-md-9">
