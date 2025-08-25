@@ -33,6 +33,10 @@ import Attendance from "./pages/Admin/Attendance.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
 import Funds from "./pages/Admin/Funds.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
+import FacultyRoute from "./components/Routes/FacultyRoute.js";
+import FacultyDashboard from './pages/Faculty/FacultyDashboard.js';
+import CRdata from "./pages/Faculty/CRdata.js";
+import Skill from "./pages/Faculty/Skill.js";
 
 function App() {
   return (
@@ -46,6 +50,12 @@ function App() {
               <Route path="user" element={<Dashboard />} />
               <Route path="user/join-community" element={<JoinCommunity />} />
               <Route path="user/feedback" element={<Feedback />} />
+            </Route>
+
+           <Route path="/dashboard" element={<FacultyRoute />}>
+              <Route path="faculty" element={<FacultyDashboard />} />
+              <Route path="faculty/CR" element={<CRdata />} />
+              <Route path="faculty/student" element={<Skill />} />
             </Route>
 
             <Route path="/dashboard" element={<AdminRoute />}>
