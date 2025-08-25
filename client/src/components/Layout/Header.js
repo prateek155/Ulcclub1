@@ -116,7 +116,7 @@ const Header = () => {
                         to={`/dashboard/${
                           auth.user.role === 1
                           ? 'admin'
-                          auth.user.role === 2
+                          : auth.user.role === 2
                           ? "faculty"
                           : 'user'
                         }`}
