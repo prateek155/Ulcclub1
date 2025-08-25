@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Spinner";
 
-export default function PresidentRoute() {
+export default function FacultyRoute() {
     const [ok, setOk] = useState(false);
     const [auth] = useAuth(); 
 
@@ -12,7 +12,7 @@ export default function PresidentRoute() {
         const authCheck = async () => {
             try {
                 
-                const res = await axios.get("https://ulcclub1.onrender.com/api/v1/auth/president-auth", {
+                const res = await axios.get("https://ulcclub1.onrender.com/api/v1/auth/faculty-auth", {
                    
                 });
 
