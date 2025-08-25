@@ -9,7 +9,7 @@ const CrDetail = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
 
-  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vReqReFYhCPifufwhRbClckxDQpX7iyw5cfo23mxyoWocY82HqGI9yATLuBew66yHEp9g8_2WyseZ64/pub?output=csv';
+  const CSV_URL = '';
 
   useEffect(() => {
     fetchCRData();
