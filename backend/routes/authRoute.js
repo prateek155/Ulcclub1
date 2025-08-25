@@ -5,7 +5,7 @@ import {
     testController,
     forgotPasswordController,
 } from "../controllers/authController.js";
-import { isAdmin, requireSignIn, isPresident, isUser } from "../middlewares/authMiddleware.js";
+import { isAdmin, requireSignIn, isFaculty, isUser } from "../middlewares/authMiddleware.js";
 
 //router object
 const router = express.Router()
@@ -34,10 +34,9 @@ router.get("/admin-auth", requireSignIn,isAdmin, (req, res) => {
 });
 
 //protected President route auth 
-router.get("/president-auth", requireSignIn,isPresident, (req, res) => {
+router.get("/faculty-auth", requireSignIn,isFaculty, (req, res) => {
     res.status(200).send({ ok: true });
 });
-
 
 
 export default router; 
