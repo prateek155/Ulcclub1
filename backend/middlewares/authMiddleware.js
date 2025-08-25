@@ -79,7 +79,7 @@ export const isAdmin = async (req, res, next) => {
 
 
 // President Access Middleware
-export const isPresident = async (req, res, next) => {
+export const isFaculty = async (req, res, next) => {
   try {
     // Fetch user information from the database using the decoded token
     const user = await userModel.findById(req.user._id);
@@ -88,16 +88,16 @@ export const isPresident = async (req, res, next) => {
     if (!user || user.role !== 2) {
       return res.status(403).send({
         success: false,
-        message: "President access required",
+        message: "Faculty access required",
       });
     }
 
     next();
   } catch (error) {
-    console.error("Error in isPresident middleware:", error);
+    console.error("Error in isFaculty middleware:", error);
     return res.status(500).send({
       success: false,
-      message: "Error in president middleware",
+      message: "Error in faculty middleware",
       error,
     });
   }
