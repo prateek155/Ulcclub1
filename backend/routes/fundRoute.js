@@ -4,7 +4,7 @@ import {
     getAllFunds,
     getFundsSummary,
     deleteFund
-} from '../controllers/fundController';
+} from '../controllers/fundController.js';
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
