@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout/Layout";
-import AdminMenu from "./../../components/Layout/AdminMenu";
 import { toast , ToastContainer} from "react-toastify";
 import axios from "axios";
 import { Camera, Calendar, Users, Clock } from 'lucide-react';
@@ -606,10 +605,6 @@ const Sponsers = () => {
       <div style={styles.product} className="product">
         <div style={styles.container}>
           <div style={styles.row}>
-            {/* Sidebar */}
-            <div style={styles.sidebarCol}>
-              <AdminMenu />
-            </div>
 
             {/* Main Content */}
             <div style={styles.mainContentCol}>
