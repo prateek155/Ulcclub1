@@ -20,7 +20,7 @@ const AdminMenu = () => {
       title: "Overview",
       items: [
         {
-          path: "/dashboard/admin",
+          path: "/dashboard",
           icon: <LayoutDashboard />,
           title: "Dashboard",
           description: "Main control center",
