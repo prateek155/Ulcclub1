@@ -113,8 +113,6 @@ const handleUpdate = async () => {
     switch (role) {
       case 1:
         return "Admin";
-      case 2:
-        return "Faculty";
       default:
         return "User";
     }
