@@ -58,8 +58,7 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div className="container-fluid">
           <Link to="/" className="navbar-brand navbar-brand-custom">
-            <img src="/image/Ulcback.png" alt="ULC Logo" />
-            ULC
+            <img src="/image/Socsa.png" alt="ULC Logo" />
           </Link>
           <button
             className="navbar-toggler"
