@@ -14,7 +14,13 @@ const UserMenu = () => {
       path: "/dashboard/user/feedback",
       icon: <MessageSquare className="w-5 h-5" />,
       title: "Feedback",
-    }
+    },
+    {
+      path: "/association",
+      icon: <PlusCircle />,
+      title: "Association ",
+      description: "Detail All Association Member's",
+    },
   ];
   return (
     <>
