@@ -703,7 +703,7 @@ const HomePage = () => {
   };
 
   return (
-    <Layout title={"All Clubs Info-"}>
+    <Layout title={"SOCSA-"}>
       <div style={styles.mainContainer}>
       {/* Hero Section */}
       <div style={styles.heroSection}>
