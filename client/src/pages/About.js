@@ -9,7 +9,7 @@ const About = () => {
         <div className="row align-items-center">
           <div className="col-md-6">
             <img 
-              src="/image/poster.jpg" 
+              src="/image/Socsa.png" 
               alt="About Us" 
             style={{ width: '700px', height: '400px', objectFit: 'contain' }}
             />
