@@ -16,7 +16,7 @@ const Association = () => {
             name: "Amey Patil",
             post: "Vice-President",
             date: "Joined: Aug 2025",
-            image: "https://placehold.co/150x150/64FFDA/0A0A1F?text=BA",
+            image: "/image/Amey.jpg",
             details: "Expert in large-scale data analysis and predictive modeling for ethical AI applications. He designs robust data pipelines and ensures data integrity across all projects."
         },
         {
@@ -32,7 +32,7 @@ const Association = () => {
             name: "Prateek Agrawal",
             post: "General Secretory",
             date: "Joined: Aug 2025",
-            image: "https://placehold.co/150x150/64FFDA/0A0A1F?text=DV",
+            image: "/image/me.jpg",
             details: "Pioneering research in reinforcement learning and explainable AI paradigms. David's work helps demystify complex AI decisions, making them transparent and auditable."
         },
         {
@@ -53,7 +53,7 @@ const Association = () => {
         },
         {
             id: 7,
-            name: "Sarthak Thakur",
+            name: "Yadnesh Kulkarni",
             post: "Head of Tech Oprations",
             date: "Joined:  Aug 2025",
             image: "https://placehold.co/150x150/00E676/0A0A1F?text=GO",
@@ -64,7 +64,7 @@ const Association = () => {
             name: "Shashwat ",
             post: "SRO",
             date: "Joined: Aug 2025",
-            image: "https://placehold.co/150x150/64FFDA/0A0A1F?text=HS",
+            image: "/image/shashwat.jpg",
             details: "Designing efficient hardware architectures optimized for AI computation. Henry focuses on low-power, high-performance chips that drive next-generation AI devices."
         },
         {
@@ -77,7 +77,7 @@ const Association = () => {
         },
         {
             id: 10,
-            name: "Akshat ",
+            name: "Akshat Kanoj",
             post: "Sponsor's",
             date: "Joined: Aug 2025",
             image: "https://placehold.co/150x150/64FFDA/0A0A1F?text=JQ",
@@ -93,7 +93,7 @@ const Association = () => {
         },
         {
             id: 12,
-            name: "Vinita ",
+            name: "Vinita Paryani",
             post: "Ladies Representative",
             date: "Joined: Aug 2025",
             image: "https://placehold.co/150x150/64FFDA/0A0A1F?text=LN",
@@ -101,8 +101,16 @@ const Association = () => {
         },
         {
             id: 13,
-            name: "Atharav Wani",
-            post: "Sport's Marshall",
+            name: "Samarth",
+            post: "Sport's Head",
+            date: "Joined: Aug 2025",
+            image: "https://placehold.co/150x150/00E676/0A0A1F?text=MP",
+            details: "Specializes in securing AI systems and using AI for threat detection. Mia develops robust defenses against adversarial attacks and ensures data privacy in AI applications."
+        },
+        {
+            id: 13,
+            name: "Aditi",
+            post: "Cultural Head",
             date: "Joined: Aug 2025",
             image: "https://placehold.co/150x150/00E676/0A0A1F?text=MP",
             details: "Specializes in securing AI systems and using AI for threat detection. Mia develops robust defenses against adversarial attacks and ensures data privacy in AI applications."
