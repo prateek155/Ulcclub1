@@ -1,214 +1,348 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, MessageSquare, Users2 } from "lucide-react";
-
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  LayoutDashboard,
+  MessageSquare,
+  Users2,
+  PlusCircle,
+  Building2,
+  Settings,
+  ChevronRight
+} from "lucide-react";
 
 const UserMenu = () => {
-  const menuItems = [
+
+    const [activeItem, setActiveItem] = useState("/dashboard/user");
+   
+  const menuSections = [
     {
-      path: "/dashboard/user/join-community",
-      icon: <Users2 className="w-5 h-5" />,
-      title: "Join Community",
+      title: "Overview",
+      items: [
+        {
+          path: "/dashboard",
+          icon: <LayoutDashboard />,
+          title: "Dashboard",
+          description: "Main control center",
+        }
+      ]
     },
     {
-      path: "/dashboard/user/feedback",
-      icon: <MessageSquare className="w-5 h-5" />,
-      title: "Feedback",
+      title: "Student Section",
+      items: [
+        {
+          path: "/association",
+          icon: <PlusCircle />,
+          title: "Association ",
+          description: "Detail All Association Member's",
+        },
+        {
+          path: "/dashboard/user/join-community",
+          icon: <Users2 />,
+          title: "Join Association",
+          description: "Join Association Become our good fallow",
+        },
+        {
+          path: "/dashboard/user/feedback",
+          icon: <MessageSquare />,
+          title: "Problem Rage",
+          description: "You can send us of Any problem ",
+        }
+      ]
     },
-    {
-      path: "/association",
-      icon: <PlusCircle />,
-      title: "Association ",
-      description: "Detail All Association Member's",
-    },
+    
   ];
+
+  const handleItemClick = (path) => {
+    setActiveItem(path);
+  };
+
   return (
     <>
-     <style>{`
-        .user-menu {
-          width: 280px;
+      <style>{`
+        .institutional-menu {
+          width: 340px;
           height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 24px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+          background: #f8fafc;
+          border-right: 1px solid #e2e8f0;
           display: flex;
           flex-direction: column;
-          position: relative;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           overflow: hidden;
-          transition: all 0.3s ease;
         }
 
-        .user-menu::before {
+        .institutional-header {
+          padding: 24px;
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+          border-bottom: 1px solid #334155;
+          position: relative;
+        }
+
+        .institutional-header::after {
           content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
           bottom: 0;
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-          backdrop-filter: blur(10px);
-          z-index: 0;
+          left: 24px;
+          right: 24px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #64748b, transparent);
         }
 
-        .user-menu > * {
-          position: relative;
-          z-index: 1;
-        }
-
-        .user-header {
-          padding: 32px 24px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(20px);
-        }
-
-        .user-header-content {
+        .header-content {
           display: flex;
           align-items: center;
           gap: 12px;
+          margin-bottom: 8px;
         }
 
-        .user-header svg {
-          width: 28px;
-          height: 28px;
-          color: white;
-          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        .header-icon {
+          width: 32px;
+          height: 32px;
+          color: #3b82f6;
+          background: rgba(59, 130, 246, 0.1);
+          padding: 6px;
+          border-radius: 8px;
         }
 
-        .user-header h2 {
-          font-size: 22px;
+        .header-title {
+          font-size: 20px;
           font-weight: 700;
           color: white;
           margin: 0;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-          letter-spacing: -0.5px;
+          letter-spacing: -0.025em;
         }
 
-        .user-nav {
+        .header-subtitle {
+          font-size: 13px;
+          color: #94a3b8;
+          margin: 0;
+          font-weight: 500;
+        }
+
+        .menu-content {
           flex: 1;
-          padding: 24px 16px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
+          padding: 0;
           overflow-y: auto;
+          background: #f8fafc;
         }
 
-        .user-nav::-webkit-scrollbar {
-          width: 4px;
+        .menu-content::-webkit-scrollbar {
+          width: 6px;
         }
 
-        .user-nav::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 2px;
+        .menu-content::-webkit-scrollbar-track {
+          background: #f1f5f9;
         }
 
-        .user-nav::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.3);
-          border-radius: 2px;
+        .menu-content::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 3px;
         }
 
-        .nav-link {
+        .menu-section {
+          margin-bottom: 8px;
+        }
+
+        .section-header {
+          padding: 20px 24px 12px 24px;
+          font-size: 11px;
+          font-weight: 700;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          background: #f1f5f9;
+          border-bottom: 1px solid #e2e8f0;
+          margin: 0;
+        }
+
+        .section-items {
+          background: white;
+          border-bottom: 1px solid #f1f5f9;
+        }
+
+        .nav-item {
           display: flex;
           align-items: center;
-          gap: 16px;
-          padding: 16px 20px;
-          border-radius: 16px;
+          padding: 16px 24px;
           text-decoration: none;
-          color: rgba(255, 255, 255, 0.8);
-          font-weight: 500;
-          font-size: 15px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          color: #475569;
+          transition: all 0.2s ease;
+          border-left: 3px solid transparent;
           position: relative;
-          overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
+          cursor: pointer;
         }
 
-        .nav-link::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s ease;
+        .nav-item:hover {
+          background: #f8fafc;
+          color: #1e293b;
+          border-left-color: #e2e8f0;
         }
 
-        .nav-link:hover::before {
-          left: 100%;
-        }
-
-        .nav-link:hover {
-          background: rgba(255, 255, 255, 0.15);
-          color: white;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-          border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .nav-link.active {
-          background: rgba(255, 255, 255, 0.25);
-          color: white;
-          border-color: rgba(255, 255, 255, 0.4);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        .nav-item.active {
+          background: #eff6ff;
+          color: #1d4ed8;
+          border-left-color: #3b82f6;
           font-weight: 600;
         }
 
-        .nav-link svg {
+        .nav-item.active::after {
+          content: '';
+          position: absolute;
+          right: 24px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 4px;
+          background: #3b82f6;
+          border-radius: 50%;
+        }
+
+        .nav-icon {
           width: 20px;
           height: 20px;
-          transition: transform 0.3s ease;
+          margin-right: 16px;
+          flex-shrink: 0;
+        }
+
+        .nav-content {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .nav-title {
+          font-size: 14px;
+          font-weight: 500;
+          margin: 0 0 2px 0;
+          line-height: 1.4;
+        }
+
+        .nav-description {
+          font-size: 12px;
+          color: #64748b;
+          margin: 0;
+          line-height: 1.3;
+        }
+
+        .nav-item.active .nav-description {
+          color: #3730a3;
+        }
+
+        .nav-arrow {
+          width: 16px;
+          height: 16px;
+          color: #cbd5e1;
+          transition: all 0.2s ease;
+          opacity: 0;
+        }
+
+        .nav-item:hover .nav-arrow {
+          opacity: 1;
+          color: #64748b;
+          transform: translateX(2px);
+        }
+
+        .nav-item.active .nav-arrow {
+          opacity: 1;
+          color: #3b82f6;
+        }
+
+        .footer-section {
+          padding: 20px 24px;
+          border-top: 1px solid #e2e8f0;
+          background: #f8fafc;
+        }
+
+        .footer-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 0;
+          color: #64748b;
+          font-size: 13px;
+          font-weight: 500;
+        }
+
+        .footer-icon {
+          width: 18px;
+          height: 18px;
         }
 
         @media (max-width: 768px) {
-          .user-menu {
+          .institutional-menu {
             width: 100%;
             height: auto;
             border-radius: 0;
+            border-right: none;
+            border-bottom: 1px solid #e2e8f0;
           }
           
-          .user-header {
-            padding: 20px 16px;
+          .institutional-header {
+            padding: 16px;
           }
           
-          .user-nav {
-            padding: 16px 12px;
+          .section-header {
+            padding: 16px 20px 8px 20px;
           }
           
-          .nav-link {
-            padding: 14px 16px;
-            font-size: 14px;
+          .nav-item {
+            padding: 12px 20px;
           }
         }
       `}</style>
-    <div className="user-menu">
-          {/* Header */}
-          <div className="user-header">
-            <div className="user-header-content">
-              <LayoutDashboard />
-              <h2>User Panel</h2>
+
+      <div className="institutional-menu">
+        {/* Header */}
+        <div className="institutional-header">
+          <div className="header-content">
+            <Building2 className="header-icon" />
+            <div>
+              <h2 className="header-title">Student</h2>
+              <p className="header-subtitle">System Management Portal</p>
             </div>
           </div>
-    
-          {/* Navigation */}
-          <nav className="user-nav">
-          {menuItems.map((item, index) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `nav-link ${isActive ? 'active' : ''}`
-              }
-            >
-              {item.icon}
-              <span>{item.title}</span>
-            </NavLink>
-          ))}
-         </nav>
         </div>
-  </>
+
+        {/* Navigation Sections */}
+        <div className="menu-content">
+          {menuSections.map((section, sectionIndex) => (
+            <div key={sectionIndex} className="menu-section">
+              <div className="section-header">
+                {section.title}
+              </div>
+              <div className="section-items">
+                {section.items.map((item, itemIndex) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `nav-item ${isActive ? 'active' : ''}`
+                    }
+                    onClick={() => handleItemClick(item.path)}
+                  >
+                    <div className="nav-icon">
+                      {item.icon}
+                    </div>
+                    <div className="nav-content">
+                      <div className="nav-title">{item.title}</div>
+                      <div className="nav-description">{item.description}</div>
+                    </div>
+                    <ChevronRight className="nav-arrow" />
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="footer-section">
+          <div className="footer-item">
+            <Settings className="footer-icon" />
+            <span>System Configuration</span>
+          </div>
+        </div>
+      </div>
+
+    </>
   );
 };
-
 export default UserMenu;
