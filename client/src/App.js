@@ -15,7 +15,6 @@ import User from "./pages/Admin/Users";
 import JoinCommunity from "./pages/user/JoinCommunity";
 import Products from "./pages/Admin/Products";
 import "./App.css";
-import AboutMore from "./pages/Aboutmore";
 import CommunityMember from "./pages/Admin/CommunityMember.js";
 import Feedback from "./pages/user/Feedback.js";
 import FeedbackManagement from "./pages/Admin/FeedManagement.js";
@@ -73,7 +72,6 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/about-more" element={<AboutMore />} />
             <Route path="/Event" element={<Event />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/eventparticipent" element={<Eventparticipent />} />
