@@ -72,9 +72,6 @@ const CommunityMember = () => {
           draggable
           pauseOnHover
         />
-        
-        <div className="main-wrapper">
-          {/* Admin Menu */}
 
           {/* Main Content */}
           <div className="content-area">
@@ -195,7 +192,6 @@ const CommunityMember = () => {
               </div>
             </div>
           </div>
-        </div>
       </div>
 
       <style jsx>{`
