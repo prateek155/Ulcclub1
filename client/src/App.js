@@ -28,9 +28,8 @@ import Skills from "./pages/Admin/Skills.js";
 import Eventparticipent from "./pages/Eventparticipent.js";
 import Participent from "./pages/Admin/Participent.js";
 import Dsocsa from "./pages/Admin/Dsocsa.js";
-import Attendance from "./pages/Admin/Attendance.js";
+import Attendance from "./pages/Admin/Report.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
-import Funds from "./pages/Admin/Funds.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
 
 function App() {
@@ -60,9 +59,8 @@ function App() {
               <Route path="admin/response" element={<Response />} />
               <Route path="admin/skills" element={<Skills />} />
               <Route path="admin/participent" element={<Participent />} />
-              <Route path="admin/attendance" element={<Attendance />} />
-              <Route path="admin/Cr" element={<CrDetail />} />
-              <Route path="admin/fund" element={<Funds />} />
+              <Route path="admin/report" element={<Report />} />
+              <Route path="admin/Cr" element={<CrDetail />} /
               <Route path="admin/volunteer" element={<Volunteer />} />
             </Route>
 
