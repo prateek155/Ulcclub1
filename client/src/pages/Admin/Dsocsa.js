@@ -79,10 +79,10 @@ const Dsocsa = () => {
           description: "Association meeting's",
         },
         {
-          path: "/dashboard/admin/attendance",
+          path: "/dashboard/admin/report",
           icon: <ClipboardList />,
-          title: "Attandance",
-          description: "Members Attands",
+          title: "Generate Report",
+          description: "Generate Meeting Report Weekly & Other",
         },
         {
           path: "/dashboard/admin/participent",
@@ -95,12 +95,6 @@ const Dsocsa = () => {
     {
       title: "Resources",
       items: [
-        {
-          path: "/dashboard/admin/fund",
-          icon: <Building2 />,
-          title: "Funds",
-          description: "department funds Approved by Treasurer",
-        },
         {
           path: "/dashboard/admin/skills",
           icon: <BookOpen />,
