@@ -60,7 +60,7 @@ function App() {
               <Route path="admin/skills" element={<Skills />} />
               <Route path="admin/participent" element={<Participent />} />
               <Route path="admin/report" element={<Report />} />
-              <Route path="admin/Cr" element={<CrDetail />} /
+              <Route path="admin/Cr" element={<CrDetail />} />
               <Route path="admin/volunteer" element={<Volunteer />} />
             </Route>
 
