@@ -28,7 +28,7 @@ import Skills from "./pages/Admin/Skills.js";
 import Eventparticipent from "./pages/Eventparticipent.js";
 import Participent from "./pages/Admin/Participent.js";
 import Dsocsa from "./pages/Admin/Dsocsa.js";
-import Attendance from "./pages/Admin/Report.js";
+import Report from "./pages/Admin/Report.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
 
