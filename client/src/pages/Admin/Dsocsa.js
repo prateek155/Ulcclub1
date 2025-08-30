@@ -73,10 +73,10 @@ const Dsocsa = () => {
       title: "Communications",
       items: [
         {
-          path: "/dashboard/admin/feedback-management",
+          path: "/dashboard/admin/users",
           icon: <MessageSquare />,
-          title: "Meeting Sechdul's",
-          description: "Association meeting's",
+          title: "User's Data",
+          description: "All Registered Users Data",
         },
         {
           path: "/dashboard/admin/report",
