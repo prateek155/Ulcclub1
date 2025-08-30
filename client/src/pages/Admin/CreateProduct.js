@@ -17,7 +17,6 @@ const CreateProduct = () => {
     startDate:"",
     endDate: "",
     venue:"",
-    eventType:"",
     photo: null
   });
   const [preview, setPreview] = useState(null);
@@ -59,7 +58,6 @@ const CreateProduct = () => {
       productData.append("startDate", formData.startDate);
       productData.append("endDate", formData.endDate);
       productData.append("venue", formData.venue);
-      productData.append("eventType", formData.eventType);
       productData.append("category", formData.category);
 
       const { data } = await axios.post(
@@ -455,20 +453,6 @@ const CreateProduct = () => {
                   <Clock size={20} color="#667eea" />
                   Event type & Orgnizer
                 </h3>
-                <div style={styles.formGrid}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Event Type</label>
-                    <select
-                      style={styles.input}
-                      name="eventType"
-                      value={formData.eventType}
-                      onChange={handleInputChange}
-                    >
-                      <option value="public">Public</option>
-                      <option value="private">Private</option>
-                      <option value="members-only">Members Only</option>
-                    </select>
-                  </div>
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Organizer Email *</label>
                     <select
