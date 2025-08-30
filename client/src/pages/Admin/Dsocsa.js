@@ -45,7 +45,7 @@ const Dsocsa = () => {
           description: "Detail Of All Cr and Lr",
         },
         {
-          path: "/dashboard/admin/all-registrations",
+          path: "/dashboard/admin/faculty",
           icon: <ClipboardList />,
           title: "Faculty",
           description: "Faculty Detail's",
