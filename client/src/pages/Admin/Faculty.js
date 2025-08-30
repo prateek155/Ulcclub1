@@ -37,7 +37,7 @@ const CreateFaculty = () => {
 
   const getAllFaculty = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/v1/faculty/all-faculty");
+      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/faculty/all-faculty");
       if (data?.success) {
         setFaculty(data.faculty);
         setFilteredFaculty(data.faculty);
@@ -106,7 +106,7 @@ const CreateFaculty = () => {
       facultyData.append("email", formData.email);
 
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/faculty/create-faculty",
+        "https://ulcclub1.onrender.com/api/v1/faculty/create-faculty",
         facultyData,
         {
           headers: {
@@ -161,7 +161,7 @@ const CreateFaculty = () => {
 
   const handleDeleteFaculty = async (facultyId) => {
      try {
-      const { data } = await axios.delete(`http://localhost:8080/api/v1/faculty/faculty/${facultyId}`);
+      const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/faculty/faculty/${facultyId}`);
       if (data?.success) {
         toast.success("Faculty removed successfully");
         getAllFaculty();
@@ -979,7 +979,7 @@ const CreateFaculty = () => {
         <div style={styles.detailsPhotoSection}>
           {selectedFaculty?.photo ? (
             <img
-               src={`http://localhost:8080/api/v1/faculty/faculty-photo/${selectedFaculty._id}`}
+               src={`https://ulcclub1.onrender.com/api/v1/faculty/faculty-photo/${selectedFaculty._id}`}
                alt={selectedFaculty.name}
                style={{ width: "150px", height: "150px", objectFit: "cover" }}  />
           ) : (
