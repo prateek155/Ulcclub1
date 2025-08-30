@@ -13,6 +13,7 @@ import communityRoutes from './routes/communityRoute.js';
 import sponsersRoute from "./routes/sponsersRoute.js";
 import registrationRoute from "./routes/registrationRoute.js";
 import participentRoute from "./routes/participentRoute.js";
+import facultyRoute from "./routes/facultyRoute.js";
 import formidable from "express-formidable"; // Import User model
 import { requireSignIn, isAdmin} from "./middlewares/authMiddleware.js"; // Import middlewares
 
@@ -42,6 +43,7 @@ app.use("/api/v1/feedback", feedbackRoutes);
 app.use("/api/v1/sponsers", sponsersRoute);
 app.use("/api/v1/registration", registrationRoute);
 app.use("/api/v1/participent", participentRoute);
+app.use("/api/v1/faculty", facultyRoute);
 app.use(formidable());
 
 // Route to fetch users' names, emails, and roles
