@@ -32,6 +32,7 @@ import Report from "./pages/Admin/Report.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
 import LatterHead from "./pages/Admin/LatterHead.js";
+import Faculty from "./pages/Admin/Faculty.js";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
               <Route path="admin/Cr" element={<CrDetail />} />
               <Route path="admin/volunteer" element={<Volunteer />} />
               <Route path="admin/latterhead" element={<LatterHead />} />
+              <Route path="admin/faculty" element={<Faculty />} />
             </Route>
 
             {/* Additional Routes */}
