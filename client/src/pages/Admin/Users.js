@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout";
-import AdminMenu from "../../components/Layout/AdminMenu";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -137,9 +136,6 @@ const handleUpdate = async () => {
       <div className="container-fluid py-4">
               <ToastContainer />
         <div className="row">
-          <div className="col-md-3">
-            <AdminMenu />
-          </div>
           <div className="main-content">
           <div className="header-section">
             <div className="header-content">
