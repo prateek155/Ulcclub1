@@ -6,7 +6,7 @@ import slugify from "slugify";
 // create a new Library
 export const createProductController = async (req, res) => {
    try {
-     const { name, description, category, createdBy, startDate, endDate, venue, eventType } = req.fields;
+     const { name, description, category, createdBy, startDate, endDate, venue } = req.fields;
      const { photo } = req.files;
  
      // Basic validations
@@ -21,8 +21,6 @@ export const createProductController = async (req, res) => {
          return res.status(500).send({ error: "endDate is required" });
       case !venue:
          return res.status(500).send({ error: "venue is required" });
-      case !eventType:
-         return res.status(500).send({ error: "eventType is required" });
       case !category:
          return res.status(500).send({ error: "category is required"});
       case !description:
@@ -51,7 +49,6 @@ export const createProductController = async (req, res) => {
        startDate,
        endDate,
        venue,
-       eventType,
        mail: user._id, // ✅ Assign ObjectId from user
      });
  
