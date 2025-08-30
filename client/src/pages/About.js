@@ -16,7 +16,7 @@ const About = () => {
           </div>
           <div className="col-md-6">
             <h1 className="text-primary mb-4 text-center">SOCSA</h1>
-            <p className="fs-5 ">
+            <p className="fs-5" style={{ textAlign: "justify" }}>
               Welcome to our website! We are dedicated to providing always updated Information and services 
               tailored to meet your unique needs. With a commitment to excellence and a passion for 
               innovation, our team strives to deliver exceptional value and user satisfaction. 
