@@ -85,10 +85,10 @@ const Dsocsa = () => {
           description: "Generate Meeting Report Weekly & Other",
         },
         {
-          path: "/dashboard/admin/participent",
+          path: "/dashboard/admin/latterhead",
           icon: <BookOpen />,
-          title: "Topic",
-          description: "Agenda of the meetings",
+          title: "Latterhead",
+          description: "Create Different Type of Latterhead Accoding To your Demand",
         }
       ]
     },
