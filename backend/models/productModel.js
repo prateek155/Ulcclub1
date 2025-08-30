@@ -41,11 +41,6 @@ const productSchema = new mongoose.Schema(
     type: String,
     required: [true, 'Venue is required'],
     },
-    eventType: {
-    type: String,
-    enum: ['public', 'private', 'members-only'],
-    default: 'public'
-    },
     status: {
       type: String,
       enum: ['registered', 'confirmed', 'cancelled'],
