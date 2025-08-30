@@ -483,8 +483,7 @@ const CreateProduct = () => {
         </div>
       </div>
     </div>
-        </div>
-      </div>
+    </div>
     </Layout>
   );
 };
