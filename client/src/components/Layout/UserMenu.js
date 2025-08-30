@@ -44,8 +44,26 @@ const UserMenu = () => {
         {
           path: "/dashboard/user/feedback",
           icon: <MessageSquare />,
-          title: "Problem Rage",
+          title: "Feedback",
           description: "You can send us of Any problem ",
+        },
+        {
+          path: "/dashboard/user/feedback",
+          icon: <MessageSquare />,
+          title: "Information",
+          description: "You can get all the information here  ",
+        },
+        {
+          path: "/dashboard/user/feedback",
+          icon: <MessageSquare />,
+          title: "Help-Section",
+          description: "You can send detail if you get any help ",
+        },
+        {
+          path: "/dashboard/user/feedback",
+          icon: <MessageSquare />,
+          title: "project's",
+          description: "Here you can see some already created good projects ",
         }
       ]
     },
