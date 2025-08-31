@@ -33,6 +33,7 @@ import CrDetail from "./pages/Admin/CrDetail.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
 import LatterHead from "./pages/Admin/LatterHead.js";
 import Faculty from "./pages/Admin/Faculty.js";
+import Projects from "./pages/user/Projects.js;
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               <Route path="user" element={<Dashboard />} />
               <Route path="user/join-community" element={<JoinCommunity />} />
               <Route path="user/feedback" element={<Feedback />} />
+              <Route path="user/project" element={<Projects />} />
             </Route>
 
             <Route path="/dashboard" element={<AdminRoute />}>
