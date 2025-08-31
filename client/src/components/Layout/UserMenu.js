@@ -48,13 +48,13 @@ const UserMenu = () => {
           description: "You can send us of Any problem ",
         },
         {
-          path: "/dashboard/user/feedback",
+          path: "/dashboard/user/information",
           icon: <MessageSquare />,
           title: "Information",
           description: "You can get all the information here  ",
         },
         {
-          path: "/dashboard/user/feedback",
+          path: "/dashboard/user/help",
           icon: <MessageSquare />,
           title: "Help-Section",
           description: "You can send detail if you get any help ",
