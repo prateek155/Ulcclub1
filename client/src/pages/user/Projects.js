@@ -8,8 +8,8 @@ const ProjectDashboard = () => {
       image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=300&h=200&fit=crop',
       name: 'AI Chat Assistant',
       field: 'AI',
-      createdBy: 'John Doe',
-      link: 'https://github.com/johndoe/ai-chat'
+      createdBy: 'Samyak',
+      link: 'http://javacalculater.netlify.app'
     },
     {
       id: 2,
