@@ -60,7 +60,7 @@ const UserMenu = () => {
           description: "You can send detail if you get any help ",
         },
         {
-          path: "/dashboard/user/feedback",
+          path: "/dashboard/user/project",
           icon: <MessageSquare />,
           title: "project's",
           description: "Here you can see some already created good projects ",
