@@ -33,7 +33,7 @@ import CrDetail from "./pages/Admin/CrDetail.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
 import LatterHead from "./pages/Admin/LatterHead.js";
 import Faculty from "./pages/Admin/Faculty.js";
-import Projects from "./pages/user/Projects.js;
+import Projects from "./pages/user/Projects.js";
 
 function App() {
   return (
