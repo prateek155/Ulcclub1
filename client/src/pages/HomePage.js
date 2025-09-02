@@ -54,9 +54,8 @@ const HomePage = () => {
   },);
 
   const upcomingEvents = [
-    { date: "Jun 15", title: "Deep Learning Workshop", type: "Workshop", attendees: 45 },
-    { date: "Jun 20", title: "AI Ethics Seminar", type: "Seminar", attendees: 32 },
-    { date: "Jul 02", title: "Guest Lecture: MLOps", type: "Lecture", attendees: 67 }
+    { date: "Sept 5", title: "Teachers Day", type: "Celebration", attendees: 74 },
+    { date: "Sept 16", title: "Codearena", type: "Coding Competition" },
   ];
 
   const achievements = [
@@ -703,7 +702,7 @@ const HomePage = () => {
   };
 
   return (
-    <Layout title={"SOCSA-"}>
+    <Layout title={"SOCSA"}>
       <div style={styles.mainContainer}>
       {/* Hero Section */}
       <div style={styles.heroSection}>
@@ -715,9 +714,9 @@ const HomePage = () => {
               <span>Artificial Intelligence & Machine Learning</span>
             </div>
             <h1 style={styles.heroTitle}>
-              Unsupervised
+              Socsa
               <span style={styles.heroTitleSpan}>
-                Learners Club
+                Execution Committee
               </span>
             </h1>
             <p style={styles.heroDescription}>
@@ -727,7 +726,7 @@ const HomePage = () => {
               <button style={styles.primaryButton}
               onClick={() => navigate("/dashboard/user/join-community")}>
                 <UserPlus style={{ width: '1.25rem', height: '1.25rem' }} />
-                Join Our Club
+                Join Our Association
                 <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
               </button>
             </div>
@@ -824,24 +823,24 @@ const HomePage = () => {
       <div style={styles.learningSection}>
         <div style={styles.learningContainer}>
           <div style={styles.sectionTitle}>
-            <h2 style={{...styles.sectionTitleText, color: '#1f2937'}}>Learning Tracks</h2>
-            <p style={{...styles.sectionSubtitle, color: '#6b7280'}}>Choose your path in AI/ML mastery</p>
+            <h2 style={{...styles.sectionTitleText, color: '#1f2937'}}>Skills Tracks</h2>
+            <p style={{...styles.sectionSubtitle, color: '#6b7280'}}>Choose your path in  different fields</p>
           </div>
           <div style={styles.learningGrid}>
             <div style={{...styles.learningCard, ...styles.learningCardBlue}}>
               <div style={{...styles.learningIcon, ...styles.learningIconBlue}}>
                 <Brain style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
               </div>
-              <h3 style={styles.learningTitle}>Machine Learning</h3>
+              <h3 style={styles.learningTitle}>Sports</h3>
               <p style={styles.learningDescription}>Master algorithms, statistics, and model building from scratch to deployment.</p>
               <div style={styles.learningTags}>
-                <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Python</span>
-                <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Scikit-learn</span>
-                <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Pandas</span>
+                <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Swimming</span>
+                <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Basket-Ball</span>
+                <span style={{...styles.learningTag, ...styles.learningTagBlue}}>E-sports</span>
                 </div>
                 <button style={styles.learningButton}>
                 <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                start learning with us!
+                start with us!
               </button>
               </div>
 
@@ -850,18 +849,18 @@ const HomePage = () => {
                   <div style={{ ...styles.learningIcon, ...styles.learningIconPurple }}>
                     <Zap style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
-                    <h3 style={styles.learningTitle}>Deep Learning</h3>
+                    <h3 style={styles.learningTitle}>Cultural</h3>
                     <p style={styles.learningDescription}>
                      Dive into neural networks, CNNs, RNNs, and cutting-edge architectures.
                     </p>
                  <div style={styles.learningTags}>
-                    <span style={{ ...styles.learningTag, ...styles.learningTagPurple }}>TensorFlow</span>
-                    <span style={{ ...styles.learningTag, ...styles.learningTagPurple }}>PyTorch</span>
-                    <span style={{ ...styles.learningTag, ...styles.learningTagPurple }}>Keras</span>
+                    <span style={{ ...styles.learningTag, ...styles.learningTagPurple }}>Dansing</span>
+                    <span style={{ ...styles.learningTag, ...styles.learningTagPurple }}>Singing</span>
+                    <span style={{ ...styles.learningTag, ...styles.learningTagPurple }}>Skit</span>
                 </div>
                  <button style={{ ...styles.learningButton, ...styles.learningButtonPurple }}>
                      <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                      Start learning with us!
+                      Start with us!
                           </button>
                         </div>
 
@@ -870,18 +869,17 @@ const HomePage = () => {
   <div style={{ ...styles.learningIcon, ...styles.learningIconGreen }}>
     <Database style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
   </div>
-  <h3 style={styles.learningTitle}>Data Science</h3>
+  <h3 style={styles.learningTitle}>Design</h3>
   <p style={styles.learningDescription}>
     Extract insights from data with statistics, visualization, and analysis.
   </p>
   <div style={styles.learningTags}>
-    <span style={{ ...styles.learningTag, ...styles.learningTagGreen }}>R</span>
-    <span style={{ ...styles.learningTag, ...styles.learningTagGreen }}>Tableau</span>
-    <span style={{ ...styles.learningTag, ...styles.learningTagGreen }}>SQL</span>
+    <span style={{ ...styles.learningTag, ...styles.learningTagGreen }}>Design</span>
+    <span style={{ ...styles.learningTag, ...styles.learningTagGreen }}>Skills</span>
   </div>
   <button style={{ ...styles.learningButton, ...styles.learningButtonGreen }}>
     <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-    Start learning with us!
+    Start with us!
   </button>
 </div>
 </div>
