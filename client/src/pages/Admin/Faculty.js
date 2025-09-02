@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout/Layout";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Camera, Calendar, Users, User, Mail, MapPin, Award, Plus, Save, Brain, Cpu, Search, X, Edit, Trash2, Phone, Building, Clock, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Camera, Calendar, Users, User, Mail, MapPin, Award, Plus, Save, Brain, Cpu, Search, X, Edit, Phone, Building, Clock, ChevronRight, ArrowLeft } from 'lucide-react';
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateFaculty = () => {
@@ -157,21 +157,6 @@ const CreateFaculty = () => {
   const handleFacultyClick = (facultyMember) => {
     setSelectedFaculty(facultyMember);
     setViewMode('details');
-  };
-
-  const handleDeleteFaculty = async (facultyId) => {
-     try {
-      const { data } = await axios.delete(`https://ulcclub1.onrender.com/api/v1/faculty/faculty/${facultyId}`);
-      if (data?.success) {
-        toast.success("Faculty removed successfully");
-        getAllFaculty();
-      } else {
-        toast.error("Failed to remove faculty");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong");
-    }
   };
 
   const categories = [
@@ -925,16 +910,6 @@ const CreateFaculty = () => {
                       title="Edit Faculty"
                     >
                       <Edit size={16} />
-                    </button>
-                    <button
-                      style={{...styles.iconButton, ...styles.deleteButton}}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteFaculty(facultyMember._id);
-                      }}
-                      title="Delete Faculty"
-                    >
-                      <Trash2 size={16} />
                     </button>
                   </div>
                 </td>
