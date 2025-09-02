@@ -1,29 +1,12 @@
 import Layout from "../../components/Layout/Layout";
 import UserMenu from '../../components/Layout/UserMenu';
 import { useAuth } from '../../context/auth';
-import { Phone, Mail, User, Users, Star, Award} from "lucide-react";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { Phone, Mail, User} from "lucide-react";
+import React, { useEffect } from "react";
 
 const Dashboard = () => {
   const [auth] = useAuth();
-  const [sponsersList, setSponsersList] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const loadSponsers = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("https://ulcclub1.onrender.com/api/v1/sponsers/get-sponsers");
-      setSponsersList(data?.sponser || []);
-    } catch (error) {
-      console.error("Error loading sponsers:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    loadSponsers();
   }, []);
 
   return (
@@ -66,93 +49,6 @@ const Dashboard = () => {
                   <p>{auth?.user?.phone}</p>
                 </div>
               </div>
-
-              <div className="stat-card">
-                <div className="stat-icon sponsors-icon">
-                  <Star size={20} />
-                </div>
-                <div className="stat-content">
-                  <h3>Active Sponsors</h3>
-                  <p>{sponsersList.length}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Sponsors Section */}
-            <div className="sponsors-section">
-              <div className="section-header">
-                <div className="header-content">
-                  <h2>Our Sponsors</h2>
-                  <p>Trusted partners supporting our community</p>
-                </div>
-              </div>
-
-              {loading ? (
-                <div className="loading-state">
-                  <div className="spinner">
-                    <div className="spinner-ring"></div>
-                  </div>
-                  <p>Loading sponsors...</p>
-                </div>
-              ) : (
-                <div className="sponsors-grid">
-                  {sponsersList.length > 0 ? (
-                    sponsersList.map((sponser, index) => (
-                      <div 
-                        key={sponser._id} 
-                        className="sponsor-card"
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                      >
-                        <div className="card-image-container">
-                          <img
-                            src={`https://ulcclub1.onrender.com/api/v1/sponsers/photo/${sponser._id}`}
-                            alt={sponser.sponsername}
-                            className="card-image"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
-                          />
-                          <div className="image-fallback" style={{ display: 'none' }}>
-                            <Star size={24} />
-                            <span>No Image</span>
-                          </div>
-                          <div className="card-overlay">
-                            <div className="overlay-content">
-                              <Star size={16} />
-                              <span>Premium Sponsor</span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="card-content">
-                          <h4 className="card-title">{sponser.sponsername}</h4>
-                          <p className="card-description">
-                            {sponser.description?.length > 80 
-                              ? `${sponser.description.substring(0, 80)}...` 
-                              : sponser.description || "No description available"
-                            }
-                          </p>
-                          <div className="card-footer">
-                            <div className="sponsor-badge">
-                              <Users size={12} />
-                              <span>Sponsor</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="no-sponsors">
-                      <div className="no-data-icon">
-                        <Star size={32} />
-                      </div>
-                      <h3>No Sponsors Yet</h3>
-                      <p>Start adding sponsors to showcase your community partners</p>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -162,7 +58,6 @@ const Dashboard = () => {
         .admin-dashboard {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
           min-height: 100vh;
-          padding: 16px;
           position: relative;
           overflow-x: hidden;
         }
