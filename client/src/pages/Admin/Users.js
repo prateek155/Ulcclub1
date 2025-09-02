@@ -3,14 +3,12 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Edit2, Trash2, Search, Users, Shield, User as UserIcon } from "lucide-react";
+import { Trash2, Search, Users, Shield, User as UserIcon } from "lucide-react";
 import "../../styles/Users.css";
 
 const User = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [editUser, setEditUser] = useState(null);
-  const [formData, setFormData] = useState({ role: "" });
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -49,42 +47,6 @@ const User = () => {
       toast.error("Something went wrong");
     }
   };
-
-  // Handle edit
-  const handleEdit = (user) => {
-    setEditUser(user);
-    setFormData({ role: user.role.toString() });
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // Update user role
-const handleUpdate = async () => {
-  try {
-    console.log("Updating user:", editUser); // Log the user being edited
-    console.log("New role to be set:", formData.role); // Log the new role being sent
-
-    const { data } = await axios.put(
-      `https://ulcclub1.onrender.com/api/v1/users/${editUser._id}`,
-      { role: parseInt(formData.role) }
-    );
-
-    console.log("Response from backend:", data); // Log response
-
-    if (data?.success) {
-      toast.success("User updated successfully");
-      fetchUsers();
-      setEditUser(null);
-    } else {
-      toast.error("Failed to update user");
-    }
-  } catch (error) {
-    console.error("Error updating user:", error.response || error); // Log full error
-    toast.error("Something went wrong");
-  }
-};
 
   // Search functionality
   const handleSearch = (e) => {
@@ -222,13 +184,6 @@ const handleUpdate = async () => {
                         <td>
                           <div className="action-buttons">
                             <button
-                              className="action-btn edit-btn"
-                              onClick={() => handleEdit(user)}
-                              title="Edit user"
-                            >
-                              <Edit2 size={16} />
-                            </button>
-                            <button
                               className="action-btn delete-btn"
                               onClick={() => handleDelete(user._id)}
                               title="Delete user"
@@ -255,65 +210,6 @@ const handleUpdate = async () => {
               )}
             </div>
           </div>
-
-          {/* Modal for editing user role */}
-          {editUser && (
-            <div className="modal-overlay" onClick={() => setEditUser(null)}>
-              <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h2 className="modal-title">Edit User Role</h2>
-                  <button
-                    className="modal-close"
-                    onClick={() => setEditUser(null)}
-                  >
-                    ×
-                  </button>
-                </div>
-                
-                <div className="modal-body">
-                  <div className="user-preview">
-                    <div className="user-avatar small">
-                      {getInitials(editUser.name)}
-                    </div>
-                    <div>
-                      <h4>{editUser.name}</h4>
-                      <p>{editUser.email}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Select Role</label>
-                    <select
-                      className="form-select"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select a role</option>
-                      <option value="0">👤 User</option>
-                      <option value="1">🛡️ Admin</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="modal-footer">
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => setEditUser(null)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleUpdate}
-                    disabled={!formData.role}
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
         </div>
       </div>
