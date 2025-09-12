@@ -296,7 +296,7 @@ const AdminDashboard = () => {
       <style jsx>{`
         .faculty-dashboard {
           background: #f8fafc;
-          min-height: 100vh;
+          min-height: 60vh;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
