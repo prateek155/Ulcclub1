@@ -23,12 +23,15 @@ const Header = () => {
       <style>
         {`
           .navbar-custom {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdropFilter: blur(10px)
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-            display: fixed;
+             background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1030;
           }
 
           .navbar-brand-custom {
