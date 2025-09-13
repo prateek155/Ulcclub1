@@ -36,6 +36,11 @@ const UserMenu = () => {
           description: "Detail All Association Member's",
         },
         {
+            path:"/Faculties",
+            icon: <PlusCircle />,
+            title: "All Faculty "
+        },
+        {
           path: "/dashboard/user/join-community",
           icon: <Users2 />,
           title: "Join Association",
