@@ -1390,10 +1390,10 @@ const HomePage = () => {
               <button 
                 className="community-primary-button"
                 style={styles.communityPrimaryButton}
-                onClick={() => navigate('Navigate to join community')}
+                onClick={() => navigate('/lostandfound')}
               >
                 <Users style={{ width: '1.25rem', height: '1.25rem' }} />
-                Get Help
+                Found Something
                 <ArrowRight style={{ width: '2.5rem', height: '1.25rem' }} />
               </button>
               <a
