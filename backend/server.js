@@ -14,7 +14,8 @@ import sponsersRoute from "./routes/sponsersRoute.js";
 import registrationRoute from "./routes/registrationRoute.js";
 import participentRoute from "./routes/participentRoute.js";
 import facultyRoute from "./routes/facultyRoute.js";
-import formidable from "express-formidable"; // Import User model
+import formidable from "express-formidable";
+import lostRoute from "./routes/lostRoute.js";
 import { requireSignIn, isAdmin} from "./middlewares/authMiddleware.js"; // Import middlewares
 
 // Configure env
@@ -44,6 +45,7 @@ app.use("/api/v1/sponsers", sponsersRoute);
 app.use("/api/v1/registration", registrationRoute);
 app.use("/api/v1/participent", participentRoute);
 app.use("/api/v1/faculty", facultyRoute);
+app.use("/api/v1/lost", lostRoute);
 app.use(formidable());
 
 // Route to fetch users' names, emails, and roles
