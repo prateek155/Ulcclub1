@@ -32,7 +32,7 @@ import Report from "./pages/Admin/Report.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
 import Volunteer from "./pages/Admin/Volunteer.js";
 import LatterHead from "./pages/Admin/LatterHead.js";
-import Lostandfound from "./pages/Lostandfound.js";
+import LostandFound from "./pages/LostandFound.js";
 import Faculty from "./pages/Admin/Faculty.js";
 import Projects from "./pages/user/Projects.js";
 
@@ -78,7 +78,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/Event" element={<Event />} />
-            <Route path="/lostandfound" element={<Lostandfound />} />
+            <Route path="/lostandfound" element={<LostandFound />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/eventparticipent" element={<Eventparticipent />} />
             <Route path="/association" element={<Association />} />
