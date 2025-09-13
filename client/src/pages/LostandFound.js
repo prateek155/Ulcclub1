@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
-import { Camera, Upload, X, Users, MapPin, FileImage, Eye } from 'lucide-react';
+import { Camera, Upload, X, Users, MapPin, FileImage, Eye,  } from 'lucide-react';
+import { toast , ToastContainer} from "react-toastify";
+import axios from "axios";
 
-const LostFound = () => {
+const LostandFound = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -72,16 +74,38 @@ const LostFound = () => {
   };
 
   const handleCreate = async (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.description || !formData.photo || !formData.venue) {
-      alert("All fields are required");
-      return;
+  e.preventDefault();
+
+  if (!formData.name || !formData.description || !formData.photo || !formData.venue) {
+    toast.error("All fields are required");
+    return;
+  }
+
+  try {
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("venue", formData.venue);
+    data.append("photo", formData.photo);
+
+    const res = await axios.post("http://localhost:8080/api/v1/lost/create-item", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (res.data.success) {
+      toast.success("Item added successfully!");
+      setFormData({ name: "", description: "", venue: "", photo: null });
+      setPreview(null);
+    } else {
+      toast.error(res.data.message || "Something went wrong");
     }
-    
-    // Simulate form submission
-    console.log('Form submitted:', formData);
-    alert('Item added successfully!');
-  };
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to add item. Please try again.");
+  }
+};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -94,6 +118,7 @@ const LostFound = () => {
 
   return (
     <div style={styles.container}>
+      <ToastContainer />
       <div style={styles.mainContent}>
         <div style={styles.formCard}>
           {/* Header */}
@@ -621,4 +646,4 @@ const styles = {
   },
 };
 
-export default LostFound;
+export default LostandFound;
