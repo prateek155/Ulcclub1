@@ -88,7 +88,7 @@ const LostandFound = () => {
     data.append("venue", formData.venue);
     data.append("photo", formData.photo);
 
-    const res = await axios.post("http://localhost:8080/api/v1/lost/create-item", data, {
+    const res = await axios.post("https://ulcclub1.onrender.com/api/v1/lost/create-item", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
