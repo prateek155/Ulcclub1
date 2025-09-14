@@ -90,7 +90,7 @@ export const getSingleItemController = async (req, res) => {
 // Get item by ID
 export const getItemByIdController = async (req, res) => {
   try {
-    const lost = await lostModel.findById(req.params.pid);
+    const lost = await lostModel.findById(req.params.itemId);
     if (!lost) {
       return res.status(404).json({ message: "Item not found" });
     }
@@ -123,7 +123,7 @@ export const itemPhotoController = async (req, res) => {
 // Delete item
 export const deleteItemController = async (req, res) => {
   try {
-    await lostModel.findByIdAndDelete(req.params.pid);
+    await lostModel.findByIdAndDelete(req.params.iid);
     res.status(200).send({
       success: true,
       message: "Item deleted successfully",
