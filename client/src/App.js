@@ -35,7 +35,7 @@ import LatterHead from "./pages/Admin/LatterHead.js";
 import LostandFound from "./pages/LostandFound.js";
 import Faculty from "./pages/Admin/Faculty.js";
 import Projects from "./pages/user/Projects.js";
-import forund from "./pages/found.js";
+import found from "./pages/found.js";
 
 function App() {
   return (
