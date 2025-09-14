@@ -15,7 +15,7 @@ const GetAllItems = () => {
 
         console.log("API Response:", data);
 
-        // Since response contains "lost"
+        // Your API sends { success, lost: [...] }
         if (data?.lost) {
           setItems(data.lost);
         } else {
@@ -31,12 +31,13 @@ const GetAllItems = () => {
     fetchItems();
   }, []);
 
-  if (loading) return <p>Loading items...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <p style={{ padding: "20px" }}>Loading items...</p>;
+  if (error) return <p style={{ padding: "20px", color: "red" }}>{error}</p>;
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>All Items</h2>
+      <h2 style={{ marginBottom: "20px", color: "black" }}>All Items</h2>
+
       {items.length === 0 ? (
         <p>No items found</p>
       ) : (
@@ -50,6 +51,8 @@ const GetAllItems = () => {
                 borderRadius: "10px",
                 padding: "10px",
                 textAlign: "center",
+                backgroundColor: "#fff", // ensures visible on white background
+                boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
               }}
             >
               <img
@@ -60,17 +63,18 @@ const GetAllItems = () => {
                   height: "150px",
                   objectFit: "cover",
                   borderRadius: "8px",
+                  backgroundColor: "#f5f5f5",
                 }}
                 onError={(e) => {
                   e.target.src =
-                    "https://via.placeholder.com/150?text=No+Image"; // fallback image
+                    "https://via.placeholder.com/220x150.png?text=No+Image";
                 }}
               />
-              <h4 style={{ margin: "10px 0" }}>{item.name}</h4>
-              <p style={{ fontSize: "14px", color: "#555" }}>
+              <h4 style={{ margin: "10px 0", color: "black" }}>{item.name}</h4>
+              <p style={{ fontSize: "14px", color: "#333", minHeight: "40px" }}>
                 {item.description}
               </p>
-              <small style={{ fontSize: "12px", color: "#777" }}>
+              <small style={{ fontSize: "12px", color: "#555" }}>
                 Venue: {item.venue}
               </small>
             </div>
