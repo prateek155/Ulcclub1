@@ -10,7 +10,7 @@ const GetAllItems = () => {
     const fetchItems = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8080/api/v1/lost/get-item"
+          "https://ulcclub1.onrender.com/api/v1/lost/get-item"
         );
 
         console.log("API Response:", data);
@@ -53,7 +53,7 @@ const GetAllItems = () => {
               }}
             >
               <img
-                src={`http://localhost:8080/api/v1/lost/item-photo/${item._id}`}
+                src={`https://ulcclub1.onrender.com/api/v1/lost/item-photo/${item._id}`}
                 alt={item.name}
                 style={{
                   width: "100%",
