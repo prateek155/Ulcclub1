@@ -17,6 +17,7 @@ import facultyRoute from "./routes/facultyRoute.js";
 import formidable from "express-formidable";
 import lostRoute from "./routes/lostRoute.js";
 import studentRoutes from "./routes/studentRoutes.js";
+import secureRoute from "./routes/secureRoute.js";
 import { requireSignIn, isAdmin} from "./middlewares/authMiddleware.js"; // Import middlewares
 
 // Configure env
@@ -48,6 +49,7 @@ app.use("/api/v1/participent", participentRoute);
 app.use("/api/v1/faculty", facultyRoute);
 app.use("/api/v1/lost", lostRoute);
 app.use("/api/v1/student", studentRoutes);
+app.use("/api/v1/secure",  secureRoute);
 app.use(formidable());
 
 // Route to fetch users' names, emails, and roles
