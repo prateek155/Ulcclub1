@@ -1150,7 +1150,7 @@ const HomePage = () => {
                   <span style={{...styles.learningTag, ...styles.learningTagBlue}}>E-sports</span>
                 </div>
                 <button className="learning-button" style={styles.learningButton} 
-                onClick={() => navigate('Navigate to join community')}>
+                onClick={() => navigate('/sport')}>
                   Start with us!
                   <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
                 </button>
@@ -1190,7 +1190,7 @@ const HomePage = () => {
                   <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Branding</span>
                 </div>
                 <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
-                onClick={() => navigate('Navigate to join community')}>
+                onClick={() => navigate('/cultural')}>
                   Start with us!
                   <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
                 </button>
