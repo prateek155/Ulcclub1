@@ -11,10 +11,9 @@ import {
   BookOpen,
   ChevronRight,
   Building2,
-  Settings,
   Shield,
   X,
-  Lock
+  Lock,
 } from "lucide-react";
 
 const Dsocsa = () => {
@@ -77,91 +76,91 @@ const Dsocsa = () => {
 
   const menuSections = [
     {
-      title: "Overview",
+      title: "OVERVIEW",
       items: [
         {
           path: "/dashboard/admin",
-          icon: <LayoutDashboard />,
+          icon: <LayoutDashboard size={20} />,
           title: "Dashboard",
           description: "Main control center",
         }
       ]
     },
     {
-      title: "Department Management",
+      title: "DEPARTMENT MANAGEMENT",
       items: [
         {
           path: "/association",
-          icon: <PlusCircle />,
-          title: "Association ",
+          icon: <PlusCircle size={20} />,
+          title: "Association",
           description: "Detail All Association Member's",
         },
         {
           path: "/dashboard/admin/Cr",
-          icon: <Package />,
+          icon: <Package size={20} />,
           title: "CR/LR",
           description: "Detail Of All Cr and Lr",
         },
         {
           path: "/dashboard/admin/faculty",
-          icon: <ClipboardList />,
+          icon: <ClipboardList size={20} />,
           title: "Faculty",
           description: "Faculty Detail's",
         }
       ]
     },
     {
-      title: "Event Management",
+      title: "EVENT MANAGEMENT",
       items: [
         {
           path: "/dashboard/admin/users",
-          icon: <Users />,
+          icon: <Users size={20} />,
           title: "Event Approval's",
-          description: "Approved Events ",
+          description: "Approved Events",
         },
         {
           path: "/dashboard/admin/volunteer",
-          icon: <Users />,
+          icon: <Users size={20} />,
           title: "Volunteer",
           description: "Volunteer's Detail's",
         },
       ]
     },
     {
-      title: "Communications",
+      title: "COMMUNICATIONS",
       items: [
         {
           path: "/dashboard/admin/users",
-          icon: <MessageSquare />,
+          icon: <MessageSquare size={20} />,
           title: "User's Data",
           description: "All Registered Users Data",
         },
         {
           path: "/dashboard/admin/report",
-          icon: <ClipboardList />,
+          icon: <ClipboardList size={20} />,
           title: "Generate Report",
           description: "Generate Meeting Report Weekly & Other",
         },
         {
           path: "/dashboard/admin/latterhead",
-          icon: <BookOpen />,
+          icon: <BookOpen size={20} />,
           title: "Latterhead",
-          description: "Create Different Type of Latterhead Accoding To your Demand",
+          description: "Create Different Type of Latterhead According To your Demand",
         }
       ]
     },
     {
-      title: "Resources",
+      title: "RESOURCES",
       items: [
         {
           path: "/dashboard/admin/action",
-          icon: <BookOpen />,
+          icon: <BookOpen size={20} />,
           title: "Action's",
           description: "Take action of any student",
         },
         {
           path: "/dashboard/admin/confidential",
-          icon: <Lock />,
+          icon: <Lock size={20} />,
           title: "Confidential Files",
           description: "OTP protected access",
         }
@@ -172,147 +171,193 @@ const Dsocsa = () => {
   return (
     <>
       <style>{`
-        .institutional-menu {
+        .dashboard-container {
+          display: flex;
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          padding: 2rem;
+          background: #f8fafc;
         }
 
-        .institutional-header {
-          background: white;
-          border-radius: 12px;
-          padding: 2rem;
-          margin-bottom: 2rem;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        .sidebar {
+          width: 280px;
+          background: #1e293b;
+          color: white;
+          overflow-y: auto;
+          position: fixed;
+          height: 100vh;
+          left: 0;
+          top: 0;
         }
 
-        .header-content {
+        .sidebar-header {
+          padding: 1.5rem;
+          border-bottom: 1px solid #334155;
+          background: #0f172a;
+        }
+
+        .sidebar-header-content {
           display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: 0.75rem;
         }
 
-        .header-icon {
-          color: #4f46e5;
-          width: 3rem;
-          height: 3rem;
+        .sidebar-header-icon {
+          width: 2rem;
+          height: 2rem;
+          background: #3b82f6;
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
         }
 
-        .header-title {
-          font-size: 1.875rem;
+        .sidebar-title {
+          font-size: 1.125rem;
           font-weight: 700;
-          color: #1f2937;
+          margin: 0;
+          color: white;
+        }
+
+        .sidebar-subtitle {
+          font-size: 0.75rem;
+          color: #94a3b8;
           margin: 0;
         }
 
-        .header-subtitle {
-          color: #6b7280;
-          margin: 0.25rem 0 0 0;
-        }
-
-        .menu-content {
-          display: grid;
-          gap: 2rem;
+        .sidebar-content {
+          padding: 1rem 0;
         }
 
         .menu-section {
-          background: white;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+          margin-bottom: 1.5rem;
         }
 
-        .section-header {
-          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-          color: white;
-          padding: 1rem 2rem;
+        .section-title {
+          font-size: 0.75rem;
           font-weight: 600;
-          font-size: 1.1rem;
-        }
-
-        .section-items {
-          padding: 1rem;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          padding: 0 1rem;
+          margin-bottom: 0.5rem;
         }
 
         .nav-item {
           display: flex;
           align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          border-radius: 8px;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          color: #cbd5e1;
           text-decoration: none;
-          color: #374151;
-          transition: all 0.3s ease;
-          margin-bottom: 0.5rem;
+          transition: all 0.2s;
+          cursor: pointer;
+          border-left: 3px solid transparent;
         }
 
         .nav-item:hover {
-          background: #f3f4f6;
-          transform: translateX(4px);
+          background: #334155;
+          color: white;
+          border-left-color: #3b82f6;
         }
 
         .nav-item.active {
-          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+          background: #1e40af;
           color: white;
+          border-left-color: #60a5fa;
         }
 
         .nav-icon {
-          width: 2.5rem;
-          height: 2.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 8px;
-          background: #f3f4f6;
           flex-shrink: 0;
+          opacity: 0.8;
         }
 
-        .nav-item.active .nav-icon {
-          background: rgba(255,255,255,0.2);
-        }
-
-        .nav-content {
+        .nav-text {
           flex: 1;
         }
 
         .nav-title {
-          font-weight: 600;
-          margin-bottom: 0.25rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin: 0;
         }
 
         .nav-description {
-          font-size: 0.875rem;
+          font-size: 0.75rem;
           opacity: 0.7;
+          margin: 0;
+          line-height: 1.2;
         }
 
         .nav-arrow {
-          width: 1.25rem;
-          height: 1.25rem;
+          width: 1rem;
+          height: 1rem;
           opacity: 0.5;
         }
 
-        .footer-section {
-          margin-top: 2rem;
-          background: white;
+        .main-content {
+          flex: 1;
+          margin-left: 280px;
+          padding: 2rem;
+        }
+
+        .life-quote-section {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           border-radius: 12px;
-          padding: 1.5rem 2rem;
+          padding: 2rem;
+          color: white;
+          text-align: center;
           box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
 
-        .footer-item {
+        .quote-icon {
+          width: 4rem;
+          height: 4rem;
+          background: rgba(255,255,255,0.2);
+          border-radius: 50%;
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          justify-content: center;
+          margin: 0 auto 1.5rem;
+        }
+
+        .quote-text {
+          font-size: 1.25rem;
+          font-weight: 600;
+          line-height: 1.6;
+          margin: 0 0 1rem 0;
+          font-style: italic;
+        }
+
+        .quote-author {
+          font-size: 0.875rem;
+          opacity: 0.9;
+          margin: 0;
+        }
+
+        .empty-state {
+          text-align: center;
           color: #6b7280;
-          font-weight: 500;
+          padding: 3rem;
         }
 
-        .footer-icon {
-          width: 1.25rem;
-          height: 1.25rem;
+        .empty-icon {
+          width: 4rem;
+          height: 4rem;
+          margin: 0 auto 1rem;
+          opacity: 0.3;
         }
 
-        /* Enhanced Modal Styles */
+        .empty-title {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin: 0 0 0.5rem 0;
+        }
+
+        .empty-description {
+          margin: 0;
+        }
+
+        /* Modal Styles */
         .modal-overlay {
           position: fixed;
           top: 0;
@@ -431,6 +476,7 @@ const Dsocsa = () => {
           text-align: center;
           letter-spacing: 0.1em;
           font-weight: 600;
+          box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -487,27 +533,48 @@ const Dsocsa = () => {
           font-size: 0.875rem;
           color: #6b7280;
           text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 100%;
+            position: relative;
+            height: auto;
+          }
+          
+          .main-content {
+            margin-left: 0;
+          }
+          
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 
-      <div className="institutional-menu">
-        {/* Header */}
-        <div className="institutional-header">
-          <div className="header-content">
-            <Building2 className="header-icon" />
-            <div>
-              <h2 className="header-title">Administration</h2>
-              <p className="header-subtitle">System Management Portal</p>
+      <div className="dashboard-container">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <div className="sidebar-header">
+            <div className="sidebar-header-content">
+              <div className="sidebar-header-icon">
+                <Building2 size={20} />
+              </div>
+              <div>
+                <h2 className="sidebar-title">Administration</h2>
+                <p className="sidebar-subtitle">System Management Portal</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Navigation Sections */}
-        <div className="menu-content">
-          {menuSections.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="menu-section">
-              <div className="section-header">{section.title}</div>
-              <div className="section-items">
+          <div className="sidebar-content">
+            {menuSections.map((section, sectionIndex) => (
+              <div key={sectionIndex} className="menu-section">
+                <div className="section-title">{section.title}</div>
                 {section.items.map((item) => (
                   <NavLink
                     key={item.path}
@@ -518,25 +585,35 @@ const Dsocsa = () => {
                     onClick={(e) => handleItemClick(item.path, e)}
                   >
                     <div className="nav-icon">{item.icon}</div>
-                    <div className="nav-content">
+                    <div className="nav-text">
                       <div className="nav-title">{item.title}</div>
-                      <div className="nav-description">
-                        {item.description}
-                      </div>
+                      <div className="nav-description">{item.description}</div>
                     </div>
                     <ChevronRight className="nav-arrow" />
                   </NavLink>
                 ))}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Footer */}
-        <div className="footer-section">
-          <div className="footer-item">
-            <Settings className="footer-icon" />
-            <span>System Configuration</span>
+        {/* Main Content */}
+        <div className="main-content">
+        
+
+          {/* Life Quote Section */}
+          <div className="life-quote-section">
+            <div className="quote-icon">
+              <BookOpen size={24} />
+            </div>
+            <p className="quote-text">
+              "Education is the most powerful weapon which you can use to change the world. 
+              Every student who enters our halls carries within them the potential to transform 
+              not just their own life, but the lives of countless others."
+            </p>
+            <p className="quote-author">
+              — Inspired by Nelson Mandela
+            </p>
           </div>
         </div>
       </div>
@@ -597,7 +674,7 @@ const Dsocsa = () => {
               </button>
               
               <div className="security-notice">
-                <Lock size={14} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                <Lock size={14} />
                 This is a secure area. Your access is being monitored.
               </div>
             </div>
