@@ -71,7 +71,7 @@ const UserMenu = () => {
           description: "Here you can see some already created good projects ",
         },
         {
-          path: "/found",
+          path: "/founditem",
           icon: <MessageSquare />,
           title: "lost items",
           description: "Here you can see some already created good projects ",
