@@ -36,7 +36,7 @@ import LostandFound from "./pages/LostandFound.js";
 import Faculty from "./pages/Admin/Faculty.js";
 import Projects from "./pages/user/Projects.js";
 import Found from "./pages/Found.js";
-import Sports from "./pages/Sports.js;
+import Sports from "./pages/Sports.js";
 
 function App() {
   return (
