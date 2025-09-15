@@ -17,7 +17,7 @@ const FileUploadApp = () => {
 
   const fetchFiles = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/secure/files');
+      const response = await fetch('https://ulcclub1.onrender.com/api/v1/secure/files');
       const data = await response.json();
       setFiles(data.files || data.data || []);
     } catch (error) {
@@ -34,7 +34,7 @@ const FileUploadApp = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/v1/secure/upload', {
+      const response = await fetch('https://ulcclub1.onrender.com/api/v1/secure/upload', {
         method: 'POST',
         body: formData
       });
