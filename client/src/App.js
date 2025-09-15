@@ -35,7 +35,7 @@ import LatterHead from "./pages/Admin/LatterHead.js";
 import LostandFound from "./pages/LostandFound.js";
 import Faculty from "./pages/Admin/Faculty.js";
 import Projects from "./pages/user/Projects.js";
-import found from "./pages/found.js";
+import Found from "./pages/Found.js";
 
 function App() {
   return (
@@ -83,7 +83,7 @@ function App() {
             <Route path="/registration" element={<Registration />} />
             <Route path="/eventparticipent" element={<Eventparticipent />} />
             <Route path="/association" element={<Association />} />
-            <Route path="/founditem" element={<found />} />
+            <Route path="/founditem" element={<Found />} />
             <Route path="*" element={<Pagenotfound />} /> 
 
           </Routes>
