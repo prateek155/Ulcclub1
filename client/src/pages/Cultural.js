@@ -1,5 +1,12 @@
 import React from "react";
-import { FaTheaterMasks, FaMusic, FaPaintBrush, FaCamera, FaBook, FaUsers } from "react-icons/fa";
+import {
+  Theater,     // 🎭 Theatre & Drama
+  Music,       // 🎵 Music
+  Paintbrush,  // 🎨 Art & Painting
+  Camera,      // 📸 Photography
+  BookOpen,    // 📖 Literature
+  Users        // 👯 Dance / People
+} from "lucide-react";
 
 const Cultural = () => {
   return (
@@ -40,7 +47,8 @@ const Cultural = () => {
           box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
         .cultural-icon {
-          font-size: 3rem;
+          width: 48px;
+          height: 48px;
           color: #6c63ff;
           margin-bottom: 10px;
         }
@@ -85,27 +93,27 @@ const Cultural = () => {
 
         <div className="cultural-grid">
           <div className="cultural-card">
-            <FaTheaterMasks className="cultural-icon" />
+            <Theater className="cultural-icon" />
             <h3>Theatre & Drama</h3>
           </div>
           <div className="cultural-card">
-            <FaMusic className="cultural-icon" />
+            <Music className="cultural-icon" />
             <h3>Music</h3>
           </div>
           <div className="cultural-card">
-            <FaPaintBrush className="cultural-icon" />
+            <Paintbrush className="cultural-icon" />
             <h3>Art & Painting</h3>
           </div>
           <div className="cultural-card">
-            <FaCamera className="cultural-icon" />
+            <Camera className="cultural-icon" />
             <h3>Photography</h3>
           </div>
           <div className="cultural-card">
-            <FaBook className="cultural-icon" />
+            <BookOpen className="cultural-icon" />
             <h3>Literature</h3>
           </div>
           <div className="cultural-card">
-            <FaUsers className="cultural-icon" />
+            <Users className="cultural-icon" />
             <h3>Dance</h3>
           </div>
         </div>
