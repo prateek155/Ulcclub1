@@ -91,7 +91,7 @@ function App() {
             <Route path="/association" element={<Association />} />
             <Route path="/founditem" element={<Found />} />
             <Route path="/sport" element={<Sports />} /> 
-            <Route path="/cultural" element={<Cultural />} /> 
+            <Route path="/culturals" element={<Cultural />} /> 
             <Route path="*" element={<Pagenotfound />} /> 
 
           </Routes>
