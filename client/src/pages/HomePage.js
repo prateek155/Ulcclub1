@@ -1170,7 +1170,7 @@ const HomePage = () => {
                   <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Drama</span>
                 </div>
                 <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonPurple}}
-                 onClick={() => navigate('Navigate to join community')}>
+                 onClick={() => navigate('/cultural')}>
                   Start with us!
                   <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
                 </button>
