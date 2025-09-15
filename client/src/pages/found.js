@@ -71,6 +71,7 @@ const Found = () => {
                 }}
               />
               <h4 style={{ margin: "10px 0", color: "black" }}>{item.name}</h4>
+                <p>hello friends </p>
               <p style={{ fontSize: "14px", color: "#333", minHeight: "40px" }}>
                 {item.description}
               </p>
