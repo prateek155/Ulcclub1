@@ -29,7 +29,7 @@ const Dsocsa = () => {
       e.preventDefault(); // stop normal navigation
 
       try {
-        await axios.post("http://localhost:8080/api/v1/secure/send-otp");
+        await axios.post("https://ulcclub1.onrender.com/api/v1/secure/send-otp");
         alert("Verification code sent to your email");
         setPendingPath(path);
         setShowVerify(true);
@@ -42,7 +42,7 @@ const Dsocsa = () => {
   const handleVerify = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/secure/verify-otp",
+        "https://ulcclub1.onrender.com/api/v1/secure/verify-otp",
         { code }
       );
       if (data.success) {
