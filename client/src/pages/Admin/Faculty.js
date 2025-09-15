@@ -954,7 +954,7 @@ const CreateFaculty = () => {
         <div style={styles.detailsPhotoSection}>
           {selectedFaculty?.photo ? (
             <img
-               src={`https://ulcclub1.onrender.com/api/v1/faculty/faculty-photo/${faculty._id}`}
+               src={`https://ulcclub1.onrender.com/api/v1/faculty/faculty-photo/${f._id}`}
                alt={selectedFaculty.name}
                style={{ width: "150px", height: "150px", objectFit: "cover" }}  />
           ) : (
