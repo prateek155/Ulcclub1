@@ -9,7 +9,7 @@ const CreateFaculty = () => {
   const [faculty, setFaculty] = useState([]);
   const [filteredFaculty, setFilteredFaculty] = useState([]);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
-  const [viewMode, setViewMode] = useState('table'); // 'form', 'table', 'details'
+  const [viewMode, setViewMode] = useState('table');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [formData, setFormData] = useState({
@@ -26,6 +26,13 @@ const CreateFaculty = () => {
   const [showForm, setShowForm] = useState(false);
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -52,12 +59,11 @@ const CreateFaculty = () => {
     getAllFaculty();
   }, []);
 
-  // Filter and search functionality
   useEffect(() => {
     let filtered = faculty;
     
     if (searchTerm) {
-      filtered = filtered.filter(f => 
+      filtered = filtered.filter(f =>
         f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         f.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         f.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -161,7 +167,7 @@ const CreateFaculty = () => {
 
   const categories = [
     'Dean',
-    'HOD', 
+    'HOD',
     'Program Director',
     'Associate Profesor'
   ];
@@ -230,7 +236,8 @@ const CreateFaculty = () => {
     },
     header: {
       display: 'flex',
-      justifyContent: 'space-between',
+      flexDirection: windowWidth < 768 ? 'column' : 'row',
+      justifyContent: windowWidth < 768 ? 'center' : 'space-between',
       alignItems: 'center',
       marginBottom: '30px',
       background: 'linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 100%)',
@@ -245,7 +252,9 @@ const CreateFaculty = () => {
     headerContent: {
       display: 'flex',
       alignItems: 'center',
-      gap: '20px'
+      gap: '20px',
+      flexDirection: windowWidth < 480 ? 'column' : 'row',
+      marginBottom: windowWidth < 768 ? '20px' : '0'
     },
     headerIcon: {
       padding: '15px',
@@ -260,7 +269,7 @@ const CreateFaculty = () => {
     },
     title: {
       margin: '0',
-      fontSize: '32px',
+      fontSize: windowWidth < 480 ? '24px' : '32px',
       fontWeight: '900',
       background: 'linear-gradient(135deg, #00f5ff, #ff00ff, #00ff88)',
       backgroundClip: 'text',
@@ -268,7 +277,8 @@ const CreateFaculty = () => {
       WebkitTextFillColor: 'transparent',
       color: 'transparent',
       position: 'relative',
-      textShadow: '0 0 30px rgba(0, 245, 255, 0.5)'
+      textShadow: '0 0 30px rgba(0, 245, 255, 0.5)',
+      textAlign: 'center'
     },
     subtitle: {
       margin: '8px 0 0 0',
@@ -278,12 +288,14 @@ const CreateFaculty = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '6px',
-      opacity: 0.8
+      opacity: 0.8,
+      justifyContent: 'center'
     },
     headerRight: {
       display: 'flex',
       alignItems: 'center',
-      gap: '20px'
+      gap: '20px',
+      flexDirection: windowWidth < 480 ? 'column' : 'row'
     },
     actionButton: {
       display: 'flex',
@@ -337,7 +349,8 @@ const CreateFaculty = () => {
       alignItems: 'center',
       marginBottom: '25px',
       flexWrap: 'wrap',
-      gap: '15px'
+      gap: '15px',
+      flexDirection: windowWidth < 768 ? 'column' : 'row'
     },
     tableTitle: {
       fontSize: '24px',
@@ -352,7 +365,8 @@ const CreateFaculty = () => {
       display: 'flex',
       gap: '15px',
       alignItems: 'center',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      justifyContent: 'center'
     },
     searchInput: {
       padding: '12px 20px',
@@ -363,7 +377,8 @@ const CreateFaculty = () => {
       backdropFilter: 'blur(20px)',
       color: 'white',
       outline: 'none',
-      minWidth: '250px',
+      minWidth: windowWidth < 480 ? 'auto' : '250px',
+      width: windowWidth < 480 ? '100%' : 'auto',
       transition: 'all 0.3s ease'
     },
     filterSelect: {
@@ -376,7 +391,8 @@ const CreateFaculty = () => {
       color: 'white',
       outline: 'none',
       cursor: 'pointer',
-      minWidth: '150px'
+      minWidth: windowWidth < 480 ? '100%' : '150px',
+      width: windowWidth < 480 ? '100%' : 'auto',
     },
     table: {
       width: '100%',
@@ -398,7 +414,8 @@ const CreateFaculty = () => {
       borderBottom: '2px solid rgba(0, 245, 255, 0.3)',
       position: 'sticky',
       top: 0,
-      zIndex: 10
+      zIndex: 10,
+      display: windowWidth < 768 ? 'none' : 'table-cell'
     },
     tableRow: {
       background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 245, 255, 0.02))',
@@ -406,14 +423,24 @@ const CreateFaculty = () => {
       border: '1px solid rgba(0, 245, 255, 0.1)',
       borderRadius: '15px',
       transition: 'all 0.3s ease',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      display: windowWidth < 768 ? 'flex' : 'table-row',
+      flexDirection: 'column',
+      marginBottom: windowWidth < 768 ? '15px' : '0',
     },
     td: {
       padding: '20px 25px',
       fontSize: '14px',
       color: 'white',
       fontWeight: '500',
-      verticalAlign: 'middle'
+      verticalAlign: 'middle',
+      display: windowWidth < 768 ? 'flex' : 'table-cell',
+      justifyContent: windowWidth < 768 ? 'space-between' : 'initial',
+      alignItems: 'center',
+      borderBottom: windowWidth < 768 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+      '&:last-child': {
+        borderBottom: 'none'
+      }
     },
     facultyPhoto: {
       width: '50px',
@@ -470,9 +497,11 @@ const CreateFaculty = () => {
     },
     detailsHeader: {
       display: 'flex',
+      flexDirection: windowWidth < 768 ? 'column' : 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: '30px'
+      marginBottom: '30px',
+      gap: windowWidth < 768 ? '20px' : '0'
     },
     backButton: {
       display: 'flex',
@@ -490,7 +519,7 @@ const CreateFaculty = () => {
     },
     detailsContent: {
       display: 'grid',
-      gridTemplateColumns: '300px 1fr',
+      gridTemplateColumns: windowWidth < 768 ? '1fr' : '300px 1fr',
       gap: '40px'
     },
     detailsPhotoSection: {
@@ -590,7 +619,7 @@ const CreateFaculty = () => {
     },
     formGrid: {
       display: 'grid',
-      gridTemplateColumns: '220px 1fr',
+      gridTemplateColumns: windowWidth < 768 ? '1fr' : '220px 1fr',
       gap: '40px',
       marginBottom: '40px'
     },
@@ -643,7 +672,7 @@ const CreateFaculty = () => {
     },
     fieldsSection: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
       gap: '25px'
     },
     inputGroup: {
@@ -703,7 +732,8 @@ const CreateFaculty = () => {
     formActions: {
       display: 'flex',
       gap: '20px',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+      flexDirection: windowWidth < 480 ? 'column' : 'row'
     },
     cancelButton: {
       padding: '15px 25px',
@@ -790,7 +820,7 @@ const CreateFaculty = () => {
       <div style={styles.tableHeader}>
         <h2 style={styles.tableTitle}>Neural Faculty Database</h2>
         <div style={styles.tableControls}>
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative', width: windowWidth < 480 ? '100%' : 'auto' }}>
             <Search size={18} style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#00f5ff' }} />
             <input
               type="text"
@@ -852,9 +882,10 @@ const CreateFaculty = () => {
                 }}
               >
                 <td style={styles.td}>
-                  {facultyMember.photo ? (
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Photo:</span>}
+                  {facultyMember._id ? (
                     <img
-                      src={facultyMember.photo.url || facultyMember.photo}
+                      src={`https://ulcclub1.onrender.com/api/v1/faculty/faculty-photo/${facultyMember._id}`}
                       alt={facultyMember.name}
                       style={styles.facultyPhoto}
                     />
@@ -871,6 +902,7 @@ const CreateFaculty = () => {
                   )}
                 </td>
                 <td style={styles.td}>
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Name:</span>}
                   <div>
                     <div style={{ fontWeight: '700', fontSize: '16px', color: '#00f5ff' }}>
                       {facultyMember.name}
@@ -878,17 +910,28 @@ const CreateFaculty = () => {
                     <div style={{ fontSize: '12px', color: '#ccc', marginTop: '2px' }}>
                       ID: {facultyMember._id?.slice(-6) || 'N/A'}
                     </div>
-                  </div>
-                </td>
-                <td style={styles.td}>
+                </div>
+              </td>
+              <td style={styles.td}>
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Category:</span>}
                   <span style={getCategoryBadgeStyle(facultyMember.category)}>
                     {facultyMember.category}
                   </span>
                 </td>
-                <td style={styles.td}>{facultyMember.email}</td>
-                <td style={styles.td}>{facultyMember.phone}</td>
-                <td style={styles.td}>{facultyMember.cabin}</td>
                 <td style={styles.td}>
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Email:</span>}
+                  <span>{facultyMember.email}</span>
+                </td>
+                <td style={styles.td}>
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Phone:</span>}
+                  <span>{facultyMember.phone}</span>
+                </td>
+                <td style={styles.td}>
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Cabin:</span>}
+                  <span>{facultyMember.cabin}</span>
+                </td>
+                <td style={styles.td}>
+                  {windowWidth < 768 && <span style={styles.infoLabel}>Actions:</span>}
                   <div style={styles.actionButtons}>
                     <button
                       style={{...styles.iconButton, ...styles.viewDetailsButton}}
@@ -904,7 +947,6 @@ const CreateFaculty = () => {
                       style={{...styles.iconButton, ...styles.editButton}}
                       onClick={(e) => {
                         e.stopPropagation();
-                        // Add edit functionality here
                         toast.info('Edit functionality coming soon!');
                       }}
                       title="Edit Faculty"
@@ -952,11 +994,11 @@ const CreateFaculty = () => {
 
       <div style={styles.detailsContent}>
         <div style={styles.detailsPhotoSection}>
-          {selectedFaculty?.photo ? (
+          {selectedFaculty?._id ? (
             <img
-               src={`https://ulcclub1.onrender.com/api/v1/faculty/faculty-photo/${faculty._id}`}
-               alt={selectedFaculty.name}
-               style={{ width: "150px", height: "150px", objectFit: "cover" }}  />
+              src={`https://ulcclub1.onrender.com/api/v1/faculty/faculty-photo/${selectedFaculty._id}`}
+              alt={selectedFaculty.name}
+              style={styles.detailsPhoto} />
           ) : (
             <div style={{
               ...styles.detailsPhoto,
@@ -1252,7 +1294,7 @@ const CreateFaculty = () => {
         </div>
 
         {/* AI Cursor Follow Effect */}
-        <div 
+        <div
           style={{
             ...styles.cursorGlow,
             left: mousePosition.x - 100,
@@ -1278,17 +1320,17 @@ const CreateFaculty = () => {
           </div>
           
           <div style={styles.headerRight}>
-            <button 
+            <button
               style={{
                 ...styles.viewButton,
                 background: viewMode === 'table' ? 'linear-gradient(135deg, #00f5ff, #ff00ff)' : 'rgba(0, 245, 255, 0.1)'
               }}
-              onClick={() => setViewMode('table')}
+              onClick={() => { setViewMode('table'); setShowForm(false); }}
             >
               <Users size={18} />
               Database
             </button>
-            <button 
+            <button
               style={{
                 ...styles.actionButton,
                 background: showForm ? 'rgba(255, 68, 68, 0.8)' : 'linear-gradient(135deg, #00f5ff, #ff00ff)'
@@ -1350,13 +1392,13 @@ const CreateFaculty = () => {
         }
         
         @keyframes particleFloat {
-          0% { 
+          0% {
             transform: translateY(100vh) rotate(0deg);
             opacity: 0;
           }
           10% { opacity: 1; }
           90% { opacity: 1; }
-          100% { 
+          100% {
             transform: translateY(-100px) rotate(360deg);
             opacity: 0;
           }
@@ -1381,6 +1423,18 @@ const CreateFaculty = () => {
         @keyframes brainPulse {
           from { transform: scale(1); }
           to { transform: scale(1.1); }
+        }
+
+        /* Hover effects */
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 245, 255, 0.4);
+        }
+        .cancel-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .icon-button:hover {
+            transform: scale(1.1);
         }
       `}</style>
     </Layout>
