@@ -37,6 +37,7 @@ import Faculty from "./pages/Admin/Faculty.js";
 import Projects from "./pages/user/Projects.js";
 import Found from "./pages/Found.js";
 import Sports from "./pages/Sports.js";
+import StudentAction from "./pages/Admin/StudentAction.js";
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
               <Route path="admin/volunteer" element={<Volunteer />} />
               <Route path="admin/latterhead" element={<LatterHead />} />
               <Route path="admin/faculty" element={<Faculty />} />
+              <Route path="admin/action" element={<StudentAction />} />
             </Route>
 
             {/* Additional Routes */}
