@@ -96,10 +96,10 @@ const Dsocsa = () => {
       title: "Resources",
       items: [
         {
-          path: "/dashboard/admin/skills",
+          path: "/dashboard/admin/action",
           icon: <BookOpen />,
           title: "Action's",
-          description: "Take any action of any student",
+          description: "Take action of any student",
         }
       ]
     }
