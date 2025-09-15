@@ -38,6 +38,7 @@ import Projects from "./pages/user/Projects.js";
 import Found from "./pages/Found.js";
 import Sports from "./pages/Sports.js";
 import StudentAction from "./pages/Admin/StudentAction.js";
+import Secure from "./pages/Admin/Secure.js";
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
               <Route path="admin/latterhead" element={<LatterHead />} />
               <Route path="admin/faculty" element={<Faculty />} />
               <Route path="admin/action" element={<StudentAction />} />
+              <Route path="admin/confidential" element={<Secure />} />
             </Route>
 
             {/* Additional Routes */}
