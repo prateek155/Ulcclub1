@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const GetAllItems = () => {
+const found = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -85,4 +85,4 @@ const GetAllItems = () => {
   );
 };
 
-export default GetAllItems;
+export default found;
