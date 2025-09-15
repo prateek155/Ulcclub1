@@ -39,6 +39,7 @@ import Found from "./pages/Found.js";
 import Sports from "./pages/Sports.js";
 import StudentAction from "./pages/Admin/StudentAction.js";
 import Secure from "./pages/Admin/Secure.js";
+import Cultural from "./pages/Cultural.js";
 
 function App() {
   return (
@@ -90,6 +91,7 @@ function App() {
             <Route path="/association" element={<Association />} />
             <Route path="/founditem" element={<Found />} />
             <Route path="/sport" element={<Sports />} /> 
+            <Route path="/cultural" element={<Cultural />} /> 
             <Route path="*" element={<Pagenotfound />} /> 
 
           </Routes>
