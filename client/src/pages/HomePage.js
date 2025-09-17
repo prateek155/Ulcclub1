@@ -77,10 +77,10 @@ const HomePage = () => {
     },
     {
       question: "Why should i join in SOCSA actuvities?",
-      answer: "1) It is a platform to showcase your skills,
+      answer: `1) It is a platform to showcase your skills,
                2) Opportunities to network with friends, seniors, and industry experts,
                3) Hands-on experience beyond the classroom,
-               4) A chance to take leadership roles and boost your resume."
+               4) A chance to take leadership roles and boost your resume.`
     },
     {
       question: "Does socsa help with placements and internships?",
