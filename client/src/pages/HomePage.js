@@ -68,27 +68,30 @@ const HomePage = () => {
 
   const faqData = [
     {
-      question: "What is SOCSA and what do we do?",
-      answer: "SOCSA is the Society of Computer Science & Applications focused on AI/ML innovation. We bring together students and professionals to learn, collaborate, and build cutting-edge projects in artificial intelligence and machine learning."
+      question: "What is Socsa?",
+      answer: "SOCSA it is the official student body of our department. We organize cultural, technical, and fun events. SOCSA is the bridge between students and teachers, built to ensure maximum involvement and growth."
     },
     {
-      question: "How can I join SOCSA?",
-      answer: "Simply click on the 'Join Our Association' button on our homepage and fill out the membership form. We welcome all skill levels from beginners to advanced practitioners."
+      question: "what does socsa do? ",
+      answer: "We conduct workshops, hackathons, seminars, cultural fests, networking events, skill sessions, and social initiatives that enhance both technical and personal development. We help students connect with faculty to resolve issues, and provide an open forum for ideas, discussions, and participation."
     },
     {
-      question: "Do I need prior AI/ML experience to join?",
-      answer: "Not at all! We have learning tracks for all levels. Our beginner-friendly workshops and mentorship programs will help you get started, regardless of your current skill level."
+      question: "Why should i join in SOCSA actuvities?",
+      answer: "1) It is a platform to showcase your skills,
+               2) Opportunities to network with friends, seniors, and industry experts,
+               3) Hands-on experience beyond the classroom,
+               4) A chance to take leadership roles and boost your resume."
     },
     {
-      question: "What kind of projects do members work on?",
-      answer: "Our members work on diverse projects including computer vision, natural language processing, robotics, web applications, and research papers. Check our featured projects section for examples."
+      question: "Does socsa help with placements and internships?",
+      answer: "Yes, indirectly we do! Our skill sessions, networking events, and industry talks give you exposure and help you build the confidence and expertise needed for placements and internships."
     },
     {
-      question: "Are there any membership fees?",
-      answer: "Basic membership is free! We believe in making AI/ML education accessible to everyone. Some premium workshops or events may have nominal fees to cover resources."
+      question: "Can I pitch my own ideas to SOCSA:",
+      answer: "Absoluty! SOCSA is built for students and by students. If you have an idea for a workshop, project, or event — bring it to us, our team will connect you with experts and bring your projects to real time."
     },
     {
-      question: "How often do you organize events and workshops?",
+      question: "how do i stay updates on socsa events?",
       answer: "We organize events weekly, including technical workshops, guest lectures, hackathons, and networking sessions. Check our events calendar for upcoming activities."
     }
   ];
