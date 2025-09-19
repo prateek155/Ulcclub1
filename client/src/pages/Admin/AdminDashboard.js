@@ -409,16 +409,38 @@ const AdminDashboard = () => {
       )}
 
       <style jsx>{`
+        /* CRITICAL FIX: Remove all margins and padding that cause white space */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+        }
+
         .faculty-dashboard {
           background: #f8fafc;
           min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          /* CRITICAL: Remove any margins that cause white space */
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          position: relative;
         }
 
         .dashboard-container {
           display: flex;
           min-height: 100vh;
           position: relative;
+          /* CRITICAL: Ensure full width without margins */
+          width: 100%;
+          margin: 0;
+          padding: 0;
         }
 
         /* Menu Button - Hidden on Desktop, Visible on Mobile/Tablet at Bottom */
@@ -527,6 +549,10 @@ const AdminDashboard = () => {
           background: #f8fafc;
           overflow-y: auto;
           min-width: 0;
+          /* CRITICAL: Ensure full width without margins */
+          width: 100%;
+          margin: 0;
+          padding: 0;
         }
 
         /* Section padding - Desktop: Normal, Mobile: Account for bottom menu button */
@@ -534,6 +560,9 @@ const AdminDashboard = () => {
           padding: 24px;
           max-width: 100%;
           padding-bottom: 120px; /* Extra bottom padding for mobile menu */
+          /* CRITICAL: Remove margins */
+          margin: 0;
+          width: 100%;
         }
 
         /* Welcome Card - Enhanced Responsive */
@@ -544,6 +573,7 @@ const AdminDashboard = () => {
           padding: 24px;
           margin-bottom: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          width: 100%;
         }
 
         .welcome-header {
@@ -604,6 +634,7 @@ const AdminDashboard = () => {
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 20px;
           margin-bottom: 32px;
+          width: 100%;
         }
 
         .stat-card {
@@ -613,6 +644,7 @@ const AdminDashboard = () => {
           padding: 20px;
           transition: all 0.2s ease;
           min-width: 0;
+          width: 100%;
         }
 
         .stat-card:hover {
@@ -681,6 +713,7 @@ const AdminDashboard = () => {
           border-radius: 12px;
           overflow: hidden;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          width: 100%;
         }
 
         .section-header {
@@ -749,6 +782,7 @@ const AdminDashboard = () => {
         /* Table Styles - Desktop Only */
         .table-container {
           overflow: hidden;
+          width: 100%;
         }
 
         .desktop-table {
@@ -914,7 +948,6 @@ const AdminDashboard = () => {
           background: #fee2e2;
           border-color: #fca5a5;
         }
-
         /* Mobile Cards - Hidden by default */
         .mobile-cards {
           display: none;
