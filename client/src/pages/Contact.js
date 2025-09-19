@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Contact = () => {
   return (
     <Layout title={"Contact Us"}>
-      <div className="container py-5">
+      <div className="container">
         <div className="row justify-content-center">
           {/* Left Section: Image */}
           <div className="col-md-6 mb-4">
