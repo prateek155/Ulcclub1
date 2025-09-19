@@ -303,7 +303,6 @@ const LostandFound = () => {
 
 const styles = {
   container: {
-    minHeight: '100vh',
     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   },
