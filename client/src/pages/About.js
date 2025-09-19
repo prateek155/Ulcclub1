@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const About = () => {
   return (
     <Layout title={"About Us"}>
-      <div className="container my-5">
+      <div className="container ">
         <div className="row align-items-center">
           <div className="col-md-6">
             <img 
