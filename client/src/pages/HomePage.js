@@ -127,7 +127,6 @@ const HomePage = () => {
   const styles = {
     // Main container with dark theme
     mainContainer: {
-      minHeight: '100vh',
       backgroundColor: '#0a0a0a',
       color: '#ffffff',
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
