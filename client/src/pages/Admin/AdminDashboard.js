@@ -421,18 +421,18 @@ const AdminDashboard = () => {
           position: relative;
         }
 
-        /* Menu Button - Hidden on Desktop, Visible on Mobile/Tablet */
+        /* Menu Button - Hidden on Desktop, Visible on Mobile/Tablet at Bottom */
         .mobile-menu-toggle {
           position: fixed;
-          top: 16px;
-          left: 16px;
+          bottom: 24px;
+          right: 24px;
           z-index: 1003;
           background: white;
           border: 2px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 12px 16px;
+          border-radius: 50px;
+          padding: 14px 18px;
           cursor: pointer;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
           color: #374151;
           font-weight: 600;
           font-size: 14px;
@@ -440,7 +440,9 @@ const AdminDashboard = () => {
           align-items: center;
           gap: 8px;
           transition: all 0.2s ease;
-          min-width: 80px;
+          min-width: 90px;
+          backdrop-filter: blur(10px);
+          background: rgba(255, 255, 255, 0.95);
         }
 
         .mobile-menu-toggle:hover {
@@ -527,10 +529,11 @@ const AdminDashboard = () => {
           min-width: 0;
         }
 
-        /* Section padding - Desktop: Normal, Mobile: Account for menu button */
+        /* Section padding - Desktop: Normal, Mobile: Account for bottom menu button */
         .section {
           padding: 24px;
           max-width: 100%;
+          padding-bottom: 120px; /* Extra bottom padding for mobile menu */
         }
 
         /* Welcome Card - Enhanced Responsive */
@@ -667,6 +670,8 @@ const AdminDashboard = () => {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          word-break: break-all;
+          line-height: 1.3;
         }
 
         /* Members Section - Enhanced */
@@ -1234,6 +1239,7 @@ const AdminDashboard = () => {
           /* Ensure proper spacing */
           .section {
             padding: 24px;
+            padding-bottom: 24px; /* Normal bottom padding on desktop */
           }
         }
 
@@ -1249,7 +1255,7 @@ const AdminDashboard = () => {
           
           .section {
             padding: 20px;
-            padding-top: 80px;
+            padding-bottom: 120px;
           }
           
           /* Show mobile menu button */
@@ -1300,7 +1306,14 @@ const AdminDashboard = () => {
         @media (max-width: 768px) {
           .section {
             padding: 16px;
-            padding-top: 80px;
+            padding-bottom: 120px;
+          }
+
+          .stat-content p {
+            font-size: 15px;
+            white-space: normal;
+            word-break: break-all;
+            line-height: 1.3;
           }
 
           .welcome-header {
@@ -1402,10 +1415,11 @@ const AdminDashboard = () => {
         /* Mobile Phones */
         @media (max-width: 480px) {
           .mobile-menu-toggle {
-            top: 12px;
-            left: 12px;
-            padding: 10px 14px;
-            min-width: 75px;
+            bottom: 16px;
+            right: 16px;
+            padding: 12px 16px;
+            min-width: 80px;
+            border-radius: 40px;
           }
 
           .menu-text {
@@ -1426,7 +1440,7 @@ const AdminDashboard = () => {
 
           .section {
             padding: 12px;
-            padding-top: 75px;
+            padding-bottom: 100px;
           }
 
           .welcome-card {
@@ -1460,7 +1474,11 @@ const AdminDashboard = () => {
           }
 
           .stat-content p {
-            font-size: 16px;
+            font-size: 14px;
+            white-space: normal;
+            word-break: break-all;
+            line-height: 1.2;
+            min-height: 32px;
           }
 
           .section-header {
