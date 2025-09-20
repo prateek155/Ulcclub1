@@ -86,243 +86,31 @@ const CreateProduct = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const styles = {
-    product: {
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      minHeight: "100vh",
-      padding: "20px",
-    },
-    container: {
-      padding: '2rem',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      minHeight: '100vh',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-    },
-    row: {
-      display: 'flex',
-      gap: '2rem',
-      maxWidth: '1400px',
-      margin: '0 auto',
-      flexWrap: 'wrap'
-    },
-    sidebarCol: {
-      flex: '0 0 250px',
-      background: 'rgba(255, 255, 255, 0.1)',
-      borderRadius: '16px',
-      padding: '1rem',
-      height: 'fit-content',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.2)'
-    },
-    mainContentCol: {
-      flex: '1',
-      minWidth: '600px'
-    },
-    eventFormCard: {
-      background: 'rgba(255, 255, 255, 0.95)',
-      backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
-      borderRadius: '24px',
-      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-      overflow: 'hidden',
-      animation: 'slideUp 0.6s ease-out'
-    },
-    formHeader: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      padding: '2.5rem',
-      textAlign: 'center',
-      position: 'relative',
-      overflow: 'hidden'
-    },
-    headerTitle: {
-      fontSize: '2.5rem',
-      fontWeight: '700',
-      margin: '0 0 0.5rem 0',
-      textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      position: 'relative',
-      zIndex: 1
-    },
-    headerSubtitle: {
-      fontSize: '1.1rem',
-      opacity: 0.9,
-      margin: 0,
-      position: 'relative',
-      zIndex: 1
-    },
-    eventForm: {
-      padding: '2.5rem'
-    },
-    formSection: {
-      marginBottom: '3rem',
-      padding: '2rem',
-      background: 'rgba(255, 255, 255, 0.7)',
-      borderRadius: '16px',
-      border: '1px solid rgba(0, 0, 0, 0.05)',
-      transition: 'all 0.3s ease'
-    },
-    sectionTitle: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.75rem',
-      fontSize: '1.4rem',
-      fontWeight: '600',
-      color: '#2d3748',
-      marginBottom: '1.5rem',
-      paddingBottom: '0.75rem',
-      borderBottom: '2px solid #e2e8f0'
-    },
-    formGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-      gap: '1.5rem'
-    },
-    formGroup: {
-      marginBottom: '1.5rem'
-    },
-    label: {
-      display: 'block',
-      fontSize: '0.95rem',
-      fontWeight: '600',
-      color: '#374151',
-      marginBottom: '0.5rem'
-    },
-    input: {
-      width: '100%',
-      padding: '0.875rem 1rem',
-      border: '2px solid #e5e7eb',
-      borderRadius: '12px',
-      fontSize: '1rem',
-      transition: 'all 0.3s ease',
-      background: 'rgba(255, 255, 255, 0.9)',
-      backdropFilter: 'blur(10px)',
-      boxSizing: 'border-box'
-    },
-    textarea: {
-      width: '100%',
-      padding: '0.875rem 1rem',
-      border: '2px solid #e5e7eb',
-      borderRadius: '12px',
-      fontSize: '1rem',
-      transition: 'all 0.3s ease',
-      background: 'rgba(255, 255, 255, 0.9)',
-      backdropFilter: 'blur(10px)',
-      resize: 'vertical',
-      minHeight: '100px',
-      boxSizing: 'border-box'
-    },
-    photoUploadArea: {
-      border: '2px dashed #cbd5e0',
-      borderRadius: '16px',
-      padding: '2rem',
-      textAlign: 'center',
-      transition: 'all 0.3s ease',
-      background: 'rgba(255, 255, 255, 0.5)'
-    },
-    uploadPlaceholder: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '1rem'
-    },
-    uploadContent: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '0.5rem'
-    },
-    uploadBtn: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      padding: '0.75rem 1.5rem',
-      border: 'none',
-      borderRadius: '12px',
-      fontWeight: '600',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.2)'
-    },
-    uploadHint: {
-      fontSize: '0.875rem',
-      color: '#6b7280'
-    },
-    photoPreview: {
-      position: 'relative',
-      display: 'inline-block'
-    },
-    previewImg: {
-      maxHeight: '250px',
-      maxWidth: '100%',
-      borderRadius: '12px',
-      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)'
-    },
-    changePhotoBtn: {
-      position: 'absolute',
-      bottom: '10px',
-      right: '10px',
-      background: 'rgba(0, 0, 0, 0.7)',
-      color: 'white',
-      border: 'none',
-      padding: '0.5rem 1rem',
-      borderRadius: '8px',
-      fontSize: '0.875rem',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease'
-    },
-    formActions: {
-      textAlign: 'center',
-      paddingTop: '2rem',
-      borderTop: '1px solid #e5e7eb'
-    },
-    createEventBtn: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      padding: '1rem 3rem',
-      border: 'none',
-      borderRadius: '16px',
-      fontSize: '1.1rem',
-      fontWeight: '600',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
-      position: 'relative',
-      overflow: 'hidden'
-    },
-    adminMenuPlaceholder: {
-      color: 'white',
-      textAlign: 'center',
-      padding: '1rem'
-    }
-  };
-
   return (
     <Layout title={"Create Event"}>
-      <div style={styles.product}>
-       <ToastContainer />
-        <div style={styles.container}>
-        <div className="row">
-       <div style={styles.row}>
-        <div style={styles.mainContentCol}>
-          <div style={styles.eventFormCard}>
-            <div style={styles.formHeader}>
-              <h2 style={styles.headerTitle}>Organize New Event</h2>
-              <p style={styles.headerSubtitle}>Create and manage your organization's events</p>
+      <div className="create-event-container">
+        <ToastContainer />
+        <div className="content-wrapper">
+          <div className="event-form-card">
+            <div className="form-header">
+              <h2 className="header-title">Organize New Event</h2>
+              <p className="header-subtitle">Create and manage your organization's events</p>
             </div>
             
-            <div style={styles.eventForm}>
+            <div className="event-form">
               {/* Event Photo Upload */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>
-                  <Camera size={20} color="#667eea" />
+              <div className="form-section">
+                <h3 className="section-title">
+                  <Camera size={20} className="section-icon" />
                   Event Media
                 </h3>
-                <div style={styles.photoUploadArea}>
+                <div className="photo-upload-area">
                   {preview ? (
-                    <div style={styles.photoPreview}>
-                      <img src={preview} alt="Event Preview" style={styles.previewImg} />
+                    <div className="photo-preview">
+                      <img src={preview} alt="Event Preview" className="preview-img" />
                       <button
                         type="button"
-                        style={styles.changePhotoBtn}
+                        className="change-photo-btn"
                         onClick={() => {
                           setPreview(null);
                           setFormData({ ...formData, photo: null });
@@ -332,10 +120,10 @@ const CreateProduct = () => {
                       </button>
                     </div>
                   ) : (
-                    <div style={styles.uploadPlaceholder}>
-                      <Camera size={48} color="#9ca3af" />
-                      <div style={styles.uploadContent}>
-                        <label style={styles.uploadBtn}>
+                    <div className="upload-placeholder">
+                      <Camera size={48} className="upload-icon" />
+                      <div className="upload-content">
+                        <label className="upload-btn">
                           Upload Event Photo
                           <input
                             type="file"
@@ -344,7 +132,7 @@ const CreateProduct = () => {
                             style={{ display: 'none' }}
                           />
                         </label>
-                        <span style={styles.uploadHint}>PNG, JPG, GIF up to 10MB</span>
+                        <span className="upload-hint">PNG, JPG, GIF up to 10MB</span>
                       </div>
                     </div>
                   )}
@@ -352,16 +140,16 @@ const CreateProduct = () => {
               </div>
 
               {/* Basic Information */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>
-                  <Users size={20} color="#667eea" />
+              <div className="form-section">
+                <h3 className="section-title">
+                  <Users size={20} className="section-icon" />
                   Basic Information
                 </h3>
-                <div style={styles.formGrid}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Event Name *</label>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Event Name *</label>
                     <input
-                      style={styles.input}
+                      className="form-input"
                       type="text"
                       name="name"
                       value={formData.name}
@@ -370,10 +158,10 @@ const CreateProduct = () => {
                       required
                     />
                   </div>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Event Category</label>
+                  <div className="form-group">
+                    <label className="form-label">Event Category</label>
                     <select
-                      style={styles.input}
+                      className="form-input"
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
@@ -391,10 +179,10 @@ const CreateProduct = () => {
                   </div>
                 </div>
                 
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Description *</label>
+                <div className="form-group">
+                  <label className="form-label">Description *</label>
                   <textarea
-                    style={styles.textarea}
+                    className="form-textarea"
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
@@ -404,17 +192,18 @@ const CreateProduct = () => {
                   />
                 </div>
               </div>
+
               {/* Date and Time */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>
-                  <Calendar size={20} color="#667eea" />
+              <div className="form-section">
+                <h3 className="section-title">
+                  <Calendar size={20} className="section-icon" />
                   Schedule
                 </h3>
-                <div style={styles.formGrid}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Start Date *</label>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Start Date *</label>
                     <input
-                      style={styles.input}
+                      className="form-input"
                       type="date"
                       name="startDate"
                       value={formData.startDate}
@@ -422,20 +211,20 @@ const CreateProduct = () => {
                       required
                     />
                   </div>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>End Date</label>
+                  <div className="form-group">
+                    <label className="form-label">End Date</label>
                     <input
-                      style={styles.input}
+                      className="form-input"
                       type="date"
                       name="endDate"
                       value={formData.endDate}
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Venue *</label>
+                  <div className="form-group">
+                    <label className="form-label">Venue *</label>
                     <input
-                      style={styles.input}
+                      className="form-input"
                       type="text"
                       name="venue"
                       value={formData.venue}
@@ -448,44 +237,477 @@ const CreateProduct = () => {
               </div>
 
               {/* Registration Details */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>
-                  <Clock size={20} color="#667eea" />
-                  Event type & Orgnizer
+              <div className="form-section">
+                <h3 className="section-title">
+                  <Clock size={20} className="section-icon" />
+                  Event type & Organizer
                 </h3>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Organizer Email *</label>
-                    <select
-                      style={styles.input}
-                      name="createdBy"
-                      value={formData.createdBy}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">Select organizer email</option>
-                      {users?.map((user) => (
-                        <option key={user._id} value={user.email}>
-                          {user.email}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="form-group">
+                  <label className="form-label">Organizer Email *</label>
+                  <select
+                    className="form-input"
+                    name="createdBy"
+                    value={formData.createdBy}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Select organizer email</option>
+                    {users?.map((user) => (
+                      <option key={user._id} value={user.email}>
+                        {user.email}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
+
               {/* Submit Button */}
-              <div style={styles.formActions}>
-                <button type="button" style={styles.createEventBtn} onClick={handleCreate}>
+              <div className="form-actions">
+                <button type="button" className="create-event-btn" onClick={handleCreate}>
                   Create Event
                 </button>
               </div>
             </div>
           </div>
         </div>
+
+        <style jsx>{`
+          .create-event-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          }
+
+          .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+          }
+
+          .event-form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+          }
+
+          @keyframes slideUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .form-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+          }
+
+          .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+          }
+
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+          }
+
+          .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+          }
+
+          .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+          }
+
+          .event-form {
+            padding: 2.5rem;
+          }
+
+          .form-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+          }
+
+          .form-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          }
+
+          .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+          }
+
+          .section-icon {
+            color: #667eea;
+          }
+
+          .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+          }
+
+          .form-group {
+            margin-bottom: 1.5rem;
+          }
+
+          .form-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+          }
+
+          .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+          }
+
+          .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+          }
+
+          .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+          }
+
+          .photo-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.5);
+          }
+
+          .photo-upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+          }
+
+          .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+          }
+
+          .upload-icon {
+            color: #9ca3af;
+          }
+
+          .upload-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+          }
+
+          .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            display: inline-block;
+          }
+
+          .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+          }
+
+          .upload-hint {
+            font-size: 0.875rem;
+            color: #6b7280;
+          }
+
+          .photo-preview {
+            position: relative;
+            display: inline-block;
+          }
+
+          .preview-img {
+            max-height: 250px;
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+          }
+
+          .change-photo-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+
+          .change-photo-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+          }
+
+          .form-actions {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+          }
+
+          .create-event-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .create-event-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+          }
+
+          .create-event-btn:active {
+            transform: translateY(0);
+          }
+
+          /* Responsive Design */
+          @media (max-width: 768px) {
+            .create-event-container {
+              padding: 15px;
+            }
+
+            .content-wrapper {
+              max-width: 100%;
+            }
+
+            .event-form-card {
+              border-radius: 16px;
+            }
+
+            .form-header {
+              padding: 2rem 1.5rem;
+            }
+
+            .header-title {
+              font-size: 2rem;
+            }
+
+            .header-subtitle {
+              font-size: 1rem;
+            }
+
+            .event-form {
+              padding: 1.5rem;
+            }
+
+            .form-section {
+              padding: 1.5rem;
+              margin-bottom: 2rem;
+            }
+
+            .section-title {
+              font-size: 1.2rem;
+              margin-bottom: 1rem;
+            }
+
+            .form-grid {
+              grid-template-columns: 1fr;
+              gap: 1rem;
+            }
+
+            .form-input, .form-textarea {
+              padding: 0.75rem;
+              font-size: 0.95rem;
+            }
+
+            .photo-upload-area {
+              padding: 1.5rem;
+            }
+
+            .upload-btn {
+              padding: 0.65rem 1.25rem;
+              font-size: 0.95rem;
+            }
+
+            .create-event-btn {
+              padding: 0.875rem 2rem;
+              font-size: 1rem;
+              width: 100%;
+              max-width: 300px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .create-event-container {
+              padding: 10px;
+            }
+
+            .form-header {
+              padding: 1.5rem 1rem;
+            }
+
+            .header-title {
+              font-size: 1.7rem;
+            }
+
+            .event-form {
+              padding: 1rem;
+            }
+
+            .form-section {
+              padding: 1rem;
+              margin-bottom: 1.5rem;
+              border-radius: 12px;
+            }
+
+            .section-title {
+              font-size: 1.1rem;
+              gap: 0.5rem;
+            }
+
+            .form-group {
+              margin-bottom: 1rem;
+            }
+
+            .form-input, .form-textarea {
+              padding: 0.625rem;
+              border-radius: 8px;
+            }
+
+            .photo-upload-area {
+              padding: 1rem;
+              border-radius: 12px;
+            }
+
+            .upload-placeholder {
+              gap: 0.75rem;
+            }
+
+            .upload-btn {
+              padding: 0.5rem 1rem;
+              font-size: 0.9rem;
+              border-radius: 8px;
+            }
+
+            .upload-hint {
+              font-size: 0.8rem;
+            }
+
+            .preview-img {
+              max-height: 200px;
+            }
+
+            .form-actions {
+              padding-top: 1.5rem;
+            }
+
+            .create-event-btn {
+              padding: 0.75rem 1.5rem;
+              font-size: 0.95rem;
+              border-radius: 12px;
+            }
+          }
+
+          @media (max-width: 360px) {
+            .header-title {
+              font-size: 1.5rem;
+            }
+
+            .section-title {
+              font-size: 1rem;
+            }
+
+            .form-input, .form-textarea {
+              font-size: 0.9rem;
+            }
+
+            .create-event-btn {
+              font-size: 0.9rem;
+            }
+          }
+
+          /* Touch device optimizations */
+          @media (hover: none) and (pointer: coarse) {
+            .form-input, .form-textarea {
+              font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .upload-btn, .create-event-btn {
+              min-height: 44px; /* Apple's recommended touch target size */
+            }
+          }
+        `}</style>
       </div>
-    </div>
-    </div>
     </Layout>
   );
 };
-
+export default CreateProduct;
 export default CreateProduct;
