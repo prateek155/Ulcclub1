@@ -69,26 +69,26 @@ const HomePage = () => {
   const faqData = [
     {
       question: "What is Socsa?",
-      answer: "SOCSA it is the official student body of our department. We organize cultural, technical, and fun events. SOCSA is the bridge between students and teachers, built to ensure maximum involvement and growth."
+      answer: "SOCSA it is the official student body of our department. We organize cultural, technical, and fun events. SOCSA is the bridge between students and teachers, built to ensure maximum involvement and growth."
     },
     {
       question: "what does socsa do? ",
-      answer: "We conduct workshops, hackathons, seminars, cultural fests, networking events, skill sessions, and social initiatives that enhance both technical and personal development. We help students connect with faculty to resolve issues, and provide an open forum for ideas, discussions, and participation."
+      answer: "We conduct workshops, hackathons, seminars, cultural fests, networking events, skill sessions, and social initiatives that enhance both technical and personal development. We help students connect with faculty to resolve issues, and provide an open forum for ideas, discussions, and participation."
     },
     {
       question: "Why should i join in SOCSA actuvities?",
       answer: `1) It is a platform to showcase your skills,
                2) Opportunities to network with friends, seniors, and industry experts,
                3) Hands-on experience beyond the classroom,
-               4) A chance to take leadership roles and boost your resume.`
+               4) A chance to take leadership roles and boost your resume.`
     },
     {
       question: "Does socsa help with placements and internships?",
-      answer: "Yes, indirectly we do! Our skill sessions, networking events, and industry talks give you exposure and help you build the confidence and expertise needed for placements and internships."
+      answer: "Yes, indirectly we do! Our skill sessions, networking events, and industry talks give you exposure and help you build the confidence and expertise needed for placements and internships."
     },
     {
       question: "Can I pitch my own ideas to SOCSA:",
-      answer: "Absoluty! SOCSA is built for students and by students. If you have an idea for a workshop, project, or event — bring it to us, our team will connect you with experts and bring your projects to real time."
+      answer: "Absoluty! SOCSA is built for students and by students. If you have an idea for a workshop, project, or event — bring it to us, our team will connect you with experts and bring your projects to real time."
     },
     {
       question: "how do i stay updates on socsa events?",
@@ -125,11 +125,15 @@ const HomePage = () => {
   };
 
   const styles = {
-    // Main container with dark theme
+    // Main container with dark theme - REMOVED ALL MARGINS AND PADDING
     mainContainer: {
       backgroundColor: '#0a0a0a',
       color: '#ffffff',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      margin: 0,
+      padding: 0,
+      width: '100%',
+      boxSizing: 'border-box'
     },
 
     // Hero Section
@@ -139,7 +143,9 @@ const HomePage = () => {
       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
       minHeight: '100vh',
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      margin: 0,
+      padding: 0
     },
     heroOverlay: {
       position: 'absolute',
@@ -279,7 +285,8 @@ const HomePage = () => {
     statsSection: {
       padding: '5rem 0',
       background: 'linear-gradient(180deg, #111827 0%, #1f2937 100%)',
-      position: 'relative'
+      position: 'relative',
+      margin: 0
     },
     statsContainer: {
       maxWidth: '1200px',
@@ -340,7 +347,8 @@ const HomePage = () => {
     featuredSection: {
       padding: '5rem 0',
       background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 100%)',
-      position: 'relative'
+      position: 'relative',
+      margin: 0
     },
     featuredContainer: {
       maxWidth: '1200px',
@@ -468,7 +476,8 @@ const HomePage = () => {
     // Learning Tracks Section
     learningSection: {
       padding: '5rem 0',
-      background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)'
+      background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+      margin: 0
     },
     learningContainer: {
       maxWidth: '1200px',
@@ -577,7 +586,8 @@ const HomePage = () => {
     // Events Section
     eventsSection: {
       padding: '5rem 0',
-      background: 'radial-gradient(ellipse at center, #1e293b 0%, #111827 100%)'
+      background: 'radial-gradient(ellipse at center, #1e293b 0%, #111827 100%)',
+      margin: 0
     },
     eventsContainer: {
       maxWidth: '1200px',
@@ -635,7 +645,8 @@ const HomePage = () => {
     // Testimonials Section
     testimonialsSection: {
       padding: '5rem 0',
-      background: 'linear-gradient(180deg, #111827 0%, #0f172a 100%)'
+      background: 'linear-gradient(180deg, #111827 0%, #0f172a 100%)',
+      margin: 0
     },
     testimonialsContainer: {
       maxWidth: '1200px',
@@ -691,7 +702,8 @@ const HomePage = () => {
     // FAQ Section
     faqSection: {
       padding: '5rem 0',
-      background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 100%)'
+      background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 100%)',
+      margin: 0
     },
     faqContainer: {
       maxWidth: '800px',
@@ -731,7 +743,8 @@ const HomePage = () => {
     // Achievements Section
     achievementsSection: {
       padding: '5rem 0',
-      background: 'linear-gradient(180deg, #0f172a 0%, #111827 100%)'
+      background: 'linear-gradient(180deg, #0f172a 0%, #111827 100%)',
+      margin: 0
     },
     achievementsContainer: {
       maxWidth: '1200px',
@@ -781,7 +794,8 @@ const HomePage = () => {
       padding: '5rem 0',
       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      margin: 0
     },
     communityOverlay: {
       position: 'absolute',
@@ -879,7 +893,8 @@ const HomePage = () => {
     // Contact Section
     contactSection: {
       padding: '5rem 0',
-      background: 'linear-gradient(180deg, #111827 0%, #0f172a 100%)'
+      background: 'linear-gradient(180deg, #111827 0%, #0f172a 100%)',
+      margin: 0
     },
     contactContainer: {
       maxWidth: '1200px',
@@ -937,6 +952,19 @@ const HomePage = () => {
   };
 
   const globalStyles = `
+    /* Reset all margins and padding */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden;
+    }
+    
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-20px); }
@@ -1021,400 +1049,400 @@ const HomePage = () => {
 
   return (
     <>
-                <Layout title={"All Clubs Info-"}>
-      <style>{globalStyles}</style>
-      <div style={styles.mainContainer}>
-        {/* Hero Section */}
-        <div style={styles.heroSection}>
-          <div style={styles.heroOverlay}></div>
-          
-          {/* Floating particles */}
-          <div style={{...styles.floatingParticle, ...styles.particle1}}></div>
-          <div style={{...styles.floatingParticle, ...styles.particle2}}></div>
-          <div style={{...styles.floatingParticle, ...styles.particle3}}></div>
-          
-          <div style={styles.heroContainer}>
-            <div style={styles.heroContent}>
-              
-              <h1 style={styles.heroTitle}>
-                SOCSA
-                <span style={styles.heroTitleSpan}>
-                  Execution Committee
-                </span>
-              </h1>
-              <p style={styles.heroDescription}>
-                Where curiosity meets innovation. Join our community of AI enthusiasts, researchers, and developers shaping the future of technology through cutting-edge projects and collaborative learning.
-              </p>
-              
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div style={styles.statsSection}>
-          <div style={styles.statsContainer}>
-            <div style={styles.statsGrid}>
-              <div className="stat-item" style={styles.statItem}>
-                <div style={{...styles.statIcon, ...styles.statIconBlue}}>
-                  <Users style={{ width: '2rem', height: '2rem', color: 'white' }} />
-                </div>
-                <div style={styles.statNumber}>{memberCount}+</div>
-                <div style={styles.statLabel}>Active Members</div>
-              </div>
-              <div className="stat-item" style={styles.statItem}>
-                <div style={{...styles.statIcon, ...styles.statIconGreen}}>
-                  <Code style={{ width: '2rem', height: '2rem', color: 'white' }} />
-                </div>
-                <div style={styles.statNumber}>{projectCount}+</div>
-                <div style={styles.statLabel}>AI Projects</div>
-              </div>
-              <div className="stat-item" style={styles.statItem}>
-                <div style={{...styles.statIcon, ...styles.statIconOrange}}>
-                  <BookOpen style={{ width: '2rem', height: '2rem', color: 'white' }} />
-                </div>
-                <div style={styles.statNumber}>{workshopCount}+</div>
-                <div style={styles.statLabel}>Workshops</div>
+      <Layout title={"All Clubs Info-"}>
+        <style>{globalStyles}</style>
+        <div style={styles.mainContainer}>
+          {/* Hero Section */}
+          <div style={styles.heroSection}>
+            <div style={styles.heroOverlay}></div>
+            
+            {/* Floating particles */}
+            <div style={{...styles.floatingParticle, ...styles.particle1}}></div>
+            <div style={{...styles.floatingParticle, ...styles.particle2}}></div>
+            <div style={{...styles.floatingParticle, ...styles.particle3}}></div>
+            
+            <div style={styles.heroContainer}>
+              <div style={styles.heroContent}>
+                
+                <h1 style={styles.heroTitle}>
+                  SOCSA
+                  <span style={styles.heroTitleSpan}>
+                    Execution Committee
+                  </span>
+                </h1>
+                <p style={styles.heroDescription}>
+                  Where curiosity meets innovation. Join our community of AI enthusiasts, researchers, and developers shaping the future of technology through cutting-edge projects and collaborative learning.
+                </p>
+                
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Featured Project Showcase */}
-        <div style={styles.featuredSection}>
-          <div style={styles.featuredContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>Featured Projects</h2>
-              <p style={styles.sectionSubtitle}>Explore our latest AI/ML innovations</p>
+          {/* Stats Section */}
+          <div style={styles.statsSection}>
+            <div style={styles.statsContainer}>
+              <div style={styles.statsGrid}>
+                <div className="stat-item" style={styles.statItem}>
+                  <div style={{...styles.statIcon, ...styles.statIconBlue}}>
+                    <Users style={{ width: '2rem', height: '2rem', color: 'white' }} />
+                  </div>
+                  <div style={styles.statNumber}>{memberCount}+</div>
+                  <div style={styles.statLabel}>Active Members</div>
+                </div>
+                <div className="stat-item" style={styles.statItem}>
+                  <div style={{...styles.statIcon, ...styles.statIconGreen}}>
+                    <Code style={{ width: '2rem', height: '2rem', color: 'white' }} />
+                  </div>
+                  <div style={styles.statNumber}>{projectCount}+</div>
+                  <div style={styles.statLabel}>AI Projects</div>
+                </div>
+                <div className="stat-item" style={styles.statItem}>
+                  <div style={{...styles.statIcon, ...styles.statIconOrange}}>
+                    <BookOpen style={{ width: '2rem', height: '2rem', color: 'white' }} />
+                  </div>
+                  <div style={styles.statNumber}>{workshopCount}+</div>
+                  <div style={styles.statLabel}>Workshops</div>
+                </div>
+              </div>
             </div>
-            <div style={styles.projectShowcase}>
-              <div style={styles.projectBadge}>
-                <Laptop style={{ width: '1.25rem', height: '1.25rem' }} />
-                <span>{featuredProjects[currentProject].tech}</span>
+          </div>
+
+          {/* Featured Project Showcase */}
+          <div style={styles.featuredSection}>
+            <div style={styles.featuredContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>Featured Projects</h2>
+                <p style={styles.sectionSubtitle}>Explore our latest AI/ML innovations</p>
               </div>
-              <h3 style={styles.projectTitle}>
-                {featuredProjects[currentProject].title}
-              </h3>
-              <div style={styles.projectDifficulty}>
-                <span style={{
-                  ...styles.difficultyBadge,
-                  ...(featuredProjects[currentProject].difficulty === 'Beginner' ? styles.difficultyBeginner :
-                      featuredProjects[currentProject].difficulty === 'Intermediate' ? styles.difficultyIntermediate :
-                      styles.difficultyAdvanced)
-                }}>
-                  {featuredProjects[currentProject].difficulty}
-                </span>
+              <div style={styles.projectShowcase}>
+                <div style={styles.projectBadge}>
+                  <Laptop style={{ width: '1.25rem', height: '1.25rem' }} />
+                  <span>{featuredProjects[currentProject].tech}</span>
+                </div>
+                <h3 style={styles.projectTitle}>
+                  {featuredProjects[currentProject].title}
+                </h3>
+                <div style={styles.projectDifficulty}>
+                  <span style={{
+                    ...styles.difficultyBadge,
+                    ...(featuredProjects[currentProject].difficulty === 'Beginner' ? styles.difficultyBeginner :
+                        featuredProjects[currentProject].difficulty === 'Intermediate' ? styles.difficultyIntermediate :
+                        styles.difficultyAdvanced)
+                  }}>
+                    {featuredProjects[currentProject].difficulty}
+                  </span>
+                </div>
+                <a 
+                  href={featuredProjects[currentProject].github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-button"
+                  style={styles.projectButton}
+                >
+                  <Github style={{ width: '1.25rem', height: '1.25rem' }} />
+                  View Project
+                </a>
+                <div style={styles.projectDots}>
+                  {featuredProjects.map((_, i) => (
+                    <button
+                      key={i}
+                      style={{
+                        ...styles.projectDot,
+                        ...(i === currentProject ? styles.projectDotActive : styles.projectDotInactive)
+                      }}
+                      onClick={() => setCurrentProject(i)}
+                    />
+                  ))}
+                </div>
               </div>
-              <a 
-                href={featuredProjects[currentProject].github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="project-button"
-                style={styles.projectButton}
-              >
-                <Github style={{ width: '1.25rem', height: '1.25rem' }} />
-                View Project
-              </a>
-              <div style={styles.projectDots}>
-                {featuredProjects.map((_, i) => (
-                  <button
-                    key={i}
-                    style={{
-                      ...styles.projectDot,
-                      ...(i === currentProject ? styles.projectDotActive : styles.projectDotInactive)
-                    }}
-                    onClick={() => setCurrentProject(i)}
-                  />
+            </div>
+          </div>
+
+          {/* Learning Tracks */}
+          <div style={styles.learningSection}>
+            <div style={styles.learningContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>Skills Tracks</h2>
+                <p style={styles.sectionSubtitle}>Choose your path in different fields</p>
+              </div>
+              <div style={styles.learningGrid}>
+                <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardBlue}}>
+                  <div style={{...styles.learningIcon, ...styles.learningIconBlue}}>
+                    <Trophy style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.learningTitle}>Sports</h3>
+                  <p style={styles.learningDescription}>
+                    Master athletic skills, team coordination, and competitive strategies from amateur to professional level.
+                  </p>
+                  <div style={styles.learningTags}>
+                    <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Swimming</span>
+                    <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Basketball</span>
+                    <span style={{...styles.learningTag, ...styles.learningTagBlue}}>E-sports</span>
+                  </div>
+                  <button className="learning-button" style={styles.learningButton} 
+                  onClick={() => navigate('/sport')}>
+                    Start with us!
+                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
+                  </button>
+                </div>
+
+                <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardPurple}}>
+                  <div style={{...styles.learningIcon, ...styles.learningIconPurple}}>
+                    <Music style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.learningTitle}>Cultural</h3>
+                  <p style={styles.learningDescription}>
+                    Dive into performing arts, cultural expressions, and creative showcases that celebrate diversity.
+                  </p>
+                  <div style={styles.learningTags}>
+                    <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Dancing</span>
+                    <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Singing</span>
+                    <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Drama</span>
+                  </div>
+                  <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonPurple}}
+                   onClick={() => navigate('/culturals')}>
+                    Start with us!
+                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
+                  </button>
+                </div>
+
+                <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardGreen}}>
+                  <div style={{...styles.learningIcon, ...styles.learningIconGreen}}>
+                    <Brush style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.learningTitle}>Design</h3>
+                  <p style={styles.learningDescription}>
+                    Extract insights from creativity with visual design, UX principles, and artistic innovation.
+                  </p>
+                  <div style={styles.learningTags}>
+                    <span style={{...styles.learningTag, ...styles.learningTagGreen}}>UI/UX</span>
+                    <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Graphics</span>
+                    <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Branding</span>
+                  </div>
+                  <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
+                  onClick={() => navigate('/cultural')}>
+                    Start with us!
+                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
+                  </button>
+                </div>
+                <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardGreen}}>
+                  <div style={{...styles.learningIcon, ...styles.learningIconGreen}}>
+                    <FileCode style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.learningTitle}>Mini Project</h3>
+                  <p style={styles.learningDescription}>
+                    Extract insights from creativity with visual design, UX principles, and artistic innovation.
+                  </p>
+                  <a className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
+                  href="https://dept-csa.github.io/edge/"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                    Register Now!
+                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Upcoming Events */}
+          <div style={styles.eventsSection}>
+            <div style={styles.eventsContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>Organized Events</h2>
+                <p style={styles.sectionSubtitle}>Join our exciting upcoming activities</p>
+              </div>
+              <div style={styles.eventsGrid}>
+                {upcomingEvents.map((event, index) => (
+                  <div key={index} className="event-card" style={styles.eventCard}>
+                    <div style={styles.eventHeader}>
+                      <div style={styles.eventDate}>{event.date}</div>
+                      <Calendar style={{ width: '1.25rem', height: '1.25rem', color: '#64748b' }} />
+                    </div>
+                    <h3 style={styles.eventTitle}>{event.title}</h3>
+                    <p style={styles.eventType}>{event.type}</p>
+                    <div style={styles.eventAttendees}>
+                      <Users style={{ width: '1rem', height: '1rem' }} />
+                      <span>{event.attendees} attending</span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Learning Tracks */}
-        <div style={styles.learningSection}>
-          <div style={styles.learningContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>Skills Tracks</h2>
-              <p style={styles.sectionSubtitle}>Choose your path in different fields</p>
-            </div>
-            <div style={styles.learningGrid}>
-              <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardBlue}}>
-                <div style={{...styles.learningIcon, ...styles.learningIconBlue}}>
-                  <Trophy style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-                </div>
-                <h3 style={styles.learningTitle}>Sports</h3>
-                <p style={styles.learningDescription}>
-                  Master athletic skills, team coordination, and competitive strategies from amateur to professional level.
-                </p>
-                <div style={styles.learningTags}>
-                  <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Swimming</span>
-                  <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Basketball</span>
-                  <span style={{...styles.learningTag, ...styles.learningTagBlue}}>E-sports</span>
-                </div>
-                <button className="learning-button" style={styles.learningButton} 
-                onClick={() => navigate('/sport')}>
-                  Start with us!
-                  <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                </button>
+          {/* Testimonials Section */}
+          <div style={styles.testimonialsSection}>
+            <div style={styles.testimonialsContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>What Our Members Say</h2>
+                <p style={styles.sectionSubtitle}>Success stories from our community</p>
               </div>
-
-              <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardPurple}}>
-                <div style={{...styles.learningIcon, ...styles.learningIconPurple}}>
-                  <Music style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-                </div>
-                <h3 style={styles.learningTitle}>Cultural</h3>
-                <p style={styles.learningDescription}>
-                  Dive into performing arts, cultural expressions, and creative showcases that celebrate diversity.
-                </p>
-                <div style={styles.learningTags}>
-                  <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Dancing</span>
-                  <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Singing</span>
-                  <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Drama</span>
-                </div>
-                <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonPurple}}
-                 onClick={() => navigate('/culturals')}>
-                  Start with us!
-                  <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                </button>
-              </div>
-
-              <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardGreen}}>
-                <div style={{...styles.learningIcon, ...styles.learningIconGreen}}>
-                  <Brush style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-                </div>
-                <h3 style={styles.learningTitle}>Design</h3>
-                <p style={styles.learningDescription}>
-                  Extract insights from creativity with visual design, UX principles, and artistic innovation.
-                </p>
-                <div style={styles.learningTags}>
-                  <span style={{...styles.learningTag, ...styles.learningTagGreen}}>UI/UX</span>
-                  <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Graphics</span>
-                  <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Branding</span>
-                </div>
-                <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
-                onClick={() => navigate('/cultural')}>
-                  Start with us!
-                  <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                </button>
-              </div>
-              <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardGreen}}>
-                <div style={{...styles.learningIcon, ...styles.learningIconGreen}}>
-                  <FileCode style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-                </div>
-                <h3 style={styles.learningTitle}>Mini Project</h3>
-                <p style={styles.learningDescription}>
-                  Extract insights from creativity with visual design, UX principles, and artistic innovation.
-                </p>
-                <a className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
-                href="https://dept-csa.github.io/edge/"
-                target="_blank"
-                rel="noopener noreferrer">
-                  Register Now!
-                  <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Upcoming Events */}
-        <div style={styles.eventsSection}>
-          <div style={styles.eventsContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>Organized Events</h2>
-              <p style={styles.sectionSubtitle}>Join our exciting upcoming activities</p>
-            </div>
-            <div style={styles.eventsGrid}>
-              {upcomingEvents.map((event, index) => (
-                <div key={index} className="event-card" style={styles.eventCard}>
-                  <div style={styles.eventHeader}>
-                    <div style={styles.eventDate}>{event.date}</div>
-                    <Calendar style={{ width: '1.25rem', height: '1.25rem', color: '#64748b' }} />
-                  </div>
-                  <h3 style={styles.eventTitle}>{event.title}</h3>
-                  <p style={styles.eventType}>{event.type}</p>
-                  <div style={styles.eventAttendees}>
-                    <Users style={{ width: '1rem', height: '1rem' }} />
-                    <span>{event.attendees} attending</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Testimonials Section */}
-        <div style={styles.testimonialsSection}>
-          <div style={styles.testimonialsContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>What Our Members Say</h2>
-              <p style={styles.sectionSubtitle}>Success stories from our community</p>
-            </div>
-            <div style={styles.testimonialsGrid}>
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="testimonial-card" style={styles.testimonialCard}>
-                  <div style={styles.testimonialText}>
-                    "{testimonial.text}"
-                  </div>
-                  <div style={styles.testimonialAuthor}>
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      style={styles.testimonialImage}
-                    />
-                    <div style={styles.testimonialInfo}>
-                      <div style={styles.testimonialName}>{testimonial.name}</div>
-                      <div style={styles.testimonialRole}>
-                        {testimonial.role} at {testimonial.company}
+              <div style={styles.testimonialsGrid}>
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="testimonial-card" style={styles.testimonialCard}>
+                    <div style={styles.testimonialText}>
+                      "{testimonial.text}"
+                    </div>
+                    <div style={styles.testimonialAuthor}>
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        style={styles.testimonialImage}
+                      />
+                      <div style={styles.testimonialInfo}>
+                        <div style={styles.testimonialName}>{testimonial.name}</div>
+                        <div style={styles.testimonialRole}>
+                          {testimonial.role} at {testimonial.company}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Achievements */}
-        <div style={styles.achievementsSection}>
-          <div style={styles.achievementsContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>Our Achievements</h2>
-              <p style={styles.sectionSubtitle}>Proud moments that define our journey</p>
-            </div>
-            <div style={styles.achievementsGrid}>
-              {achievements.map((achievement, index) => {
-                const Icon = achievement.icon;
-                return (
-                  <div key={index} className="achievement-item" style={styles.achievementItem}>
-                    <div className="achievement-icon" style={styles.achievementIcon}>
-                      <Icon style={{ width: '2rem', height: '2rem', color: 'white' }} />
+          {/* Achievements */}
+          <div style={styles.achievementsSection}>
+            <div style={styles.achievementsContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>Our Achievements</h2>
+                <p style={styles.sectionSubtitle}>Proud moments that define our journey</p>
+              </div>
+              <div style={styles.achievementsGrid}>
+                {achievements.map((achievement, index) => {
+                  const Icon = achievement.icon;
+                  return (
+                    <div key={index} className="achievement-item" style={styles.achievementItem}>
+                      <div className="achievement-icon" style={styles.achievementIcon}>
+                        <Icon style={{ width: '2rem', height: '2rem', color: 'white' }} />
+                      </div>
+                      <h3 style={styles.achievementTitle}>{achievement.title}</h3>
+                      <p style={styles.achievementDesc}>{achievement.desc}</p>
                     </div>
-                    <h3 style={styles.achievementTitle}>{achievement.title}</h3>
-                    <p style={styles.achievementDesc}>{achievement.desc}</p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* FAQ Section */}
-        <div style={styles.faqSection}>
-          <div style={styles.faqContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>Frequently Asked Questions</h2>
-              <p style={styles.sectionSubtitle}>Everything you need to know about SOCSA</p>
-            </div>
-            <div>
-              {faqData.map((faq, index) => (
-                <div key={index} className="faq-item" style={styles.faqItem}>
-                  <div 
-                    className="faq-question"
-                    style={styles.faqQuestion}
-                    onClick={() => handleFAQToggle(index)}
-                  >
-                    <span>{faq.question}</span>
-                    <ChevronDown 
-                      className="faq-icon"
-                      style={{
-                        ...styles.faqIcon,
-                        transform: openFAQ === index ? 'rotate(180deg)' : 'rotate(0deg)'
-                      }} 
-                    />
-                  </div>
-                  {openFAQ === index && (
-                    <div style={styles.faqAnswer}>
-                      {faq.answer}
+          {/* FAQ Section */}
+          <div style={styles.faqSection}>
+            <div style={styles.faqContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>Frequently Asked Questions</h2>
+                <p style={styles.sectionSubtitle}>Everything you need to know about SOCSA</p>
+              </div>
+              <div>
+                {faqData.map((faq, index) => (
+                  <div key={index} className="faq-item" style={styles.faqItem}>
+                    <div 
+                      className="faq-question"
+                      style={styles.faqQuestion}
+                      onClick={() => handleFAQToggle(index)}
+                    >
+                      <span>{faq.question}</span>
+                      <ChevronDown 
+                        className="faq-icon"
+                        style={{
+                          ...styles.faqIcon,
+                          transform: openFAQ === index ? 'rotate(180deg)' : 'rotate(0deg)'
+                        }} 
+                      />
                     </div>
-                  )}
-                </div>
-              ))}
+                    {openFAQ === index && (
+                      <div style={styles.faqAnswer}>
+                        {faq.answer}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Contact Section */}
-        <div style={styles.contactSection}>
-          <div style={styles.contactContainer}>
-            <div style={styles.sectionTitle}>
-              <h2 style={styles.sectionTitleText}>Get In Touch</h2>
-              <p style={styles.sectionSubtitle}>Ready to start your journey with us?</p>
-            </div>
-            <div style={styles.contactGrid}>
-              <div className="contact-card" style={styles.contactCard}>
-                <div style={styles.contactIcon}>
-                  <Mail style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-                </div>
-                <h3 style={styles.contactTitle}>Email Us</h3>
-                <p style={styles.contactInfo}>socsa@university.edu</p>
+          {/* Contact Section */}
+          <div style={styles.contactSection}>
+            <div style={styles.contactContainer}>
+              <div style={styles.sectionTitle}>
+                <h2 style={styles.sectionTitleText}>Get In Touch</h2>
+                <p style={styles.sectionSubtitle}>Ready to start your journey with us?</p>
               </div>
-              <div className="contact-card" style={styles.contactCard}>
-                <div style={styles.contactIcon}>
-                  <Phone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+              <div style={styles.contactGrid}>
+                <div className="contact-card" style={styles.contactCard}>
+                  <div style={styles.contactIcon}>
+                    <Mail style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.contactTitle}>Email Us</h3>
+                  <p style={styles.contactInfo}>socsa@university.edu</p>
                 </div>
-                <h3 style={styles.contactTitle}>Call Us</h3>
-                <p style={styles.contactInfo}>+91 98765 43210</p>
-              </div>
-              <div className="contact-card" style={styles.contactCard}>
-                <div style={styles.contactIcon}>
-                  <MapPin style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                <div className="contact-card" style={styles.contactCard}>
+                  <div style={styles.contactIcon}>
+                    <Phone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.contactTitle}>Call Us</h3>
+                  <p style={styles.contactInfo}>+91 98765 43210</p>
                 </div>
-                <h3 style={styles.contactTitle}>Visit Us</h3>
-                <p style={styles.contactInfo}>Computer Science Department, Main Campus</p>
+                <div className="contact-card" style={styles.contactCard}>
+                  <div style={styles.contactIcon}>
+                    <MapPin style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                  </div>
+                  <h3 style={styles.contactTitle}>Visit Us</h3>
+                  <p style={styles.contactInfo}>Computer Science Department, Main Campus</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Community Join Section */}
-        <div style={styles.communitySection}>
-          <div style={styles.communityOverlay}></div>
-          <div style={styles.communityContainer}>
-            <div style={styles.communityBadge}>
-              <Lightbulb style={{ width: '1.25rem', height: '1.25rem' }} />
-              <span>Ready to innovate?</span>
-            </div>
-            <h2 style={styles.communityTitle}>Join Our AI/ML Community</h2>
-            <p style={styles.communityDescription}>
-              Connect with passionate learners, work on cutting-edge projects, and shape the future of artificial intelligence together.
-            </p>
-            <div style={styles.communityButtons}>
-              <button 
-                className="community-primary-button"
-                style={styles.communityPrimaryButton}
-                onClick={() => navigate('Navigate to join community')}
-              >
-                <Users style={{ width: '1.25rem', height: '1.25rem' }} />
-                Join Club
-                <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
-              </button>
-              <button 
-                className="community-primary-button"
-                style={styles.communityPrimaryButton}
-                onClick={() => navigate('/lostandfound')}
-              >
-                <Users style={{ width: '1.25rem', height: '1.25rem' }} />
-                Found Something
-                <ArrowRight style={{ width: '2.5rem', height: '1.25rem' }} />
-              </button>
-              <a
-                className="community-secondary-button"
-                style={styles.communitySecondaryButton}
-                href="https://docs.google.com/forms/d/1G4yV44kJY6u5zgq_i-6jW5vx4H-R1j5tk6UC9LL8GK8"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Code2 style={{ width: '1.25rem', height: '1.25rem' }} />
-                Share Your Skills
-                <ExternalLink style={{ width: '1rem', height: '1rem' }} />
-              </a>
-              
+          {/* Community Join Section */}
+          <div style={styles.communitySection}>
+            <div style={styles.communityOverlay}></div>
+            <div style={styles.communityContainer}>
+              <div style={styles.communityBadge}>
+                <Lightbulb style={{ width: '1.25rem', height: '1.25rem' }} />
+                <span>Ready to innovate?</span>
+              </div>
+              <h2 style={styles.communityTitle}>Join Our AI/ML Community</h2>
+              <p style={styles.communityDescription}>
+                Connect with passionate learners, work on cutting-edge projects, and shape the future of artificial intelligence together.
+              </p>
+              <div style={styles.communityButtons}>
+                <button 
+                  className="community-primary-button"
+                  style={styles.communityPrimaryButton}
+                  onClick={() => navigate('Navigate to join community')}
+                >
+                  <Users style={{ width: '1.25rem', height: '1.25rem' }} />
+                  Join Club
+                  <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
+                </button>
+                <button 
+                  className="community-primary-button"
+                  style={styles.communityPrimaryButton}
+                  onClick={() => navigate('/lostandfound')}
+                >
+                  <Users style={{ width: '1.25rem', height: '1.25rem' }} />
+                  Found Something
+                  <ArrowRight style={{ width: '2.5rem', height: '1.25rem' }} />
+                </button>
+                <a
+                  className="community-secondary-button"
+                  style={styles.communitySecondaryButton}
+                  href="https://docs.google.com/forms/d/1G4yV44kJY6u5zgq_i-6jW5vx4H-R1j5tk6UC9LL8GK8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Code2 style={{ width: '1.25rem', height: '1.25rem' }} />
+                  Share Your Skills
+                  <ExternalLink style={{ width: '1rem', height: '1rem' }} />
+                </a>
+                
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
     </>
   );
 };
