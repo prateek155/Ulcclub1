@@ -96,7 +96,14 @@ const Products = () => {
       <style jsx>{`
 
         .main-contant{
-            padding:0;
+          flex: 1;
+          background: #f8fafc;
+          overflow-y: auto;
+          min-width: 0;
+          /* CRITICAL: Ensure full width without margins */
+          width: 100%;
+          margin: 0;
+          padding: 0;
         }
         .products-container {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
