@@ -91,8 +91,13 @@ const Products = () => {
   }, []);
 
   return (
+    <div className="main-contant">
     <Layout>
       <style jsx>{`
+
+        .main-contant{
+            padding:0;
+        }
         .products-container {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           min-height: 100vh;
@@ -431,7 +436,6 @@ const Products = () => {
           100% { transform: rotate(360deg); }
         }
       `}</style>
-      
       <div className="products-container">
         <div className="content-wrapper">
           <div className="header-section">
@@ -517,6 +521,7 @@ const Products = () => {
         </div>
       )}
     </Layout>
+    </div>
   );
 };
 
