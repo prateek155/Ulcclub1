@@ -130,8 +130,8 @@ const HomePage = () => {
       backgroundColor: '#0a0a0a',
       color: '#ffffff',
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-      margin: 0,
-      padding: 0,
+      margin: '0 !important',
+      padding: '0 !important',
       width: '100vw',
       boxSizing: 'border-box'
     },
@@ -954,16 +954,21 @@ const HomePage = () => {
   const globalStyles = `
     /* Reset all margins and padding */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body {
-      margin: 0 !important;
-      padding: 0 !important;
-      overflow-x: hidden;
-    }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Override Layout component padding */
+  .main-content {
+    padding: 0 !important;
+  }
+  
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+  }
     
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
