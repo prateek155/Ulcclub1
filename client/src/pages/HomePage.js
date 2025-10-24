@@ -1413,24 +1413,24 @@ const HomePage = () => {
                 Connect with passionate learners, work on cutting-edge projects, and shape the future of artificial intelligence together.
               </p>
               <div style={styles.communityButtons}>
-                <button 
-                  className="community-primary-button"
-                  style={styles.communityPrimaryButton}
-                  onClick={() => navigate('Navigate to join community')}
-                >
-                  <Users style={{ width: '1.25rem', height: '1.25rem' }} />
-                  Join Club
-                  <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                </button>
-                <button 
-                  className="community-primary-button"
-                  style={styles.communityPrimaryButton}
-                  onClick={() => navigate('/lostandfound')}
-                >
-                  <Users style={{ width: '1.25rem', height: '1.25rem' }} />
-                  Found Something
-                  <ArrowRight style={{ width: '2.5rem', height: '1.25rem' }} />
-                </button>
+               // <button 
+                //  className="community-primary-button"
+                //  style={styles.communityPrimaryButton}
+               //   onClick={() => navigate('Navigate to join community')}
+             //   >
+              //    <Users style={{ width: '1.25rem', height: '1.25rem' }} />
+              //    Join Club
+              //    <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
+             //   </button>
+             //   <button 
+             //     className="community-primary-button"
+            //      style={styles.communityPrimaryButton}
+            //      onClick={() => navigate('/lostandfound')}
+           //     >
+           //       <Users style={{ width: '1.25rem', height: '1.25rem' }} />
+           //       Found Something
+           //       <ArrowRight style={{ width: '2.5rem', height: '1.25rem' }} />
+           //     </button>
                 <a
                   className="community-secondary-button"
                   style={styles.communitySecondaryButton}
