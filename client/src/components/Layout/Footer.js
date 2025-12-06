@@ -1,15 +1,12 @@
 import React from 'react';
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 
 const Footer = () => {
-  const [hoveredLink, setHoveredLink] = useState(null);
 
   const footerStyles = {
     footer: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(180deg, #111827 0%, #0f172a 100%)',
       color: 'white',
-      padding: '40px 20px 20px',
+      padding: '10px',
       marginTop: 'auto',
       boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)',
       position: 'relative',
@@ -40,38 +37,10 @@ const Footer = () => {
     },
     copyrightText: {
       margin: 0,
-      fontSize: '16px',
+      fontSize: '18px',
       fontWeight: '500',
       letterSpacing: '0.5px',
       opacity: 0.9,
-    },
-    footerLinks: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexWrap: 'wrap',
-      gap: '10px',
-    },
-    footerLink: {
-      color: 'white',
-      textDecoration: 'none',
-      padding: '8px 16px',
-      borderRadius: '25px',
-      fontWeight: '500',
-      fontSize: '14px',
-      transition: 'all 0.3s ease',
-      position: 'relative',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      background: 'rgba(255, 255, 255, 0.1)',
-      backdropFilter: 'blur(10px)',
-      cursor: 'pointer',
-    },
-    footerLinkHover: {
-      background: 'rgba(255, 255, 255, 0.2)',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 4px 15px rgba(255, 255, 255, 0.2)',
-      color: '#f0f0f0',
     },
     separator: {
       color: 'rgba(255, 255, 255, 0.6)',
@@ -111,29 +80,9 @@ const Footer = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  const handleLinkHover = (linkName) => {
-    setHoveredLink(linkName);
-  };
-
-  const handleLinkLeave = () => {
-    setHoveredLink(null);
-  };
-
-  const getLinkStyle = (linkName) => {
-    return {
-      ...footerStyles.footerLink,
-      ...(hoveredLink === linkName ? footerStyles.footerLinkHover : {}),
-    };
-  };
-
   const responsiveFooterStyles = {
     ...footerStyles.footer,
     ...(isMobile ? { padding: '30px 15px 15px' } : {}),
-  };
-
-  const responsiveLinksStyles = {
-    ...footerStyles.footerLinks,
-    ...(isMobile ? { flexDirection: 'column', gap: '15px' } : {}),
   };
 
   const responsiveCopyrightStyles = {
@@ -165,31 +114,6 @@ const Footer = () => {
             <p style={responsiveCopyrightStyles}>
               &copy; 2025 Ulc@club. All Rights Reserved
             </p>
-          </div>
-          
-          <div style={responsiveLinksStyles}>
-            <NavLink
-              to="/about"
-              style={getLinkStyle('about')}
-              onMouseEnter={() => handleLinkHover('about')}
-              onMouseLeave={handleLinkLeave}
-            >
-              About
-            </NavLink>
-            
-            {!isMobile && (
-              <span style={footerStyles.separator}>|</span>
-            )}
-            
-            <NavLink
-              to="/contact"
-              style={getLinkStyle('contact')}
-              onMouseEnter={() => handleLinkHover('contact')}
-              onMouseLeave={handleLinkLeave}
-            >
-              Contact
-            </NavLink>
-            
           </div>
         </div>
       </footer>
