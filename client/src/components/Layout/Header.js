@@ -21,44 +21,52 @@ const Header = () => {
     <>
       <ToastContainer />
       <style>
-        {`
-          .navbar-custom {
-            background-color: black;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-          }
+  {`
+    .navbar-custom {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.5); /* semi-transparent */
+      backdrop-filter: blur(6px); /* adds glass blur effect */
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      
+    }
 
-          .navbar-brand-custom {
-            font-family: 'Satisfy', cursive;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-          }
+    .navbar-brand-custom {
+      font-family: 'Satisfy', cursive;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;      
+    }
 
-          .navbar-brand-custom img {
-            width: 60px;
-            height: 40px;
-            object-fit: contain;
-          }
+    .navbar-brand-custom img {
+      width: 60px;
+      height: 40px;
+      object-fit: contain;
+    }
 
-          .navbar-nav-custom {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-          }
+    .navbar-nav-custom {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+     
+    }
 
-          .dropdown-toggle.text-capitalize {
-            text-transform: capitalize;
-          }
-        `}
-      </style>
+    .dropdown-toggle.text-capitalize {
+      text-transform: capitalize;
+    }
+  `}
+   </style>
+
       <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div className="container-fluid">
           <Link to="/" className="navbar-brand navbar-brand-custom">
-            <img src="/image/Socsa.png" alt="ULC Logo" />
+            <img src="/image/ulc1.jpg" alt="ULC Logo" />
           </Link>
           <button
             className="navbar-toggler"
@@ -73,12 +81,18 @@ const Header = () => {
           </button>
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav navbar-nav-custom mb-2 mb-lg-0">
+            <ul className="navbar-nav navbar-nav-custom mb-2 mb-lg-0 center">
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
                   Home
                 </NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink to="/about" className="nav-link">
+                 About
+                </NavLink>
+              </li>
+              
               <li className="nav-item">
                 <NavLink to="/Event" className="nav-link">
                   Events
