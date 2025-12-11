@@ -1070,9 +1070,9 @@ const HomePage = () => {
               <div style={styles.heroContent}>
                 
                 <h1 style={styles.heroTitle}>
-                  SOCSA
+                  ULC
                   <span style={styles.heroTitleSpan}>
-                    Execution Committee
+                    Unsupervised Learners Club
                   </span>
                 </h1>
                 <p style={styles.heroDescription}>
