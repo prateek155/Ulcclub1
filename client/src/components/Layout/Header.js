@@ -103,7 +103,7 @@ const Header = () => {
 
           {/* LEFT SIDE: LOGO */}
           <Link to="/" className="navbar-brand navbar-brand-custom">
-            <img src="/image/ulc1.jpg" alt="ULC Logo" />
+            <img src="/image/ulc.jpg" alt="ULC Logo" />
           </Link>
 
           {/* RIGHT SIDE: ONLY PROFILE ICON (NO NAVBAR TOGGLER) */}
