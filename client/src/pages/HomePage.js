@@ -462,7 +462,7 @@ const HomePage = () => {
     // Learning Tracks Section
     learningSection: {
       padding: '5rem 0',
-      background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+      background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 100%)',
       margin: 0
     },
     learningContainer: {
