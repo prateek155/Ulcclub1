@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Users, Code, BookOpen, Calendar, Trophy, Music, ArrowRight, Laptop, Brush, Github, ChevronRight, TrendingUp,  Lightbulb, Code2, ChevronDown,Award, Target, Mail, Phone, MapPin, ExternalLink, FileCode } from 'lucide-react';
+import { Users, Code, BookOpen, Calendar, Trophy, MonitorSmartphone, ArrowRight, Laptop, Puzzle, Github, TrendingUp,  Lightbulb, Code2, ChevronDown, Target, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import { useNavigate } from "react-router-dom";
 
@@ -53,67 +53,52 @@ const HomePage = () => {
   }, []);
 
   const upcomingEvents = [
-    { date: "Sept 5", title: "Teachers Day", type: "Celebration", attendees: 74 },
-    { date: "Sept 16", title: "Codearena", type: "Coding Competition", attendees: 89 },
-    { date: "Sept 25", title: "AI Workshop", type: "Learning Session", attendees: 45 },
-    { date: "Oct 3", title: "Hackathon", type: "Competition", attendees: 120 }
+    { date: "Sept 5", title: "ML Guest Lecture", type: "Workshop", attendees: 120 },
+    { date: "Nov 7 & 8 ", title: "Hackathon", type: "Coding Competition", attendees: 450 },
+    { date: "march 14", title: "IOT Devise Discusion", type: "Workshop", attendees: 80 }
   ];
 
   const achievements = [
     { icon: Trophy, title: "Best AI Project", desc: "Winner at TechFest 2025" },
     { icon: TrendingUp, title: "Industry Partnerships", desc: "Collaborating with 5+ companies" },
-    { icon: Award, title: "Excellence Award", desc: "Recognized by IEEE for innovation" },
     { icon: Target, title: "100% Success Rate", desc: "All members placed in top companies" }
   ];
 
   const faqData = [
     {
-      question: "What is Socsa?",
-      answer: "SOCSA it is the official student body of our department. We organize cultural, technical, and fun events. SOCSA is the bridge between students and teachers, built to ensure maximum involvement and growth."
+      question: "Why We Join ULC ?",
+      answer: " Join us to create new developments and start-up Ideas."
     },
     {
-      question: "what does socsa do? ",
-      answer: "We conduct workshops, hackathons, seminars, cultural fests, networking events, skill sessions, and social initiatives that enhance both technical and personal development. We help students connect with faculty to resolve issues, and provide an open forum for ideas, discussions, and participation."
+      question: "Who can use this portal ?",
+      answer: "Club Member's and faculty advisor"
     },
     {
-      question: "Why should i join in SOCSA actuvities?",
-      answer: `1) It is a platform to showcase your skills,
-               2) Opportunities to network with friends, seniors, and industry experts,
-               3) Hands-on experience beyond the classroom,
-               4) A chance to take leadership roles and boost your resume.`
+      question: "How can we join the club ?",
+      answer: "Those who join the club they just submit hsi details and come for interview", 
     },
     {
-      question: "Does socsa help with placements and internships?",
-      answer: "Yes, indirectly we do! Our skill sessions, networking events, and industry talks give you exposure and help you build the confidence and expertise needed for placements and internships."
+      question: "If any member will create something then club will support him ?",
+      answer: "Yes, we support our members and there ideas also to make come true."
     },
-    {
-      question: "Can I pitch my own ideas to SOCSA:",
-      answer: "Absoluty! SOCSA is built for students and by students. If you have an idea for a workshop, project, or event — bring it to us, our team will connect you with experts and bring your projects to real time."
-    },
-    {
-      question: "how do i stay updates on socsa events?",
-      answer: "We organize events weekly, including technical workshops, guest lectures, hackathons, and networking sessions. Check our events calendar for upcoming activities."
-    }
   ];
 
   const testimonials = [
     {
-      name: "Arpit Ingle",
-      role: "AI Research Intern",
-      company: "Tech Corp",
+      name: "Sarthak Thakur",
+      role: "President",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       text: "SOCSA transformed my understanding of AI. The hands-on projects and mentorship helped me land my dream internship!"
     },
     {
-      name: "Sarah Chen",
-      role: "ML Engineer",
-      company: "DataFlow Inc",
+      name: "Prateek Agrawal",
+      role: "General Secretary",
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
       text: "The community here is incredible. I've learned more in 6 months than I did in 2 years of self-study."
     },
     {
-      name: "Raj Patel",
-      role: "Data Scientist",
+      name: "Amit Mishra & Pradeep Tiwari",
+      role: "Faculty Adviser / Guider",
       company: "AI Solutions",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
       text: "From zero coding experience to building neural networks - SOCSA made it possible with their structured learning approach."
@@ -130,10 +115,10 @@ const HomePage = () => {
       backgroundColor: '#0a0a0a',
       color: '#ffffff',
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-      margin: '0 !important',
-      padding: '0 !important',
+      margin: 0,
+      padding: 0,
       width: '100vw',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
     },
 
     // Hero Section
@@ -250,6 +235,7 @@ const HomePage = () => {
       transition: 'all 0.3s ease',
       fontSize: '1.05rem'
     },
+    
 
     // Floating particles
     floatingParticle: {
@@ -954,101 +940,119 @@ const HomePage = () => {
   const globalStyles = `
     /* Reset all margins and padding */
     * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Override Layout component padding */
-  .main-content {
-    padding: 0 !important;
-  }
-  
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden;
-  }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .stat-item:hover {
-      transform: translateY(-5px);
+    /* Keep page scrollable but visually hide native scrollbars (modern browsers + Firefox) */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden;
+      overflow-y: auto;           /* keep vertical scrolling */
+      scrollbar-width: none;      /* Firefox */
+      -ms-overflow-style: none;   /* IE 10+ */
     }
 
-    .learning-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 25px 50px rgba(59, 130, 246, 0.15);
+    /* WebKit scrollbar hide */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    .main-container::-webkit-scrollbar,
+    .hero-section::-webkit-scrollbar,
+    .stats-section::-webkit-scrollbar,
+    .featured-section::-webkit-scrollbar,
+    .learning-section::-webkit-scrollbar,
+    .events-section::-webkit-scrollbar,
+    .testimonials-section::-webkit-scrollbar,
+    .achievements-section::-webkit-scrollbar,
+    .faq-section::-webkit-scrollbar,
+    .contact-section::-webkit-scrollbar,
+    .community-section::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
     }
 
-    .event-card:hover {
-      transform: translateY(-5px);
+    /* Optional: hide sidebar scrollbar if you have one */
+    .sidebar-section {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .sidebar-section::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+    /* Reduce global header height (target common header selectors used by Layout) */
+    header,
+    .site-header,
+    .navbar,
+    .main-header,
+    .header,
+    .topbar {
+      height: 56px !important;
+      min-height: 56px !important;
+      padding: 0 16px !important;
+      display: flex !important;
+      align-items: center !important;
+      background-clip: padding-box !important;
     }
 
-    .testimonial-card:hover {
-      transform: translateY(-5px);
+    header > .container,
+    .site-header .container,
+    .navbar .container {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
 
-    .achievement-item:hover {
-      transform: translateY(-5px);
+    header .logo,
+    .site-header .logo,
+    .navbar .brand,
+    .header .brand {
+      max-height: 40px;
+      line-height: 40px;
+      overflow: hidden;
     }
 
-    .achievement-item:hover .achievement-icon {
-      transform: scale(1.1);
+    header nav a,
+    .navbar a,
+    .site-header a,
+    .main-header a {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+      font-size: 14px !important;
     }
 
-    .primary-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+    /* Keep focus outlines accessible */
+    button:focus,
+    a:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
     }
 
-    .secondary-button:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
+    /* Existing keyframes and hover utilities */
+    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);} }
+    @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.5;} }
+    @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
 
-    .learning-button:hover {
-      gap: 1rem;
-    }
+    .stat-item:hover { transform: translateY(-5px); }
+    .learning-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(59,130,246,0.15); }
+    .event-card:hover { transform: translateY(-5px); }
+    .testimonial-card:hover { transform: translateY(-5px); }
+    .achievement-item:hover { transform: translateY(-5px); }
+    .achievement-item:hover .achievement-icon { transform: scale(1.1); }
+    .primary-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(59,130,246,0.4); }
+    .secondary-button:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); }
+    .learning-button:hover { gap: 1rem; }
+    .project-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+    .community-primary-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+    .community-secondary-button:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
+    .contact-card:hover { transform: translateY(-5px); }
+    .faq-item:hover { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)); }
+    .faq-question:hover { color: #e0e7ff; }
 
-    .project-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .community-primary-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .community-secondary-button:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .contact-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .faq-item:hover {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-    }
-
-    .faq-question:hover {
-      color: #e0e7ff;
+    /* Print: show scrollbars normally for printing if necessary */
+    @media print {
+      html, body { overflow: visible !important; }
+      html::-webkit-scrollbar, body::-webkit-scrollbar { display: block; }
     }
   `;
 
@@ -1056,9 +1060,9 @@ const HomePage = () => {
     <>
       <Layout title={"All Clubs Info-"}>
         <style>{globalStyles}</style>
-        <div style={styles.mainContainer}>
+        <div className="main-container" style={styles.mainContainer}>
           {/* Hero Section */}
-          <div style={styles.heroSection}>
+          <div className="hero-section" style={styles.heroSection}>
             <div style={styles.heroOverlay}></div>
             
             {/* Floating particles */}
@@ -1068,11 +1072,10 @@ const HomePage = () => {
             
             <div style={styles.heroContainer}>
               <div style={styles.heroContent}>
-                
                 <h1 style={styles.heroTitle}>
                   ULC
                   <span style={styles.heroTitleSpan}>
-                    Unsupervised Learners Club
+                    Unsupervised Learner's Club
                   </span>
                 </h1>
                 <p style={styles.heroDescription}>
@@ -1167,15 +1170,14 @@ const HomePage = () => {
           <div style={styles.learningSection}>
             <div style={styles.learningContainer}>
               <div style={styles.sectionTitle}>
-                <h2 style={styles.sectionTitleText}>Skills Tracks</h2>
-                <p style={styles.sectionSubtitle}>Choose your path in different fields</p>
+                <h2 style={styles.sectionTitleText}>Skill's</h2>
               </div>
               <div style={styles.learningGrid}>
                 <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardBlue}}>
                   <div style={{...styles.learningIcon, ...styles.learningIconBlue}}>
-                    <Trophy style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                    <TrendingUp style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
-                  <h3 style={styles.learningTitle}>Sports</h3>
+                  <h3 style={styles.learningTitle}>Stsrt-up</h3>
                   <p style={styles.learningDescription}>
                     Master athletic skills, team coordination, and competitive strategies from amateur to professional level.
                   </p>
@@ -1184,18 +1186,13 @@ const HomePage = () => {
                     <span style={{...styles.learningTag, ...styles.learningTagBlue}}>Basketball</span>
                     <span style={{...styles.learningTag, ...styles.learningTagBlue}}>E-sports</span>
                   </div>
-                  <button className="learning-button" style={styles.learningButton} 
-                  onClick={() => navigate('/sport')}>
-                    Start with us!
-                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                  </button>
                 </div>
 
                 <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardPurple}}>
                   <div style={{...styles.learningIcon, ...styles.learningIconPurple}}>
-                    <Music style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                    <MonitorSmartphone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
-                  <h3 style={styles.learningTitle}>Cultural</h3>
+                  <h3 style={styles.learningTitle}>Web-development</h3>
                   <p style={styles.learningDescription}>
                     Dive into performing arts, cultural expressions, and creative showcases that celebrate diversity.
                   </p>
@@ -1204,18 +1201,13 @@ const HomePage = () => {
                     <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Singing</span>
                     <span style={{...styles.learningTag, ...styles.learningTagPurple}}>Drama</span>
                   </div>
-                  <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonPurple}}
-                   onClick={() => navigate('/culturals')}>
-                    Start with us!
-                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                  </button>
                 </div>
 
                 <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardGreen}}>
                   <div style={{...styles.learningIcon, ...styles.learningIconGreen}}>
-                    <Brush style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+                    <Puzzle style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
-                  <h3 style={styles.learningTitle}>Design</h3>
+                  <h3 style={styles.learningTitle}>Mini-Project's</h3>
                   <p style={styles.learningDescription}>
                     Extract insights from creativity with visual design, UX principles, and artistic innovation.
                   </p>
@@ -1224,27 +1216,6 @@ const HomePage = () => {
                     <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Graphics</span>
                     <span style={{...styles.learningTag, ...styles.learningTagGreen}}>Branding</span>
                   </div>
-                  <button className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
-                  onClick={() => navigate('/cultural')}>
-                    Start with us!
-                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                  </button>
-                </div>
-                <div className="learning-card" style={{...styles.learningCard, ...styles.learningCardGreen}}>
-                  <div style={{...styles.learningIcon, ...styles.learningIconGreen}}>
-                    <FileCode style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-                  </div>
-                  <h3 style={styles.learningTitle}>Mini Project</h3>
-                  <p style={styles.learningDescription}>
-                    Extract insights from creativity with visual design, UX principles, and artistic innovation.
-                  </p>
-                  <a className="learning-button" style={{...styles.learningButton, ...styles.learningButtonGreen}}
-                  href="https://dept-csa.github.io/edge/"
-                  target="_blank"
-                  rel="noopener noreferrer">
-                    Register Now!
-                    <ChevronRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                  </a>
                 </div>
               </div>
             </div>
@@ -1255,7 +1226,7 @@ const HomePage = () => {
             <div style={styles.eventsContainer}>
               <div style={styles.sectionTitle}>
                 <h2 style={styles.sectionTitleText}>Organized Events</h2>
-                <p style={styles.sectionSubtitle}>Join our exciting upcoming activities</p>
+                <p style={styles.sectionSubtitle}>Join us for more activities</p>
               </div>
               <div style={styles.eventsGrid}>
                 {upcomingEvents.map((event, index) => (
@@ -1380,21 +1351,21 @@ const HomePage = () => {
                     <Mail style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
                   <h3 style={styles.contactTitle}>Email Us</h3>
-                  <p style={styles.contactInfo}>socsa@university.edu</p>
+                  <p style={styles.contactInfo}>unsupervisedLearnersclub@mitwpu.edu.in</p>
                 </div>
                 <div className="contact-card" style={styles.contactCard}>
                   <div style={styles.contactIcon}>
                     <Phone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
                   <h3 style={styles.contactTitle}>Call Us</h3>
-                  <p style={styles.contactInfo}>+91 98765 43210</p>
+                  <p style={styles.contactInfo}>7627073230 / 9175185122</p>
                 </div>
                 <div className="contact-card" style={styles.contactCard}>
                   <div style={styles.contactIcon}>
                     <MapPin style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
                   </div>
                   <h3 style={styles.contactTitle}>Visit Us</h3>
-                  <p style={styles.contactInfo}>Computer Science Department, Main Campus</p>
+                  <p style={styles.contactInfo}>vyas building MIT WPU Campus, pune</p>
                 </div>
               </div>
             </div>
@@ -1416,20 +1387,11 @@ const HomePage = () => {
                 <button 
                   className="community-primary-button"
                   style={styles.communityPrimaryButton}
-                onClick={() => navigate('Navigate to join community')}
+                  onClick={() => navigate('Navigate to join community')}
                 >
                   <Users style={{ width: '1.25rem', height: '1.25rem' }} />
                   Join Club
                   <ArrowRight style={{ width: '1.25rem', height: '1.25rem' }} />
-                </button>
-                <button 
-                  className="community-primary-button"
-                 style={styles.communityPrimaryButton}
-                  onClick={() => navigate('/lostandfound')}
-                >
-                  <Users style={{ width: '1.25rem', height: '1.25rem' }} />
-                  Found Something
-                  <ArrowRight style={{ width: '2.5rem', height: '1.25rem' }} />
                 </button>
                 <a
                   className="community-secondary-button"
