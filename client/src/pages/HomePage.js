@@ -937,7 +937,7 @@ const HomePage = () => {
     }
   };
 
- /* ---------- replace globalStyles with this ---------- */
+ /* ---------- UPDATED globalStyles (Black Border Fix Applied) ---------- */
 const globalStyles = `
   /* Reset */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -947,6 +947,35 @@ const globalStyles = `
     height: 100%;
     background-color: #0a0a0a !important;
     color: #ffffff;
+  }
+
+  /* ===== REMOVE OUTER BLACK BORDER / FRAME ===== */
+  #root,
+  .main-container,
+  .layout,
+  .app,
+  .site-wrapper,
+  .page-wrapper,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #0a0a0a !important;
+    border-radius: 0 !important;
+  }
+
+  /* Make all sections full width (edge-to-edge) */
+  .hero-section,
+  .hero-container,
+  .main-container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   /* Keep page scrollable but avoid horizontal overflow */
@@ -972,7 +1001,10 @@ const globalStyles = `
     width: 6px;
     height: 6px;
   }
-  .main-container::-webkit-scrollbar-thumb { border-radius: 6px; background: rgba(255,255,255,0.08); }
+  .main-container::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+  }
 
   /* Header: force dark/compact header to avoid white area in app */
   header,
@@ -989,7 +1021,7 @@ const globalStyles = `
     background-color: rgba(6,6,6,0.95) !important;
     color: #fff !important;
     box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    z-index: 9999;
+    border: none !important;                /* <-- Remove header borders */
   }
 
   header .logo, .site-header .logo, .navbar .brand, .header .brand {
@@ -1004,11 +1036,23 @@ const globalStyles = `
     color: #e6eef8 !important;
   }
 
-  button:focus, a:focus { outline: 2px solid #3b82f6; outline-offset: 2px; }
+  button:focus, a:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
 
-  @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);} }
-  @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.5;} }
-  @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+  @keyframes float {
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-20px);}
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1;}
+    50%{opacity:0.5;}
+  }
+  @keyframes bounce {
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+  }
 
   /* Hover utilities */
   .stat-item:hover { transform: translateY(-5px); }
@@ -1030,7 +1074,7 @@ const globalStyles = `
   /* Responsive adjustments for small screens */
   @media (max-width: 420px) {
     .hero-container { padding: 2rem 1rem !important; }
-    .hero-title { font-size: 2.1rem !important; } /* fallback class name if used */
+    .hero-title { font-size: 2.1rem !important; }
     .hero-section { min-height: calc(100vh - 56px) !important; padding-top: 56px; }
     .project-showcase { padding: 2rem !important; max-width: 95% !important; }
     .learning-card { padding: 1.25rem !important; }
