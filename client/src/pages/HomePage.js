@@ -117,7 +117,7 @@ const HomePage = () => {
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
       margin: 0,
       padding: 0,
-      width: '100vw',
+      maxWidth: '100%',
       boxSizing: 'border-box',
     },
 
@@ -126,7 +126,7 @@ const HomePage = () => {
       position: 'relative',
       overflow: 'hidden',
       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-      minHeight: '100vh',
+      minHeight: 'calc(100vh - 56px)',
       display: 'flex',
       alignItems: 'center',
       margin: 0,
@@ -937,124 +937,113 @@ const HomePage = () => {
     }
   };
 
-  const globalStyles = `
-    /* Reset all margins and padding */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    /* Keep page scrollable but visually hide native scrollbars (modern browsers + Firefox) */
-    html, body {
-      margin: 0 !important;
-      padding: 0 !important;
-      overflow-x: hidden;
-      overflow-y: auto;           /* keep vertical scrolling */
-      scrollbar-width: none;      /* Firefox */
-      -ms-overflow-style: none;   /* IE 10+ */
-    }
+ /* ---------- replace globalStyles with this ---------- */
+const globalStyles = `
+  /* Reset */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* WebKit scrollbar hide */
-    html::-webkit-scrollbar,
-    body::-webkit-scrollbar,
-    .main-container::-webkit-scrollbar,
-    .hero-section::-webkit-scrollbar,
-    .stats-section::-webkit-scrollbar,
-    .featured-section::-webkit-scrollbar,
-    .learning-section::-webkit-scrollbar,
-    .events-section::-webkit-scrollbar,
-    .testimonials-section::-webkit-scrollbar,
-    .achievements-section::-webkit-scrollbar,
-    .faq-section::-webkit-scrollbar,
-    .contact-section::-webkit-scrollbar,
-    .community-section::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      display: none;
-    }
+  /* Make background explicit on all roots so WebViews don't show white */
+  html, body, #root, .main-container {
+    height: 100%;
+    background-color: #0a0a0a !important;
+    color: #ffffff;
+  }
 
-    /* Optional: hide sidebar scrollbar if you have one */
-    .sidebar-section {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .sidebar-section::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  /* Keep page scrollable but avoid horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: auto;
+    scrollbar-width: thin;
+  }
 
-    /* Reduce global header height (target common header selectors used by Layout) */
-    header,
-    .site-header,
-    .navbar,
-    .main-header,
-    .header,
-    .topbar {
-      height: 56px !important;
-      min-height: 56px !important;
-      padding: 0 16px !important;
-      display: flex !important;
-      align-items: center !important;
-      background-clip: padding-box !important;
-    }
+  /* WebKit scrollbar hide for content containers only */
+  .main-container::-webkit-scrollbar,
+  .hero-section::-webkit-scrollbar,
+  .stats-section::-webkit-scrollbar,
+  .featured-section::-webkit-scrollbar,
+  .learning-section::-webkit-scrollbar,
+  .events-section::-webkit-scrollbar,
+  .testimonials-section::-webkit-scrollbar,
+  .achievements-section::-webkit-scrollbar,
+  .faq-section::-webkit-scrollbar,
+  .contact-section::-webkit-scrollbar,
+  .community-section::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .main-container::-webkit-scrollbar-thumb { border-radius: 6px; background: rgba(255,255,255,0.08); }
 
-    header > .container,
-    .site-header .container,
-    .navbar .container {
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-    }
+  /* Header: force dark/compact header to avoid white area in app */
+  header,
+  .site-header,
+  .navbar,
+  .main-header,
+  .header,
+  .topbar {
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 0 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    background-color: rgba(6,6,6,0.95) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    z-index: 9999;
+  }
 
-    header .logo,
-    .site-header .logo,
-    .navbar .brand,
-    .header .brand {
-      max-height: 40px;
-      line-height: 40px;
-      overflow: hidden;
-    }
+  header .logo, .site-header .logo, .navbar .brand, .header .brand {
+    max-height: 40px;
+    overflow: hidden;
+  }
 
-    header nav a,
-    .navbar a,
-    .site-header a,
-    .main-header a {
-      padding-top: 8px !important;
-      padding-bottom: 8px !important;
-      font-size: 14px !important;
-    }
+  header nav a, .navbar a, .site-header a, .main-header a {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    font-size: 14px !important;
+    color: #e6eef8 !important;
+  }
 
-    /* Keep focus outlines accessible */
-    button:focus,
-    a:focus {
-      outline: 2px solid #3b82f6;
-      outline-offset: 2px;
-    }
+  button:focus, a:focus { outline: 2px solid #3b82f6; outline-offset: 2px; }
 
-    /* Existing keyframes and hover utilities */
-    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);} }
-    @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.5;} }
-    @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+  @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);} }
+  @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.5;} }
+  @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
 
-    .stat-item:hover { transform: translateY(-5px); }
-    .learning-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(59,130,246,0.15); }
-    .event-card:hover { transform: translateY(-5px); }
-    .testimonial-card:hover { transform: translateY(-5px); }
-    .achievement-item:hover { transform: translateY(-5px); }
-    .achievement-item:hover .achievement-icon { transform: scale(1.1); }
-    .primary-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(59,130,246,0.4); }
-    .secondary-button:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); }
-    .learning-button:hover { gap: 1rem; }
-    .project-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-    .community-primary-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-    .community-secondary-button:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
-    .contact-card:hover { transform: translateY(-5px); }
-    .faq-item:hover { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)); }
-    .faq-question:hover { color: #e0e7ff; }
+  /* Hover utilities */
+  .stat-item:hover { transform: translateY(-5px); }
+  .learning-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(59,130,246,0.15); }
+  .event-card:hover { transform: translateY(-5px); }
+  .testimonial-card:hover { transform: translateY(-5px); }
+  .achievement-item:hover { transform: translateY(-5px); }
+  .achievement-item:hover .achievement-icon { transform: scale(1.1); }
+  .primary-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(59,130,246,0.4); }
+  .secondary-button:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); }
+  .learning-button:hover { gap: 1rem; }
+  .project-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+  .community-primary-button:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+  .community-secondary-button:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
+  .contact-card:hover { transform: translateY(-5px); }
+  .faq-item:hover { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)); }
+  .faq-question:hover { color: #e0e7ff; }
 
-    /* Print: show scrollbars normally for printing if necessary */
-    @media print {
-      html, body { overflow: visible !important; }
-      html::-webkit-scrollbar, body::-webkit-scrollbar { display: block; }
-    }
-  `;
+  /* Responsive adjustments for small screens */
+  @media (max-width: 420px) {
+    .hero-container { padding: 2rem 1rem !important; }
+    .hero-title { font-size: 2.1rem !important; } /* fallback class name if used */
+    .hero-section { min-height: calc(100vh - 56px) !important; padding-top: 56px; }
+    .project-showcase { padding: 2rem !important; max-width: 95% !important; }
+    .learning-card { padding: 1.25rem !important; }
+    .community-container { padding: 0 1rem !important; }
+    .heroBadge { padding: 0.5rem 1rem !important; font-size: 0.9rem; }
+    h1, h2, h3 { word-break: break-word; }
+  }
+
+  /* Print: show scrollbars normally */
+  @media print {
+    html, body { overflow: visible !important; }
+  }
+`;
 
   return (
     <>
