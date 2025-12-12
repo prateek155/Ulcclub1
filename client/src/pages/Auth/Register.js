@@ -189,276 +189,221 @@ const Register = () => {
       </div>
 
       <style jsx>{`
-        .modern-form-container {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          position: relative;
-        }
+  /* ROOT & BACKGROUND */
+  .modern-form-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+  }
 
-        .modern-form-container::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="white" stop-opacity="0.1"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="80" fill="url(%23a)"/><circle cx="900" cy="800" r="120" fill="url(%23a)"/></svg>');
-          opacity: 0.5;
-        }
+  /* optional subtle background shapes (keeps depth without card) */
+  .modern-form-container::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03), transparent 10%),
+                radial-gradient(circle at 80% 30%, rgba(255,255,255,0.02), transparent 12%),
+                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.02), transparent 12%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.8;
+  }
 
-        .form-wrapper {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          border-radius: 24px;
-          padding: 40px;
-          width: 100%;
-          max-width: 450px;
-          box-shadow: 
-            0 20px 40px rgba(0, 0, 0, 0.1),
-            0 0 0 1px rgba(255, 255, 255, 0.2);
-          position: relative;
-          z-index: 1;
-        }
+  /* FORM WRAPPER -> Make it full size and remove card styling */
+  .form-wrapper {
+    /* fill the center area but take full width on small screens */
+    width: 100%;
+    max-width: none;        /* remove previous max-width */
+    background: transparent;/* remove white background */
+    backdrop-filter: none;  /* remove blur backdrop */
+    border-radius: 0;       /* no rounded card corners */
+    padding: 28px 20px;     /* keep inner padding for spacing */
+    box-shadow: none;       /* remove shadows */
+    position: relative;
+    z-index: 2;             /* above background shapes */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 
-        .form-header {
-          text-align: center;
-          margin-bottom: 40px;
-        }
+  /* Header - keep centered and visible on full-bleed */
+  .form-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    z-index: 2;
+  }
 
-        .form-icon {
-          width: 80px;
-          height: 80px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 20px;
-          color: white;
-          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
+  .form-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    color: white;
+    box-shadow: none;
+  }
 
-        .form-title {
-          font-size: 28px;
-          font-weight: 700;
-          color: #2d3748;
-          margin-bottom: 8px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
+  .form-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    /* gradient text effect kept but white on dark bg looks good too */
+    background: linear-gradient(135deg, #ffffff, rgba(255,255,255,0.9));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 
-        .form-subtitle {
-          color: #718096;
-          font-size: 16px;
-          margin: 0;
-        }
+  .form-subtitle {
+    color: rgba(255,255,255,0.85);
+    font-size: 15px;
+    margin: 0;
+  }
 
-        .modern-form {
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
+  /* Form layout - keep inputs width-limited for readability */
+  .modern-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 640px; /* keep inputs readable on very wide screens */
+    z-index: 2;
+  }
 
-        .input-group {
-          position: relative;
-        }
+  .input-group { position: relative; }
 
-        .input-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
 
-        .modern-input {
-          width: 100%;
-          height: 56px;
-          padding: 0 56px 0 56px;
-          border: 2px solid #e2e8f0;
-          border-radius: 16px;
-          font-size: 16px;
-          font-weight: 500;
-          background: #f8fafc;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          color: #2d3748;
-          outline: none;
-        }
+  /* Inputs: transparent background with subtle inner panel */
+  .modern-input {
+    width: 100%;
+    height: 56px;
+    padding: 0 56px 0 56px;
+    border: 1px solid rgba(255,255,255,0.12); /* subtle border for contrast */
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.03); /* slight translucent panel */
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #fff;
+    outline: none;
+    backdrop-filter: blur(6px);
+  }
 
-        .modern-input::placeholder {
-          color: #a0aec0;
-          font-weight: 400;
-        }
+  .modern-input::placeholder {
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+  }
 
-        .modern-input:focus {
-          border-color: #667eea;
-          background: white;
-          box-shadow: 
-            0 0 0 4px rgba(102, 126, 234, 0.1),
-            0 2px 8px rgba(0, 0, 0, 0.04);
-          transform: translateY(-2px);
-        }
+  .modern-input:focus {
+    border-color: rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.04);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+  }
 
-        .modern-input.error {
-          border-color: #e53e3e;
-          background: #fed7d7;
-        }
+  .modern-input.error {
+    border-color: rgba(255,80,80,0.8);
+    background: rgba(255,80,80,0.06);
+    color: #fff;
+  }
 
-        .input-icon {
-          position: absolute;
-          left: 18px;
-          color: #a0aec0;
-          z-index: 1;
-          transition: color 0.3s ease;
-        }
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    color: rgba(255,255,255,0.6);
+    z-index: 3;
+    transition: color 0.22s ease;
+  }
 
-        .modern-input:focus + .input-icon,
-        .input-wrapper:focus-within .input-icon {
-          color: #667eea;
-        }
+  .input-wrapper:focus-within .input-icon,
+  .modern-input:focus + .input-icon {
+    color: #ffffff;
+  }
 
-        .password-toggle {
-          position: absolute;
-          right: 18px;
-          background: none;
-          border: none;
-          color: #a0aec0;
-          cursor: pointer;
-          padding: 4px;
-          border-radius: 8px;
-          transition: all 0.3s ease;
-          z-index: 1;
-        }
+  .password-toggle {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    z-index: 3;
+  }
+  .password-toggle:hover { color: #fff; background: rgba(255,255,255,0.03); }
 
-        .password-toggle:hover {
-          color: #667eea;
-          background: rgba(102, 126, 234, 0.1);
-        }
+  .error-message {
+    color: rgba(255,100,100,0.95);
+    font-size: 14px;
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+  }
 
-        .error-message {
-          color: #e53e3e;
-          font-size: 14px;
-          margin-top: 8px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
+  /* Submit button - keep visible on full-bleed */
+  .modern-submit-btn {
+    height: 56px;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+    border: 1px solid rgba(255,255,255,0.16);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    z-index: 2;
+  }
 
-        .error-message::before {
-          content: '⚠';
-          font-size: 12px;
-        }
+  .modern-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
 
-        .modern-submit-btn {
-          height: 56px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border: none;
-          border-radius: 16px;
-          color: white;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          margin-top: 16px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-        }
+  /* Small screens: tighten spacing and make inputs full width */
+  @media (max-width: 480px) {
+    .modern-form {
+      max-width: 92vw;
+    }
+    .modern-input { height: 52px; font-size: 15px; padding-left: 50px; padding-right: 50px; }
+    .modern-submit-btn { height: 52px; font-size: 15px; }
+    .form-wrapper { padding: 18px; gap: 10px; }
+  }
 
-        .modern-submit-btn::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s;
-        }
+  /* Slight entry animation */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .form-wrapper { animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1); }
 
-        .modern-submit-btn:hover::before {
-          left: 100%;
-        }
+  /* Toast z-index so toasts remain on top */
+  .Toastify__toast-container { z-index: 9999; }
+`}</style>
 
-        .modern-submit-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .modern-submit-btn:active {
-          transform: translateY(-1px);
-        }
-
-        .modern-submit-btn svg {
-          transition: transform 0.3s ease;
-        }
-
-        .modern-submit-btn:hover svg {
-          transform: translateX(4px);
-        }
-
-        @media (max-width: 480px) {
-          .form-wrapper {
-            padding: 32px 24px;
-            margin: 16px;
-          }
-          
-          .form-title {
-            font-size: 24px;
-          }
-          
-          .modern-input {
-            height: 52px;
-            font-size: 15px;
-          }
-          
-          .modern-submit-btn {
-            height: 52px;
-            font-size: 15px;
-          }
-        }
-
-        /* Animation for form appearance */
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .form-wrapper {
-          animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Toast container styling */
-        .Toastify__toast-container {
-          z-index: 9999;
-        }
-
-        .Toastify__toast {
-          border-radius: 12px;
-          backdrop-filter: blur(20px);
-        }
-
-        .Toastify__toast--success {
-          background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        }
-
-        .Toastify__toast--error {
-          background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-        }
-      `}</style>
     </Layout>
   );
 };
