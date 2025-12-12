@@ -3,73 +3,43 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/image/Socsa.png" />
-
-    <!-- IMPORTANT: enable viewport-fit=cover so safe-area insets are exposed to CSS -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-
-    <!-- Use dark theme color so status bar blends with your dark background -->
-    <meta name="theme-color" content="#0a0a0a" />
-
-    <!-- iOS PWA helpers (improves status bar handling on iOS webview) -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/image/Socsa.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <title>Info App</title>
-
     <!--
-      Tiny early CSS reset to prevent the white frame / margin and ensure full-bleed dark background.
-      Place this inline so the browser applies it before React mounts (avoids white flash).
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <style>
-      /* Force full-bleed app background and remove default margins */
-      html, body, #root {
-        height: 100%;
-        width: 100%;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #0a0a0a !important;
-        color: #ffffff;
-        overflow-x: hidden !important;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      /* Ensure any immediate wrapper created by hosting does not add a white background */
-      body > div, #root > div {
-        height: 100%;
-        width: 100%;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-      }
-
-      /* Common app wrapper names — make them full bleed if present */
-      .main-container, .app-wrapper, .page-wrapper, .main-app, .modern-form-container {
-        background: transparent !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        border: none !important;
-        box-shadow: none !important;
-      }
-
-      /* Avoid 100vw issues on mobile which can create horizontal scroll / white stripe */
-      body, #root { max-width: 100%; }
-    </style>
+    <title>Info App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
   </body>
 </html>
