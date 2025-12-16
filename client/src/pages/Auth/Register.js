@@ -188,150 +188,221 @@ const Register = () => {
         </div>
       </div>
 
-     <style>{`
-/* ===== FULL SCREEN BACKGROUND (NO WHITE BORDER) ===== */
-.modern-form-container {
-  min-height: 100vh;
-  width: 100vw;          /* 🔥 FULL WIDTH */
-  margin: 0;
-  padding: 0;            /* 🔥 REMOVE SIDE SPACE */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* subtle background shapes */
-.modern-form-container::before {
-  content: '';
-  position: absolute;
-  inset: -20%;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.04), transparent 15%),
-    radial-gradient(circle at 80% 30%, rgba(255,255,255,0.03), transparent 15%),
-    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.03), transparent 15%);
-  pointer-events: none;
-}
-
-/* ===== FORM WRAPPER (CENTERED CARD WIDTH) ===== */
-.form-wrapper {
-  width: 100%;
-  max-width: 420px;      /* ✔ controls form width */
-  padding: 24px 20px;    /* ✔ padding moved HERE */
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  z-index: 2;
-}
-
-/* ===== HEADER ===== */
-.form-header {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 18px;
-}
-
-.form-icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 14px;
-}
-
-.form-title {
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.form-subtitle {
-  font-size: 15px;
-  opacity: 0.85;
-}
-
-/* ===== FORM ===== */
-.modern-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* ===== INPUTS ===== */
-.input-wrapper {
-  position: relative;
-}
-
-.modern-input {
-  width: 100%;
-  height: 54px;
-  padding: 0 52px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-  font-size: 15px;
-}
-
-.modern-input::placeholder {
-  color: rgba(255,255,255,0.65);
-}
-
-.input-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(255,255,255,0.6);
-}
-
-.password-toggle {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.7);
-  cursor: pointer;
-}
-
-/* ===== BUTTON ===== */
-.modern-submit-btn {
-  height: 54px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255,255,255,0.15);
-  color: #fff;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 480px) {
-  .form-wrapper {
-    max-width: 100%;
-    padding: 20px 16px;
+      <style jsx>{`
+  /* ROOT & BACKGROUND */
+  .modern-form-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
   }
-}
 
-/* ===== TOAST ===== */
-.Toastify__toast-container {
-  z-index: 9999;
-}
+  /* optional subtle background shapes (keeps depth without card) */
+  .modern-form-container::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03), transparent 10%),
+                radial-gradient(circle at 80% 30%, rgba(255,255,255,0.02), transparent 12%),
+                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.02), transparent 12%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.8;
+  }
+
+  /* FORM WRAPPER -> Make it full size and remove card styling */
+  .form-wrapper {
+    /* fill the center area but take full width on small screens */
+    width: 100%;
+    max-width: none;        /* remove previous max-width */
+    background: transparent;/* remove white background */
+    backdrop-filter: none;  /* remove blur backdrop */
+    border-radius: 0;       /* no rounded card corners */
+    padding: 28px 20px;     /* keep inner padding for spacing */
+    box-shadow: none;       /* remove shadows */
+    position: relative;
+    z-index: 2;             /* above background shapes */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Header - keep centered and visible on full-bleed */
+  .form-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    z-index: 2;
+  }
+
+  .form-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    color: white;
+    box-shadow: none;
+  }
+
+  .form-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    /* gradient text effect kept but white on dark bg looks good too */
+    background: linear-gradient(135deg, #ffffff, rgba(255,255,255,0.9));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .form-subtitle {
+    color: rgba(255,255,255,0.85);
+    font-size: 15px;
+    margin: 0;
+  }
+
+  /* Form layout - keep inputs width-limited for readability */
+  .modern-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 640px; /* keep inputs readable on very wide screens */
+    z-index: 2;
+  }
+
+  .input-group { position: relative; }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Inputs: transparent background with subtle inner panel */
+  .modern-input {
+    width: 100%;
+    height: 56px;
+    padding: 0 56px 0 56px;
+    border: 1px solid rgba(255,255,255,0.12); /* subtle border for contrast */
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.03); /* slight translucent panel */
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #fff;
+    outline: none;
+    backdrop-filter: blur(6px);
+  }
+
+  .modern-input::placeholder {
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+  }
+
+  .modern-input:focus {
+    border-color: rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.04);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+  }
+
+  .modern-input.error {
+    border-color: rgba(255,80,80,0.8);
+    background: rgba(255,80,80,0.06);
+    color: #fff;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    color: rgba(255,255,255,0.6);
+    z-index: 3;
+    transition: color 0.22s ease;
+  }
+
+  .input-wrapper:focus-within .input-icon,
+  .modern-input:focus + .input-icon {
+    color: #ffffff;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    z-index: 3;
+  }
+  .password-toggle:hover { color: #fff; background: rgba(255,255,255,0.03); }
+
+  .error-message {
+    color: rgba(255,100,100,0.95);
+    font-size: 14px;
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+  }
+
+  /* Submit button - keep visible on full-bleed */
+  .modern-submit-btn {
+    height: 56px;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+    border: 1px solid rgba(255,255,255,0.16);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    z-index: 2;
+  }
+
+  .modern-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+
+  /* Small screens: tighten spacing and make inputs full width */
+  @media (max-width: 480px) {
+    .modern-form {
+      max-width: 92vw;
+    }
+    .modern-input { height: 52px; font-size: 15px; padding-left: 50px; padding-right: 50px; }
+    .modern-submit-btn { height: 52px; font-size: 15px; }
+    .form-wrapper { padding: 18px; gap: 10px; }
+  }
+
+  /* Slight entry animation */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .form-wrapper { animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  /* Toast z-index so toasts remain on top */
+  .Toastify__toast-container { z-index: 9999; }
 `}</style>
-
 
     </Layout>
   );
