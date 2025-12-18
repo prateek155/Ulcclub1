@@ -184,19 +184,18 @@ const Register = () => {
                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
+  {/* Guidelines Section */}
+             <div className="guidelines">
+                 <ul>
+                 <li>Use a valid Gmail address for registration.</li>
+                 <li>Password should be strong and easy to remember.</li>
+                 <li>Enter your correct phone number for future communication.</li>
+                 <li>PRN must match your official college records.</li>
+                 <li>Do not share your login credentials with anyone.</li>
+                 </ul>
+            </div>
           </form>
         </div>
-        {/* Guidelines Section */}
-<div className="guidelines">
-  <ul>
-    <li>Use a valid Gmail address for registration.</li>
-    <li>Password should be strong and easy to remember.</li>
-    <li>Enter your correct phone number for future communication.</li>
-    <li>PRN must match your official college records.</li>
-    <li>Do not share your login credentials with anyone.</li>
-  </ul>
-</div>
-
       </div>
 
       <style jsx>{`
