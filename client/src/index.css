@@ -178,3 +178,11 @@ button {
 .Toastify__toast-container {
   z-index: 9999;
 }
+
+/* FORCE REMOVE MAIN CONTENT PADDING */
+.main-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+}
+
