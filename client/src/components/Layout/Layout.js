@@ -12,7 +12,7 @@ const Layout = ({
   author = "Prateekinfoyt"
 }) => {
   return (
-    <div>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <meta name="description" content={description} />
@@ -29,7 +29,7 @@ const Layout = ({
       </main>
 
       <Footer />
-    </div>
+    </>
   );
 };
 
