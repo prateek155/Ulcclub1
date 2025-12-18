@@ -108,9 +108,7 @@ const AdminDashboard = () => {
               <X size={18} />
             </button>
           </div>
-         <div className="sidebar-scroll">
-         <AdminMenu />
-          </div>
+          <AdminMenu />
         </aside>
 
         {/* Overlay */}
@@ -203,8 +201,6 @@ const AdminDashboard = () => {
           border-right: 1px solid #e5e7eb;
         }
 
-
-
         /* Mobile Sidebar */
         @media (max-width: 1024px) {
           .sidebar {
@@ -216,28 +212,18 @@ const AdminDashboard = () => {
             transition: left 0.3s ease;
           }
 
-          /* Sidebar scroll */
-.sidebar-scroll {
-  height: calc(100vh - 56px);   /* subtract header height */
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-
           .sidebar.open {
             left: 0;
           }
         }
 
         .sidebar-header {
-  display: none;
-  padding: 16px;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e5e7eb;
-  height: 56px;   /* IMPORTANT */
-  flex-shrink: 0;
-}
+          display: none;
+          padding: 16px;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #e5e7eb;
+        }
 
         @media (max-width: 1024px) {
           .sidebar-header {
@@ -328,6 +314,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
-
-
