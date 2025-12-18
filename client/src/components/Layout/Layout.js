@@ -21,19 +21,19 @@ const Layout = ({
         <title>{title}</title>
       </Helmet>
 
-      {/* 🔥 THIS WRAPPER IS MANDATORY */}
-      <div className="app-layout">
-        <Header />
+      <Header />
 
-        <main className="layout-main">
-          <Toaster />
-          {children}
-        </main>
+      <main className="layout-main">
+        <Toaster />
+        {children}
+      </main>
 
-        <Footer />
-      </div>
+      <Footer />
     </>
   );
 };
 
 export default Layout;
+
+
+layout file
