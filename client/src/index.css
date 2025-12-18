@@ -14,30 +14,23 @@
 }
 
 /* =========================
-   HTML & BODY
+   HTML, BODY & ROOT
+   (CRITICAL FOR FOOTER FIX)
 ========================= */
 html,
-body {
+body,
+#root {
+  height: 100%;
   width: 100%;
   font-family: 'Poppins', sans-serif;
 }
 
-/* =========================
-   APP LAYOUT (🔥 MOBILE SAFE)
-========================= */
-.app-layout {
-  min-height: 100dvh;      /* 🔥 REAL FIX FOR MOBILE APP */
+/* React root must be flex */
+#root {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
   color: #000000;
-}
-
-/* fallback for old devices */
-@supports not (height: 100dvh) {
-  .app-layout {
-    min-height: 100vh;
-  }
 }
 
 /* =========================
@@ -75,12 +68,21 @@ body {
 
 /* =========================
    MAIN CONTENT
+   (THIS PUSHES FOOTER DOWN)
 ========================= */
 .layout-main {
-  flex: 1;                 /* pushes footer down */
-  display: flex;
-  flex-direction: column;
+  flex: 1;              /* 🔥 KEY LINE */
   width: 100%;
+  display: flex;          /* 🔥 REQUIRED */
+  flex-direction: column; /* 🔥 REQUIRED */
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove any accidental padding */
+.main-content {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* =========================
@@ -88,11 +90,57 @@ body {
 ========================= */
 .footer {
   width: 100%;
+  margin-top: auto;     /* stays at bottom */
   padding: 12px 10px;
   font-size: 14px;
   text-align: center;
   color: white;
   background: linear-gradient(to right, #434343, #000000);
+}
+
+.footer a {
+  text-decoration: none;
+  color: white;
+  padding: 8px;
+}
+
+.footer a:hover {
+  color: #ffefba;
+  border-bottom: 1px solid #ffefba;
+}
+
+/* =========================
+   404 PAGE
+========================= */
+.pnf {
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pnf-title {
+  font-size: 100px;
+  font-weight: 700;
+}
+
+.pnf-heading {
+  font-weight: 400;
+}
+
+.pnf-btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: 1px solid black;
+  text-decoration: none;
+  color: black;
+  transition: 0.3s;
+}
+
+.pnf-btn:hover {
+  background: black;
+  color: white;
 }
 
 /* =========================
@@ -116,9 +164,17 @@ button {
   .navbar {
     font-size: 15px;
   }
+
+  .pnf-title {
+    font-size: 64px;
+  }
 }
 
 @media (max-width: 480px) {
+  .pnf-title {
+    font-size: 48px;
+  }
+
   .footer {
     font-size: 13px;
   }
