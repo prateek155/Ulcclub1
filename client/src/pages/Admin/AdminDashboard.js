@@ -3,64 +3,113 @@ import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
-import { Phone, Mail, Activity, UserCheck, Trash2, Building2, GraduationCap, X, Menu } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  Phone,
+  Mail,
+  Activity,
+  UserCheck,
+  Trash2,
+  Building2,
+  GraduationCap,
+  X,
+  Menu,
+} from "lucide-react";
 
 const AdminDashboard = () => {
   const [auth] = useAuth();
   const [communityMembers, setCommunityMembers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  /* ================= API ================= */
 
-  useEffect(() => {
-    axios.get("https://ulcclub1.onrender.com/api/v1/community/members")
-      .then(res => res.data?.success && setCommunityMembers(res.data.members))
-      .catch(() => {});
-  }, []);
+  const fetchCommunityMembers = async () => {
+    try {
+      const { data } = await axios.get(
+        "https://ulcclub1.onrender.com/api/v1/community/members"
+      );
+      if (data?.success) setCommunityMembers(data.members);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  useEffect(() => {
-    axios.get("https://ulcclub1.onrender.com/api/v1/product/get-product")
-      .then(res => setProducts(res.data.product || []))
-      .catch(() => toast.error("Error loading events"));
-  }, []);
+  const getAllProducts = async () => {
+    try {
+      const { data } = await axios.get(
+        "https://ulcclub1.onrender.com/api/v1/product/get-product"
+      );
+      setProducts(data.product || []);
+    } catch (err) {
+      toast.error("Something went wrong");
+    }
+  };
 
   const acceptMember = async (id) => {
-    await axios.post(`https://ulcclub1.onrender.com/api/v1/community/accept-member/${id}`);
-    setCommunityMembers(prev => prev.filter(m => m._id !== id));
-    toast.success("Member approved");
+    try {
+      const { data } = await axios.post(
+        `https://ulcclub1.onrender.com/api/v1/community/accept-member/${id}`
+      );
+      if (data?.success) {
+        setCommunityMembers((prev) => prev.filter((m) => m._id !== id));
+        toast.success("Member approved");
+      }
+    } catch {
+      toast.error("Error approving member");
+    }
   };
 
   const deleteMember = async (id) => {
-    await axios.delete(`https://ulcclub1.onrender.com/delete-member/${id}`);
-    setCommunityMembers(prev => prev.filter(m => m._id !== id));
-    toast.success("Member removed");
+    try {
+      const { data } = await axios.delete(
+        `https://ulcclub1.onrender.com/delete-member/${id}`
+      );
+      if (data?.success) {
+        setCommunityMembers((prev) => prev.filter((m) => m._id !== id));
+        toast.success("Member deleted");
+      }
+    } catch {
+      toast.error("Error deleting member");
+    }
   };
+
+  useEffect(() => {
+    fetchCommunityMembers();
+    getAllProducts();
+  }, []);
+
+  /* ================= UI ================= */
 
   return (
     <Layout title="Admin Dashboard">
-      <div className="dashboard-root">
-
+      <div className="admin-dashboard">
         {/* Mobile Menu Button */}
-        <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
-          {isMobileMenuOpen ? <X /> : <Menu />}
-          <span>{isMobileMenuOpen ? "Close" : "Menu"}</span>
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <Menu size={22} />
+          Menu
         </button>
 
         {/* Sidebar */}
-        <aside className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
+        <aside
+          className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}
+        >
           <div className="sidebar-header">
-            <Building2 size={20} />
-            <span>Admin Panel</span>
-            <X onClick={() => setIsMobileMenuOpen(false)} />
+            <span>
+              <Building2 size={18} /> Admin Panel
+            </span>
+            <button onClick={() => setIsMobileMenuOpen(false)}>
+              <X size={18} />
+            </button>
           </div>
-
-          {/* 🔥 SCROLLABLE AREA */}
-          <div className="sidebar-scroll">
-            <AdminMenu />
+         <div className="sidebar-scroll">
+         <AdminMenu />
           </div>
         </aside>
 
@@ -71,150 +120,207 @@ const AdminDashboard = () => {
         />
 
         {/* Main Content */}
-        <main className="main">
-          <div className="welcome">
-            <Building2 size={32} />
-            <div>
-              <h1>Admin Portal</h1>
-              <p>Welcome, {auth?.user?.name}</p>
-            </div>
+        <main className="content">
+          {/* Welcome */}
+          <div className="card">
+            <h1>Admin Portal</h1>
+            <p>Welcome back, {auth?.user?.name}</p>
           </div>
 
+          {/* Stats */}
           <div className="stats">
-            <div><Mail /> {auth?.user?.email}</div>
-            <div><Phone /> {auth?.user?.phone}</div>
-            <div><Activity /> Events: {products.length}</div>
-          </div>
-
-          <h2>Membership Requests</h2>
-
-          {communityMembers.map((m, i) => (
-            <div key={m._id} className="member-card">
-              <strong>{m.Name}</strong>
-              <p>{m.bio}</p>
-              <div className="actions">
-                <button onClick={() => acceptMember(m._id)}><UserCheck /> Accept</button>
-                <button onClick={() => deleteMember(m._id)}><Trash2 /> Reject</button>
+            <div className="stat">
+              <Mail size={18} />
+              <div>
+                <small>Email</small>
+                <p>{auth?.user?.email}</p>
               </div>
             </div>
-          ))}
+
+            <div className="stat">
+              <Phone size={18} />
+              <div>
+                <small>Phone</small>
+                <p>{auth?.user?.phone}</p>
+              </div>
+            </div>
+
+            <div className="stat">
+              <Activity size={18} />
+              <div>
+                <small>Events</small>
+                <p>{products.length}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Members */}
+          <div className="card">
+            <h2>Membership Requests</h2>
+
+            {communityMembers.length === 0 ? (
+              <p>No pending requests</p>
+            ) : (
+              communityMembers.map((m, i) => (
+                <div key={m._id} className="member">
+                  <div>
+                    <strong>{m.Name}</strong>
+                    <small>{m.phone}</small>
+                  </div>
+                  <div className="actions">
+                    <button onClick={() => acceptMember(m._id)}>
+                      <UserCheck size={14} />
+                    </button>
+                    <button onClick={() => deleteMember(m._id)}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </main>
       </div>
 
-      {/* STYLES */}
-      <style>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+      {/* ================= STYLES ================= */}
+      <style jsx>{`
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
 
-        .dashboard-root {
+        .admin-dashboard {
           display: flex;
           min-height: 100vh;
           background: #f8fafc;
         }
 
-        /* ===== SIDEBAR ===== */
+        /* Sidebar */
         .sidebar {
-          width: 280px;
+          width: 260px;
           background: #fff;
           border-right: 1px solid #e5e7eb;
         }
 
+
+
+        /* Mobile Sidebar */
+        @media (max-width: 1024px) {
+          .sidebar {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            height: 100vh;
+            z-index: 3000;
+            transition: left 0.3s ease;
+          }
+
+          /* Sidebar scroll */
+.sidebar-scroll {
+  height: calc(100vh - 56px);   /* subtract header height */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+          .sidebar.open {
+            left: 0;
+          }
+        }
+
         .sidebar-header {
-          padding: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border-bottom: 1px solid #e5e7eb;
-          font-weight: 600;
+  display: none;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  height: 56px;   /* IMPORTANT */
+  flex-shrink: 0;
+}
+
+        @media (max-width: 1024px) {
+          .sidebar-header {
+            display: flex;
+          }
         }
 
-        .sidebar-scroll {
-          height: calc(100vh - 60px);
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
+        /* Overlay */
+        .overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 2500;
+          display: none;
         }
 
-        /* ===== MAIN ===== */
-        .main {
+        .overlay.show {
+          display: block;
+        }
+
+        /* Mobile menu button */
+        .mobile-menu-btn {
+          display: none;
+        }
+
+        @media (max-width: 1024px) {
+          .mobile-menu-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 30px;
+            border: none;
+            background: white;
+            z-index: 3500;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+          }
+        }
+
+        /* Content */
+        .content {
           flex: 1;
           padding: 24px;
         }
 
-        .welcome {
-          display: flex;
-          gap: 12px;
+        .card {
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
           margin-bottom: 20px;
         }
 
         .stats {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-          gap: 12px;
-          margin-bottom: 24px;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+          margin-bottom: 20px;
         }
 
-        .member-card {
+        .stat {
           background: white;
           padding: 16px;
-          border-radius: 8px;
-          margin-bottom: 12px;
-          border: 1px solid #e5e7eb;
-        }
-
-        .actions {
+          border-radius: 10px;
           display: flex;
-          gap: 8px;
-          margin-top: 8px;
-        }
-
-        /* ===== MOBILE ===== */
-        .mobile-menu-btn {
-          display: none;
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          z-index: 3000;
-          background: white;
-          border: 1px solid #e5e7eb;
-          border-radius: 30px;
-          padding: 10px 14px;
-          display: flex;
+          gap: 12px;
           align-items: center;
-          gap: 6px;
         }
 
-        .overlay {
-          display: none;
+        .member {
+          display: flex;
+          justify-content: space-between;
+          padding: 12px 0;
+          border-bottom: 1px solid #e5e7eb;
         }
 
-        @media (max-width: 1024px) {
-          .sidebar {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            height: 100vh;
-            z-index: 3001;
-            transition: left 0.3s ease;
-          }
-
-          .sidebar.open {
-            left: 0;
-          }
-
-          .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 3000;
-            display: none;
-          }
-
-          .overlay.show {
-            display: block;
-          }
-
-          .mobile-menu-btn {
-            display: flex;
-          }
+        .actions button {
+          margin-left: 8px;
+          border: none;
+          background: transparent;
+          cursor: pointer;
         }
       `}</style>
     </Layout>
@@ -222,3 +328,6 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
+
