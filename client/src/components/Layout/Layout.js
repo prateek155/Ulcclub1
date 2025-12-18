@@ -34,6 +34,3 @@ const Layout = ({
 };
 
 export default Layout;
-
-
-layout file
