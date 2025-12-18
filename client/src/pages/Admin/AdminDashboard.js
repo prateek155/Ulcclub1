@@ -494,7 +494,7 @@ const AdminDashboard = () => {
          width: 280px;
          z-index: 2000;
          }
-         
+
         /* Sidebar header - Hidden on desktop, shown on mobile */
         .sidebar-header {
           padding: 20px 16px;
@@ -534,15 +534,15 @@ const AdminDashboard = () => {
         }
 
         .mobile-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.6);
-          z-index: 1001;
-          backdrop-filter: blur(2px);
-          display: none; /* Hidden by default */
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.6);
+         z-index: 1000;   /* ⬅️ LOWER than sidebar */
+         backdrop-filter: blur(2px);
+         display: none;
         }
 
         .main-content {
@@ -1304,11 +1304,11 @@ const AdminDashboard = () => {
             left: 0;
             height: 100vh;
             width: 300px;
-            z-index: 1002;
+            z-index: 2000;   /* ⬅️ MUST be higher */
             transform: translateX(-100%);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            background: white;
             will-change: transform;
-          }
+           }
 
           .sidebar-section.mobile-open {
             transform: translateX(0);
