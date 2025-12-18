@@ -362,6 +362,20 @@ const ForgotPassword = () => {
                             <button type="submit" className="btn btn-primary">
                                 Reset Password
                             </button>
+                        {/* Password Reset Guidelines */}
+<div style={{
+  marginTop: "18px",
+  fontSize: "13px",
+  lineHeight: "1.6",
+  color: "#4a5568"
+}}>
+  <ul style={{ paddingLeft: "18px" }}>
+    <li>Make sure your email and PRN are correct.</li>
+    <li>Choose a strong password you have not used before.</li>
+    <li>Do not share your new password with anyone.</li>
+  </ul>
+</div>
+
                         </form>
 
                         <div className="back-to-login">
