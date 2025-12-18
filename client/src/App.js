@@ -44,7 +44,7 @@ import Cultural from "./pages/Cultural.js";
 function App() {
   return (
     <div className="App">
-      <div className="main-content">
+      <div className="main-content no-padding">
         <>
         <Routes>
             <Route path="/" element={<HomePage />} />
