@@ -485,15 +485,16 @@ const AdminDashboard = () => {
         }
 
         /* Sidebar - Desktop: Always visible, Mobile: Slide-out */
-        .sidebar-section {
-          flex-shrink: 0;
-          background: white;
-          border-right: 1px solid #e2e8f0;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          overflow-y: auto;
-          width: 280px;
-        }
-
+       .sidebar-section {
+        flex-shrink: 0;
+         background: white;
+         border-right: 1px solid #e2e8f0;
+         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         overflow-y: auto;
+         width: 280px;
+         z-index: 2000;
+         }
+         
         /* Sidebar header - Hidden on desktop, shown on mobile */
         .sidebar-header {
           padding: 20px 16px;
