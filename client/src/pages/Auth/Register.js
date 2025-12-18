@@ -186,6 +186,17 @@ const Register = () => {
             </button>
           </form>
         </div>
+        {/* Guidelines Section */}
+<div className="guidelines">
+  <ul>
+    <li>Use a valid Gmail address for registration.</li>
+    <li>Password should be strong and easy to remember.</li>
+    <li>Enter your correct phone number for future communication.</li>
+    <li>PRN must match your official college records.</li>
+    <li>Do not share your login credentials with anyone.</li>
+  </ul>
+</div>
+
       </div>
 
       <style jsx>{`
