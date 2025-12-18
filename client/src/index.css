@@ -14,41 +14,44 @@
 }
 
 /* =========================
-   HTML & Body Base
+   HTML, BODY & ROOT
+   (CRITICAL FOR FOOTER FIX)
 ========================= */
 html,
-body {
-  width: 100%;
+body,
+#root {
   height: 100%;
+  width: 100%;
   font-family: 'Poppins', sans-serif;
 }
 
-/* =========================
-   Body Layout (Footer Bottom Fix)
-========================= */
-body {
+/* React root must be flex */
+#root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background-color: #ffffff;   /* ✅ removed dark background */
+  background-color: #ffffff;
   color: #000000;
 }
 
 /* =========================
-   Navbar (Header)
+   HEADER / NAVBAR
 ========================= */
 .navbar {
   width: 100%;
-  position: sticky;   /* ✅ always at top */
+  position: sticky;
   top: 0;
   z-index: 1000;
-  font-family: 'Poppins', sans-serif;
   font-size: 17px;
   line-height: 26px;
   text-transform: uppercase;
-  box-shadow: 0 8px 6px -6px gray;
-  border-bottom: 1px solid gray;
   background-color: #ffffff;
+  border-bottom: 1px solid gray;
+  box-shadow: 0 8px 6px -6px gray;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 3px;
 }
 
 .nav-link {
@@ -63,29 +66,33 @@ body {
   border-bottom: 2px solid currentColor;
 }
 
-.navbar-brand {
-  font-weight: 700;
-  letter-spacing: 3px;
-}
-
 /* =========================
-   Main Content Area
+   MAIN CONTENT
+   (THIS PUSHES FOOTER DOWN)
 ========================= */
-main {
-  flex: 1;              /* ✅ pushes footer to bottom */
+.layout-main {
+  flex: 1;              /* 🔥 KEY LINE */
   width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove any accidental padding */
+.main-content {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* =========================
-   Footer
+   FOOTER
 ========================= */
 .footer {
   width: 100%;
-  margin-top: auto;     /* ✅ always at bottom */
-  color: white;
+  margin-top: auto;     /* stays at bottom */
+  padding: 12px 10px;
   font-size: 14px;
   text-align: center;
-  padding: 12px 10px;
+  color: white;
   background: linear-gradient(to right, #434343, #000000);
 }
 
@@ -101,15 +108,14 @@ main {
 }
 
 /* =========================
-   Page Not Found (404)
+   404 PAGE
 ========================= */
 .pnf {
-  display: flex;
   min-height: 65vh;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
 
 .pnf-title {
@@ -122,21 +128,21 @@ main {
 }
 
 .pnf-btn {
-  color: black;
+  margin-top: 12px;
+  padding: 10px 16px;
   border: 1px solid black;
   text-decoration: none;
-  padding: 10px 16px;
-  margin-top: 12px;
-  transition: all 0.3s ease;
+  color: black;
+  transition: 0.3s;
 }
 
 .pnf-btn:hover {
-  background-color: black;
+  background: black;
   color: white;
 }
 
 /* =========================
-   Utility
+   UTILITIES
 ========================= */
 img {
   max-width: 100%;
@@ -150,7 +156,7 @@ button {
 }
 
 /* =========================
-   Mobile Optimization
+   MOBILE OPTIMIZATION
 ========================= */
 @media (max-width: 768px) {
   .navbar {
@@ -173,16 +179,8 @@ button {
 }
 
 /* =========================
-   Toast Fix
+   TOAST FIX
 ========================= */
 .Toastify__toast-container {
   z-index: 9999;
 }
-
-/* FORCE REMOVE MAIN CONTENT PADDING */
-.main-content {
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100%;
-}
-
