@@ -21,14 +21,17 @@ const Layout = ({
         <title>{title}</title>
       </Helmet>
 
-      <Header />
+      {/* 🔥 THIS WRAPPER IS MANDATORY */}
+      <div className="app-layout">
+        <Header />
 
-      <main className="layout-main">
-        <Toaster />
-        {children}
-      </main>
+        <main className="layout-main">
+          <Toaster />
+          {children}
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </>
   );
 };
