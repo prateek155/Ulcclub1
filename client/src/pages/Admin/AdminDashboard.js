@@ -52,7 +52,7 @@ const AdminDashboard = () => {
           <span>{isMobileMenuOpen ? "Close" : "Menu"}</span>
         </button>
 
-        {/* Sidebar */}
+        {/* Sidebar - Now Always Visible */}
         <aside className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
           <div className="sidebar-header">
             <div className="sidebar-logo">
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
             </button>
           </div>
 
-          {/* 🔥 SCROLLABLE AREA - FIXED */}
+          {/* 🔥 SCROLLABLE MENU AREA */}
           <div className="sidebar-scroll">
             <AdminMenu />
           </div>
@@ -208,7 +208,7 @@ const AdminDashboard = () => {
         </>
       )}
 
-      {/* STYLES - FIXED FOR MOBILE MENU */}
+      {/* STYLES - SIDEBAR ALWAYS VISIBLE ON ALL SCREENS */}
       <style>{`
         * { 
           box-sizing: border-box; 
@@ -228,7 +228,7 @@ const AdminDashboard = () => {
           background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         }
 
-        /* ===== SIDEBAR ===== */
+        /* ===== SIDEBAR - ALWAYS VISIBLE ===== */
         .sidebar {
           width: 280px;
           background: #ffffff;
@@ -236,6 +236,11 @@ const AdminDashboard = () => {
           box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
           display: flex;
           flex-direction: column;
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          z-index: 1000;
         }
 
         .sidebar-header {
@@ -247,6 +252,7 @@ const AdminDashboard = () => {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           flex-shrink: 0;
+          min-height: 80px;
         }
 
         .sidebar-logo {
@@ -273,12 +279,15 @@ const AdminDashboard = () => {
           background: rgba(255, 255, 255, 0.1);
         }
 
-        /* 🔥 FIXED: Sidebar scroll section */
+        /* 🔥 FIXED: Sidebar scroll - Works on all screen sizes */
         .sidebar-scroll {
           flex: 1;
           overflow-y: auto;
+          overflow-x: hidden;
           -webkit-overflow-scrolling: touch;
           padding: 16px 0;
+          height: 0;
+          min-height: 0;
         }
 
         .sidebar-scroll::-webkit-scrollbar {
@@ -298,11 +307,13 @@ const AdminDashboard = () => {
           background: #94a3b8;
         }
 
-        /* ===== MAIN ===== */
+        /* ===== MAIN - ADJUSTED FOR SIDEBAR ===== */
         .main {
           flex: 1;
+          margin-left: 280px;
           padding: 32px;
           overflow-y: auto;
+          width: calc(100% - 280px);
         }
 
         .welcome-section {
@@ -568,42 +579,20 @@ const AdminDashboard = () => {
           display: none;
         }
 
-        /* ===== MOBILE ===== */
+        /* ===== MOBILE MENU BUTTON - HIDDEN BY DEFAULT ===== */
         .mobile-menu-btn {
           display: none;
-          position: fixed;
-          bottom: 24px;
-          right: 24px;
-          z-index: 3000;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          border: none;
-          border-radius: 50px;
-          padding: 14px 20px;
-          align-items: center;
-          gap: 8px;
-          font-weight: 600;
-          font-size: 14px;
-          cursor: pointer;
-          box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-          transition: all 0.3s;
-        }
-
-        .mobile-menu-btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         .overlay {
           display: none;
         }
 
+        /* ===== RESPONSIVE - MOBILE VIEW ===== */
         @media (max-width: 1024px) {
+          /* Sidebar slides in from left on mobile */
           .sidebar {
-            position: fixed;
-            top: 0;
             left: -280px;
-            height: 100vh;
             z-index: 3001;
             transition: left 0.3s ease;
           }
@@ -612,15 +601,15 @@ const AdminDashboard = () => {
             left: 0;
           }
 
-          /* 🔥 FIXED: Mobile sidebar scroll */
-          .sidebar-scroll {
-            height: auto;
-            max-height: calc(100vh - 80px);
-            overflow-y: auto;
-          }
-
           .sidebar-close {
             display: block;
+          }
+
+          /* Main content takes full width on mobile */
+          .main {
+            margin-left: 0;
+            width: 100%;
+            padding: 20px;
           }
 
           .overlay {
@@ -638,10 +627,27 @@ const AdminDashboard = () => {
 
           .mobile-menu-btn {
             display: flex;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2999;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 20px;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
           }
 
-          .main {
-            padding: 20px;
+          .mobile-menu-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
           }
 
           .stats-grid {
