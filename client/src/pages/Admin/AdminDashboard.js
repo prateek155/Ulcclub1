@@ -24,8 +24,20 @@ const AdminDashboard = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  /* 🔥 LOCK HEADER & FOOTER WHEN SIDEBAR OPENS */
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add("admin-sidebar-open");
+    } else {
+      document.body.classList.remove("admin-sidebar-open");
+    }
 
+    return () => {
+      document.body.classList.remove("admin-sidebar-open");
+    };
+  }, [isMobileMenuOpen]);
+
+  /* ===== API ===== */
   useEffect(() => {
     axios
       .get("https://ulcclub1.onrender.com/api/v1/community/members")
@@ -50,7 +62,9 @@ const AdminDashboard = () => {
   };
 
   const deleteMember = async (id) => {
-    await axios.delete(`https://ulcclub1.onrender.com/delete-member/${id}`);
+    await axios.delete(
+      `https://ulcclub1.onrender.com/delete-member/${id}`
+    );
     setCommunityMembers((prev) => prev.filter((m) => m._id !== id));
     setSelectedMember(null);
     toast.success("Member removed");
@@ -59,13 +73,16 @@ const AdminDashboard = () => {
   return (
     <Layout title="Admin Dashboard">
       <div className="dashboard-root">
-        {/* Mobile Menu Button */}
-        <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
-          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          <span>{isMobileMenuOpen ? "Close" : "Menu"}</span>
+        {/* MOBILE MENU BUTTON */}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <Menu size={18} />
+          <span>Menu</span>
         </button>
 
-        {/* Sidebar */}
+        {/* SIDEBAR */}
         <aside className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
           <div className="sidebar-header">
             <div className="sidebar-logo">
@@ -76,7 +93,7 @@ const AdminDashboard = () => {
               className="sidebar-close"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
 
@@ -85,110 +102,90 @@ const AdminDashboard = () => {
           </div>
         </aside>
 
-        {/* Overlay */}
+        {/* OVERLAY */}
         <div
           className={`overlay ${isMobileMenuOpen ? "show" : ""}`}
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Main */}
+        {/* MAIN */}
         <main className="main">
           <div className="welcome-section">
-            <Building2 size={36} />
-            <div>
-              <h1>Admin Portal</h1>
-              <p>Welcome back, {auth?.user?.name}</p>
-            </div>
+            <h2>Welcome back, {auth?.user?.name}</h2>
           </div>
 
           <div className="stats-grid">
             <div className="stat-card">
-              <Mail /> {auth?.user?.email}
+              <Mail size={18} />
+              <span>{auth?.user?.email}</span>
             </div>
             <div className="stat-card">
-              <Phone /> {auth?.user?.phone}
+              <Phone size={18} />
+              <span>{auth?.user?.phone}</span>
             </div>
             <div className="stat-card">
-              <Activity /> Events: {products.length}
+              <Activity size={18} />
+              <span>Events: {products.length}</span>
             </div>
           </div>
 
-          <h2 className="section-title">Membership Requests</h2>
+          <h3 className="section-title">Membership Requests</h3>
 
-          <div className="members-list">
-            {communityMembers.map((m) => (
-              <div
-                key={m._id}
-                className="member-card"
-                onClick={() => setSelectedMember(m)}
-              >
-                <strong>{m.Name}</strong>
-                <p>{m.bio}</p>
-
-                <div className="member-actions">
-                  <button
-                    className="btn-accept"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      acceptMember(m._id);
-                    }}
-                  >
-                    <UserCheck size={16} /> Accept
-                  </button>
-                  <button
-                    className="btn-reject"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteMember(m._id);
-                    }}
-                  >
-                    <Trash2 size={16} /> Reject
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {communityMembers.length === 0 && (
+          {communityMembers.length === 0 ? (
             <div className="empty-state">
               <Users size={48} />
               <p>No pending requests</p>
             </div>
+          ) : (
+            communityMembers.map((m) => (
+              <div key={m._id} className="member-card">
+                <h4>{m.Name}</h4>
+                <div className="member-actions">
+                  <button onClick={() => acceptMember(m._id)}>
+                    <UserCheck size={16} /> Accept
+                  </button>
+                  <button onClick={() => deleteMember(m._id)}>
+                    <Trash2 size={16} /> Reject
+                  </button>
+                </div>
+              </div>
+            ))
           )}
         </main>
       </div>
 
-      {/* STYLES */}
+      {/* ===== STYLES ===== */}
       <style>{`
-        :root {
-          --app-header-height: 64px;
+        /* LOCK BACKGROUND WHEN SIDEBAR OPEN */
+        .admin-sidebar-open {
+          overflow: hidden;
         }
 
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
+        .admin-sidebar-open header,
+        .admin-sidebar-open footer {
+          display: none;
         }
 
         .dashboard-root {
-          display: flex;
           min-height: 100vh;
-          background: #f5f7fa;
         }
 
         /* SIDEBAR */
         .sidebar {
-          width: 280px;
-          background: #fff;
           position: fixed;
-          top: var(--app-header-height);
-          left: 0;
-          height: calc(100dvh - var(--app-header-height));
-          border-right: 1px solid #e5e7eb;
+          top: 0;
+          left: -280px;
+          width: 280px;
+          height: 100vh;
+          background: #fff;
+          z-index: 10001;
           display: flex;
           flex-direction: column;
-          z-index: 3001;
           transition: left 0.3s ease;
+        }
+
+        .sidebar.open {
+          left: 0;
         }
 
         .sidebar-header {
@@ -198,8 +195,7 @@ const AdminDashboard = () => {
           align-items: center;
           justify-content: space-between;
           background: linear-gradient(135deg, #667eea, #764ba2);
-          color: white;
-          flex-shrink: 0;
+          color: #fff;
         }
 
         .sidebar-scroll {
@@ -207,131 +203,75 @@ const AdminDashboard = () => {
           overflow-y: auto;
         }
 
-        .sidebar-close {
-          background: none;
-          border: none;
+        /* OVERLAY */
+        .overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.45);
+          z-index: 10000;
+          display: none;
+        }
+
+        .overlay.show {
+          display: block;
+        }
+
+        /* MOBILE MENU BUTTON */
+        .mobile-menu-btn {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 9999;
+          background: linear-gradient(135deg, #667eea, #764ba2);
           color: white;
-          cursor: pointer;
+          border: none;
+          padding: 12px 18px;
+          border-radius: 30px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
         }
 
         /* MAIN */
         .main {
-          margin-left: 280px;
-          padding: 24px;
-          width: calc(100% - 280px);
-        }
-
-        .welcome-section {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 20px;
-          align-items: center;
+          padding: 16px;
         }
 
         .stats-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: 1fr;
           gap: 12px;
-          margin-bottom: 20px;
         }
 
         .stat-card {
-          background: white;
-          padding: 12px;
-          border-radius: 8px;
+          background: #fff;
+          padding: 14px;
+          border-radius: 10px;
           display: flex;
-          gap: 8px;
+          gap: 10px;
           align-items: center;
-          border: 1px solid #e5e7eb;
         }
 
         .member-card {
-          background: white;
-          padding: 16px;
-          border-radius: 8px;
-          border: 1px solid #e5e7eb;
-          margin-bottom: 12px;
+          background: #fff;
+          padding: 14px;
+          border-radius: 10px;
+          margin-top: 12px;
         }
 
         .member-actions {
           display: flex;
-          gap: 8px;
-          margin-top: 8px;
+          gap: 10px;
+          margin-top: 10px;
         }
 
-        .btn-accept {
-          background: #16a34a;
-          color: white;
-          border: none;
-          padding: 8px 12px;
-          border-radius: 6px;
-        }
-
-        .btn-reject {
-          background: #dc2626;
-          color: white;
-          border: none;
-          padding: 8px 12px;
-          border-radius: 6px;
+        .member-actions button {
+          flex: 1;
         }
 
         .empty-state {
           text-align: center;
           margin-top: 40px;
-          color: #64748b;
-        }
-
-        /* MOBILE */
-        .mobile-menu-btn {
-          display: none;
-        }
-
-        .overlay {
-          display: none;
-        }
-
-        @media (max-width: 1024px) {
-          .sidebar {
-            left: -280px;
-          }
-
-          .sidebar.open {
-            left: 0;
-          }
-
-          .main {
-            margin-left: 0;
-            width: 100%;
-          }
-
-          .mobile-menu-btn {
-            display: flex;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 3002;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 999px;
-            padding: 12px 16px;
-            gap: 6px;
-            align-items: center;
-          }
-
-          .overlay {
-            position: fixed;
-            top: var(--app-header-height);
-            left: 0;
-            right: 0;
-            height: calc(100dvh - var(--app-header-height));
-            background: rgba(0,0,0,0.4);
-            z-index: 3000;
-          }
-
-          .overlay.show {
-            display: block;
-          }
         }
       `}</style>
     </Layout>
