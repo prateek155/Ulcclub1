@@ -286,7 +286,7 @@ const AdminDashboard = () => {
           overflow-y: auto;
           overflow-x: hidden;
           -webkit-overflow-scrolling: touch;
-          padding: 16px 0;
+          padding: 0;
           min-height: 0;
         }
 
