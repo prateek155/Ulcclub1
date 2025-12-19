@@ -122,7 +122,6 @@ const AdminMenu = () => {
           display: flex;
           flex-direction: column;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          overflow: visible; /* ✅ important */
           }
 
         .menu-content {
