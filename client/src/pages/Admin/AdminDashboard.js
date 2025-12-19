@@ -241,6 +241,7 @@ const AdminDashboard = () => {
           left: 0;
           height: 100dvh;
           z-index: 1000;
+          padding-top: env(safe-area-inset-top);
         }
 
         .sidebar-header {
@@ -253,7 +254,7 @@ const AdminDashboard = () => {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           flex-shrink: 0;
-          min-height: 80px;
+          min-height: 72px;
         }
 
         .sidebar-logo {
