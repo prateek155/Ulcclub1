@@ -1745,5 +1745,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
-this is my current admindashboard file but in this file sidebar is not visible in mobile view 
