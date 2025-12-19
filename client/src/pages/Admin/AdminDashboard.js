@@ -64,7 +64,7 @@ const AdminDashboard = () => {
             </button>
           </div>
 
-          {/* 🔥 SCROLLABLE AREA */}
+          {/* 🔥 SCROLLABLE AREA - FIXED */}
           <div className="sidebar-scroll">
             <AdminMenu />
           </div>
@@ -208,7 +208,7 @@ const AdminDashboard = () => {
         </>
       )}
 
-      {/* STYLES */}
+      {/* STYLES - FIXED FOR MOBILE MENU */}
       <style>{`
         * { 
           box-sizing: border-box; 
@@ -246,6 +246,7 @@ const AdminDashboard = () => {
           border-bottom: 1px solid #e2e8f0;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
+          flex-shrink: 0;
         }
 
         .sidebar-logo {
@@ -272,8 +273,9 @@ const AdminDashboard = () => {
           background: rgba(255, 255, 255, 0.1);
         }
 
+        /* 🔥 FIXED: Sidebar scroll section */
         .sidebar-scroll {
-          height: calc(100vh - 80px);
+          flex: 1;
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
           padding: 16px 0;
@@ -608,6 +610,13 @@ const AdminDashboard = () => {
 
           .sidebar.open {
             left: 0;
+          }
+
+          /* 🔥 FIXED: Mobile sidebar scroll */
+          .sidebar-scroll {
+            height: auto;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
           }
 
           .sidebar-close {
