@@ -129,7 +129,7 @@ const AdminMenu = () => {
         .menu-content {
           flex: 1;
           padding: 0;
-          overflow-y: auto;
+          overflow: visible;
           background: #ffffff;
         }
 
