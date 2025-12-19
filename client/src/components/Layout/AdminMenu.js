@@ -126,7 +126,7 @@ const AdminMenu = () => {
 
         .menu-content {
           flex: 1;
-          padding: 0;
+          padding: 8px 0;
           overflow: visible;
           background: #ffffff;
         }
