@@ -239,7 +239,7 @@ const AdminDashboard = () => {
           position: fixed;
           top: 0;
           left: 0;
-          height: 100vh;
+          height: 100dvh;
           z-index: 1000;
         }
 
@@ -248,6 +248,7 @@ const AdminDashboard = () => {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          height: 72px;
           border-bottom: 1px solid #e2e8f0;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
@@ -286,7 +287,6 @@ const AdminDashboard = () => {
           overflow-x: hidden;
           -webkit-overflow-scrolling: touch;
           padding: 16px 0;
-          height: 0;
           min-height: 0;
         }
 
