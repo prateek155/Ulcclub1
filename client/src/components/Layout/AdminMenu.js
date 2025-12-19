@@ -116,15 +116,14 @@ const AdminMenu = () => {
   return (
     <>
       <style>{`
-        .institutional-menu {
+       .institutional-menu {
           width: 100%;
-          height: 100%;
           background: #ffffff;
           display: flex;
           flex-direction: column;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          overflow: hidden;
-        }
+          overflow: visible; /* ✅ important */
+          }
 
         .menu-content {
           flex: 1;
