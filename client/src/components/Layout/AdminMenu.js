@@ -70,40 +70,11 @@ const AdminMenu = () => {
           title: "Feedback System",
           description: "Check and Solve the Problem Of student's",
         },
-      ]
-    },
-    {
-      title: "Communications & Development",
-      items: [
         {
           path: "/dashboard/admin/skills",
           icon: <BookOpen />,
           title: "Student Skills",
           description: "List of the skills which is fill by student's",
-        },
-        {
-          path: "/dashboard/admin/sponser",
-          icon: <BookOpen />,
-          title: "All Sponser's",
-          description: "All Approved Sponsers Data",
-        },
-        {
-          path: "/dashboard/admin/all-registrations",
-          icon: <Building2 />,
-          title: "All Registration",
-          description: "Registration for Indivisual and Grop Event's",
-        },
-        {
-          path: "/dashboard/admin/response",
-          icon: <Building2 />,
-          title: "Response's",
-          description: "department funds Approved by Treasurer",
-        },
-        {
-          path: "/dashboard/admin/participent",
-          icon: <Building2 />,
-          title: "Participent",
-          description: "Data of Privious Participent",
         },
       ]
     },
