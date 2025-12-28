@@ -77,6 +77,8 @@ body,
   flex-direction: column; /* 🔥 REQUIRED */
   padding: 0;
   margin: 0;
+  overflow: visible !important;
+  position: relative;
 }
 
 /* Remove any accidental padding */
