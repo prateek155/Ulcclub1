@@ -25,6 +25,13 @@ body,
   font-family: 'Poppins', sans-serif;
 }
 
+/* Prevent horizontal scroll but allow fixed elements */
+html,
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 /* React root must be flex */
 #root {
   display: flex;
@@ -68,17 +75,17 @@ body,
 
 /* =========================
    MAIN CONTENT
-   (THIS PUSHES FOOTER DOWN)
+   (THIS PUSHES FOOTER DOWN & ALLOWS SIDEBAR)
 ========================= */
 .layout-main {
-  flex: 1;              /* 🔥 KEY LINE */
+  flex: 1;                        /* 🔥 KEY LINE - Pushes footer down */
   width: 100%;
-  display: flex;          /* 🔥 REQUIRED */
-  flex-direction: column; /* 🔥 REQUIRED */
+  display: flex;                  /* 🔥 REQUIRED */
+  flex-direction: column;         /* 🔥 REQUIRED */
   padding: 0;
   margin: 0;
-  overflow: visible !important;
-  position: relative;
+  overflow: visible !important;   /* 🔥 CRITICAL - Allows sidebar to appear */
+  position: relative;             /* 🔥 CRITICAL - Creates positioning context */
 }
 
 /* Remove any accidental padding */
@@ -166,7 +173,7 @@ button {
   .navbar {
     font-size: 15px;
   }
-
+  
   .pnf-title {
     font-size: 64px;
   }
@@ -176,7 +183,7 @@ button {
   .pnf-title {
     font-size: 48px;
   }
-
+  
   .footer {
     font-size: 13px;
   }
@@ -187,4 +194,67 @@ button {
 ========================= */
 .Toastify__toast-container {
   z-index: 9999;
+}
+
+/* =========================
+   SIDEBAR FIX FOR MOBILE
+   (CRITICAL FOR ADMIN PANEL)
+========================= */
+/* Ensure fixed positioned elements can escape layout-main */
+.layout-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Prevent body scroll when mobile menu is open (optional) */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* =========================
+   ACCESSIBILITY
+========================= */
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .navbar {
+    border-bottom: 2px solid #000;
+  }
+  
+  .footer {
+    border-top: 2px solid #fff;
+  }
+}
+
+/* =========================
+   PRINT STYLES
+========================= */
+@media print {
+  .navbar,
+  .footer {
+    display: none;
+  }
+  
+  .layout-main {
+    overflow: visible;
+  }
+  
+  * {
+    background: white !important;
+    color: black !important;
+  }
 }
