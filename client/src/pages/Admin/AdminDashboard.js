@@ -109,6 +109,15 @@ const AdminDashboard = () => {
             </span>
           </button>
 
+          {/* Overlay */}
+          {isMobileMenuOpen && (
+            <div 
+              className="mobile-overlay"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu overlay"
+            />
+          )}
+
           {/* Sidebar Section with AdminMenu */}
           <div className={`sidebar-section ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
             <div className="sidebar-header">
@@ -128,15 +137,6 @@ const AdminDashboard = () => {
               <AdminMenu />
             </div>
           </div>
-
-          {/* Overlay */}
-          {isMobileMenuOpen && (
-            <div 
-              className="mobile-overlay"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close menu overlay"
-            />
-          )}
           
           {/* Main Content */}
           <div className="main-content">
@@ -426,7 +426,6 @@ const AdminDashboard = () => {
           background: #f8fafc;
           min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          /* CRITICAL: Remove any margins that cause white space */
           margin: 0;
           padding: 0;
           width: 100%;
@@ -437,7 +436,6 @@ const AdminDashboard = () => {
           display: flex;
           min-height: 100vh;
           position: relative;
-          /* CRITICAL: Ensure full width without margins */
           width: 100%;
           margin: 0;
           padding: 0;
@@ -448,7 +446,7 @@ const AdminDashboard = () => {
           position: fixed;
           bottom: 24px;
           right: 24px;
-          z-index: 1003;
+          z-index: 1001;
           background: white;
           border: 2px solid #e2e8f0;
           border-radius: 50px;
@@ -458,7 +456,7 @@ const AdminDashboard = () => {
           color: #374151;
           font-weight: 600;
           font-size: 14px;
-          display: none; /* Hidden by default on desktop */
+          display: none;
           align-items: center;
           gap: 8px;
           transition: all 0.2s ease;
@@ -499,7 +497,7 @@ const AdminDashboard = () => {
           padding: 20px 16px;
           border-bottom: 1px solid #e2e8f0;
           background: #f8fafc;
-          display: none; /* Hidden by default on desktop */
+          display: none;
           justify-content: space-between;
           align-items: center;
         }
@@ -539,9 +537,9 @@ const AdminDashboard = () => {
           width: 100%;
           height: 100%;
           background: rgba(0, 0, 0, 0.6);
-          z-index: 1001;
+          z-index: 1002;
           backdrop-filter: blur(2px);
-          display: none; /* Hidden by default */
+          display: none;
         }
 
         .main-content {
@@ -549,7 +547,6 @@ const AdminDashboard = () => {
           background: #f8fafc;
           overflow-y: auto;
           min-width: 0;
-          /* CRITICAL: Ensure full width without margins */
           width: 100%;
           margin: 0;
           padding: 0;
@@ -559,8 +556,7 @@ const AdminDashboard = () => {
         .section {
           padding: 24px;
           max-width: 100%;
-          padding-bottom: 120px; /* Extra bottom padding for mobile menu */
-          /* CRITICAL: Remove margins */
+          padding-bottom: 120px;
           margin: 0;
           width: 100%;
         }
@@ -948,6 +944,7 @@ const AdminDashboard = () => {
           background: #fee2e2;
           border-color: #fca5a5;
         }
+
         /* Mobile Cards - Hidden by default */
         .mobile-cards {
           display: none;
@@ -1100,7 +1097,7 @@ const AdminDashboard = () => {
           display: flex;
           justify-content: center;
           align-items: center;
-          z-index: 1000;
+          z-index: 1004;
           backdrop-filter: blur(4px);
           padding: 20px;
         }
@@ -1248,7 +1245,6 @@ const AdminDashboard = () => {
 
         /* Desktop and Large Tablet */
         @media (min-width: 1025px) {
-          /* Keep sidebar always visible */
           .sidebar-section {
             position: static;
             transform: none;
@@ -1256,7 +1252,6 @@ const AdminDashboard = () => {
             box-shadow: none;
           }
           
-          /* Hide mobile menu elements */
           .mobile-menu-toggle {
             display: none !important;
           }
@@ -1269,10 +1264,9 @@ const AdminDashboard = () => {
             display: none !important;
           }
           
-          /* Ensure proper spacing */
           .section {
             padding: 24px;
-            padding-bottom: 24px; /* Normal bottom padding on desktop */
+            padding-bottom: 24px;
           }
         }
 
@@ -1291,19 +1285,17 @@ const AdminDashboard = () => {
             padding-bottom: 120px;
           }
           
-          /* Show mobile menu button */
           .mobile-menu-toggle {
             display: flex !important;
           }
           
-          /* Transform sidebar into slide-out menu */
           .sidebar-section {
             position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
             width: 300px;
-            z-index: 1002;
+            z-index: 1003;
             transform: translateX(-100%);
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
             will-change: transform;
@@ -1313,7 +1305,6 @@ const AdminDashboard = () => {
             transform: translateX(0);
           }
           
-          /* Show sidebar header on mobile */
           .sidebar-header {
             display: flex !important;
           }
@@ -1324,7 +1315,6 @@ const AdminDashboard = () => {
             padding: 16px 0;
           }
           
-          /* Show overlay when mobile menu is open */
           .mobile-overlay {
             display: block;
           }
@@ -1388,7 +1378,6 @@ const AdminDashboard = () => {
             font-size: 24px;
           }
 
-          /* Hide desktop table, show mobile cards */
           .desktop-table {
             display: none;
           }
@@ -1397,7 +1386,6 @@ const AdminDashboard = () => {
             display: flex;
           }
 
-          /* Modal adjustments */
           .modal-overlay {
             padding: 16px;
             align-items: flex-start;
@@ -1584,7 +1572,6 @@ const AdminDashboard = () => {
             font-size: 13px;
           }
 
-          /* Modal mobile adjustments */
           .modal-overlay {
             padding: 8px;
             padding-top: 20px;
@@ -1739,8 +1726,8 @@ const AdminDashboard = () => {
           white-space: nowrap;
           border: 0;
         }
-           `}</style>
-           </Layout>
+      `}</style>
+    </Layout>
   );
 };
 
