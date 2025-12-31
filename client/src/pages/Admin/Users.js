@@ -4,7 +4,6 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Trash2, Search, Users, Shield, User as UserIcon } from "lucide-react";
-import "../../styles/Users.css";
 
 const User = () => {
   const [users, setUsers] = useState([]);
