@@ -44,8 +44,8 @@ const AdminMenu = () => {
         {
           path: "/dashboard/admin/create-product",
           icon: <PlusCircle />,
-          title: "Create New Event",
-          description: "Create New Only Approved Event's",
+          title: "Create New Project",
+          description: "Create New Finalised Project",
         },
         {
           path: "/dashboard/admin/product",
