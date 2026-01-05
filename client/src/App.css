@@ -1,16 +1,29 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
+ 
+Search within code
+ 
+‎client/src/App.css‎
+Original file line number	Diff line number	Diff line change
+@@ -5,15 +5,16 @@ html, body {
+    flex-direction: column;
+  }
 
+  .App {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    flex: 1;
+  }
+  
 .App {
-  flex: 1;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
 .main-content {
   flex: 1;
 }
+
+  
