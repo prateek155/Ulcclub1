@@ -21,8 +21,6 @@ import FeedbackManagement from "./pages/Admin/FeedManagement.js";
 import AllRegistrations from "./pages/Admin/AllRegistratiions.js";
 import Event from "./pages/Event.js";
 import Registration from "./pages/Registration.js";
-import Sponsers from "./pages/Admin/Sponsers.js";
-import Response from "./pages/Admin/Response.js";
 import Skills from "./pages/Admin/Skills.js";
 import Eventparticipent from "./pages/Eventparticipent.js";
 import Participent from "./pages/Admin/Participent.js";
@@ -58,9 +56,7 @@ function App() {
               <Route path="admin/users" element={<User />} />
               <Route path="admin/community-member" element={<CommunityMember />} />
               <Route path="admin/feedback-management" element={<FeedbackManagement />} />
-              <Route path="admin/sponser" element={<Sponsers /> } />
               <Route path="admin/all-registrations" element={<AllRegistrations />} />
-              <Route path="admin/response" element={<Response />} />
               <Route path="admin/skills" element={<Skills />} />
               <Route path="admin/participent" element={<Participent />} />
               <Route path="admin/Cr" element={<CrDetail />} />
