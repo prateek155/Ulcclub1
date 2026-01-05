@@ -21,7 +21,6 @@ import FeedbackManagement from "./pages/Admin/FeedManagement.js";
 import AllRegistrations from "./pages/Admin/AllRegistratiions.js";
 import Event from "./pages/Event.js";
 import Registration from "./pages/Registration.js";
-import Association from "./pages/Association.js";
 import Sponsers from "./pages/Admin/Sponsers.js";
 import Response from "./pages/Admin/Response.js";
 import Skills from "./pages/Admin/Skills.js";
@@ -36,10 +35,9 @@ import LostandFound from "./pages/LostandFound.js";
 import Faculty from "./pages/Admin/Faculty.js";
 import Projects from "./pages/user/Projects.js";
 import Found from "./pages/Found.js";
-import Sports from "./pages/Sports.js";
 import StudentAction from "./pages/Admin/StudentAction.js";
 import Secure from "./pages/Admin/Secure.js";
-import Cultural from "./pages/Cultural.js";
+
 
 function App() {
   return (
@@ -88,10 +86,7 @@ function App() {
             <Route path="/lostandfound" element={<LostandFound />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/eventparticipent" element={<Eventparticipent />} />
-            <Route path="/association" element={<Association />} />
             <Route path="/founditem" element={<Found />} />
-            <Route path="/sport" element={<Sports />} /> 
-            <Route path="/culturals" element={<Cultural />} /> 
             <Route path="*" element={<Pagenotfound />} /> 
 
           </Routes>
