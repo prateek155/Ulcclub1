@@ -26,7 +26,6 @@ import Response from "./pages/Admin/Response.js";
 import Skills from "./pages/Admin/Skills.js";
 import Eventparticipent from "./pages/Eventparticipent.js";
 import Participent from "./pages/Admin/Participent.js";
-import Report from "./pages/Admin/Report.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
 import LatterHead from "./pages/Admin/LatterHead.js";
 import LostandFound from "./pages/LostandFound.js";
@@ -64,7 +63,6 @@ function App() {
               <Route path="admin/response" element={<Response />} />
               <Route path="admin/skills" element={<Skills />} />
               <Route path="admin/participent" element={<Participent />} />
-              <Route path="admin/report" element={<Report />} />
               <Route path="admin/Cr" element={<CrDetail />} />
               <Route path="admin/latterhead" element={<LatterHead />} />
               <Route path="admin/faculty" element={<Faculty />} />
