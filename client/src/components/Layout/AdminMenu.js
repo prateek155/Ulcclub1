@@ -30,17 +30,6 @@ const AdminMenu = () => {
       ]
     },
     {
-      title: "Acadmin",
-      items: [
-        {
-          path: "/dashboard/admin/Dsocsa",
-          icon: <LayoutDashboard />,
-          title: "Socsa",
-          description: "Every thing Related to Acadmin",
-        }
-      ]
-    },
-    {
       title: "Creation System",
       items: [
         {
