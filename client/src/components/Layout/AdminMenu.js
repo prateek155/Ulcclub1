@@ -86,12 +86,6 @@ const AdminMenu = () => {
           description: "All Registered Users Data",
         },
         {
-          path: "/dashboard/admin/report",
-          icon: <ClipboardList size={20} />,
-          title: "Generate Report",
-          description: "Generate Meeting Report Weekly & Other",
-        },
-        {
           path: "/dashboard/admin/latterhead",
           icon: <BookOpen size={20} />,
           title: "Latterhead",
