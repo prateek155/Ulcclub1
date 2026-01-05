@@ -9,7 +9,9 @@ import {
   BookOpen,
   Settings,
   ChevronRight,
-  Building2
+  Building2,
+  Lock,
+  ClipboardList
 } from "lucide-react";
 
 const AdminMenu = () => {
@@ -76,6 +78,48 @@ const AdminMenu = () => {
           title: "Student Skills",
           description: "List of the skills which is fill by student's",
         },
+        {
+          path: "/dashboard/admin/Cr",
+          icon: <Package size={20} />,
+          title: "CR/LR",
+          description: "Detail Of All Cr and Lr",
+        },
+        {
+          path: "/dashboard/admin/faculty",
+          icon: <ClipboardList size={20} />,
+          title: "Faculty",
+          description: "Faculty Detail's",
+        },
+        {
+          path: "/dashboard/admin/users",
+          icon: <MessageSquare size={20} />,
+          title: "User's Data",
+          description: "All Registered Users Data",
+        },
+        {
+          path: "/dashboard/admin/report",
+          icon: <ClipboardList size={20} />,
+          title: "Generate Report",
+          description: "Generate Meeting Report Weekly & Other",
+        },
+        {
+          path: "/dashboard/admin/latterhead",
+          icon: <BookOpen size={20} />,
+          title: "Latterhead",
+          description: "Create Different Type of Latterhead According To your Demand",
+        },
+        {
+          path: "/dashboard/admin/action",
+          icon: <BookOpen size={20} />,
+          title: "Action's",
+          description: "Take action of any student",
+        },
+        {
+          path: "/dashboard/admin/confidential",
+          icon: <Lock size={20} />,
+          title: "Confidential Files",
+          description: "OTP protected access",
+        }
       ]
     },
   ];
