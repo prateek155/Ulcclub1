@@ -22,8 +22,6 @@ import AllRegistrations from "./pages/Admin/AllRegistratiions.js";
 import Event from "./pages/Event.js";
 import Registration from "./pages/Registration.js";
 import Skills from "./pages/Admin/Skills.js";
-import Eventparticipent from "./pages/Eventparticipent.js";
-import Participent from "./pages/Admin/Participent.js";
 import CrDetail from "./pages/Admin/CrDetail.js";
 import LatterHead from "./pages/Admin/LatterHead.js";
 import LostandFound from "./pages/LostandFound.js";
@@ -56,9 +54,7 @@ function App() {
               <Route path="admin/users" element={<User />} />
               <Route path="admin/community-member" element={<CommunityMember />} />
               <Route path="admin/feedback-management" element={<FeedbackManagement />} />
-              <Route path="admin/all-registrations" element={<AllRegistrations />} />
               <Route path="admin/skills" element={<Skills />} />
-              <Route path="admin/participent" element={<Participent />} />
               <Route path="admin/Cr" element={<CrDetail />} />
               <Route path="admin/latterhead" element={<LatterHead />} />
               <Route path="admin/faculty" element={<Faculty />} />
