@@ -167,7 +167,6 @@ const Header = () => {
                   </li>
 
                   <li><NavLink to="/about" className="dropdown-item">About</NavLink></li>
-                  <li><NavLink to="/Event" className="dropdown-item">Events</NavLink></li>
 
                   <li><hr className="dropdown-divider" /></li>
 
