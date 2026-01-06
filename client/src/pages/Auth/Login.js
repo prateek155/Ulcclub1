@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../context/auth";
 
 const MAX_ATTEMPTS = 3;
-const LOCK_DURATION = 30 * 1000; // 30 seconds
+const LOCK_DURATION = 30 * 1000; // 30 seconds in milliseconds
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,43 +16,18 @@ const Login = () => {
   const [auth, setAuth] = useAuth();
   const [isLocked, setIsLocked] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
-  const [digitalRain, setDigitalRain] = useState([]);
-  const [securityElements, setSecurityElements] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Generate digital rain effect & security elements
-  useEffect(() => {
-    const generateRainDrops = () => {
-      const characters = "0123456789ABCDEF";
-      const drops = [];
-      for (let i = 0; i < 50; i++) {
-        drops.push({
-          id: i,
-          char: characters[Math.floor(Math.random() * characters.length)],
-          x: Math.random() * 100,
-          animationDuration: Math.random() * 3 + 2,
-          animationDelay: Math.random() * 2,
-        });
-      }
-      setDigitalRain(drops);
-    };
-
-   
-
-    generateRainDrops();
-    const interval = setInterval(() => generateRainDrops(), 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Lock/attempt logic from localStorage
   useEffect(() => {
     const lockTime = localStorage.getItem("lockTime");
+
     if (lockTime) {
       const timeLeft = parseInt(lockTime) - Date.now();
       if (timeLeft > 0) {
         setIsLocked(true);
         setRemainingTime(Math.floor(timeLeft / 1000));
+
         const interval = setInterval(() => {
           const newTimeLeft = parseInt(lockTime) - Date.now();
           if (newTimeLeft <= 0) {
@@ -64,8 +39,10 @@ const Login = () => {
             setRemainingTime(Math.floor(newTimeLeft / 1000));
           }
         }, 1000);
+
         return () => clearInterval(interval);
       } else {
+        // lock expired
         localStorage.removeItem("lockTime");
         localStorage.removeItem("failedAttempts");
       }
@@ -82,16 +59,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (isLocked) {
       toast.error("You are currently locked out. Please wait.");
       return;
     }
+
     const failedAttempts = parseInt(localStorage.getItem("failedAttempts")) || 0;
+
     try {
       const res = await axios.post(`https://ulcclub1.onrender.com/api/v1/auth/login`, {
         email,
         password,
       });
+
       if (res && res.data.success) {
         toast.success(res.data.message);
         setAuth({
@@ -107,12 +88,14 @@ const Login = () => {
         const newAttempts = failedAttempts + 1;
         localStorage.setItem("failedAttempts", newAttempts);
         toast.error(res.data.message);
+
         if (newAttempts >= MAX_ATTEMPTS) {
           const lockUntil = Date.now() + LOCK_DURATION;
           localStorage.setItem("lockTime", lockUntil.toString());
           setIsLocked(true);
           setRemainingTime(Math.floor(LOCK_DURATION / 1000));
-          toast.error("Too many failed attempts. You are locked out for 30 seconds.");
+          toast.error("Too many failed attempts. You are locked out for 5 minutes.");
+          navigate("/");
         }
       }
     } catch (error) {
@@ -123,293 +106,413 @@ const Login = () => {
 
   return (
     <>
-      {/* ---------- Page-level CSS: safe header + sticky footer + full-bleed ---------- */}
       <style>{`
-        /* Reset & full-bleed roots */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body, #root { height: 100%; background: #0a0a0a; color: #fff; }
-        body { overflow-x: hidden; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-
-        /* Expose safe-area variables & header/footer sizes (fallbacks included) */
-        :root{
-          --safe-area-top: env(safe-area-inset-top, 18px);
-          --header-visual: 56px;
-          --header-total: calc(var(--header-visual) + var(--safe-area-top));
-          --footer-height: 64px; /* adjust to match your Layout footer */
-        }
-
-        /* If your Layout uses different header selectors, these ensure safety */
-        header, .header, .site-header, .main-header, .navbar, .topbar {
-          padding-top: env(safe-area-inset-top, 18px);
-          padding-top: constant(safe-area-inset-top, 18px);
-          height: calc(var(--header-visual) + env(safe-area-inset-top, 18px));
-          min-height: calc(var(--header-visual) + env(safe-area-inset-top, 18px));
+        * {
           box-sizing: border-box;
-          z-index: 9999;
+          margin: 0;
+          padding: 0;
         }
 
-        /* Reserve space so header doesn't overlap content */
-        .page-safe-area {
-          padding-top: var(--header-total);
-          padding-bottom: var(--footer-height);
-          min-height: calc(100vh - var(--header-total));
-          width: 100%;
-          box-sizing: border-box;
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          min-height: 100vh;
         }
 
-        /* Make footer sticky but non-intrusive (overridden by Layout footer if exists) */
-        footer, .footer, .site-footer {
-          position: fixed;
+        .modern-login-container {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          position: relative;
+        }
+
+        .modern-login-container::before {
+          content: '';
+          position: absolute;
+          top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          height: var(--footer-height);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(180deg, #0f172a, #0b1220);
-          color: #dbeafe;
-          z-index: 9998;
-          border-top: 1px solid rgba(255,255,255,0.03);
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+          backdrop-filter: blur(10px);
         }
 
-        /* Login page container (centered panel) */
-        .cybersecurity-login-container {
-          min-height: calc(100vh - var(--header-total));
+        .login-card {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border-radius: 24px;
+          box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgba(255, 255, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+          padding: 48px 40px;
+          width: 100%;
+          max-width: 420px;
+          position: relative;
+          z-index: 1;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 
+            0 30px 60px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(255, 255, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .login-title {
+          font-size: 32px;
+          font-weight: 700;
+          color: #1a202c;
+          text-align: center;
+          margin-bottom: 12px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .login-subtitle {
+          color: #718096;
+          text-align: center;
+          margin-bottom: 40px;
+          font-size: 16px;
+          font-weight: 400;
+        }
+
+        .form-group {
+          margin-bottom: 24px;
+          position: relative;
+        }
+
+        .password-input-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .password-toggle {
+          position: absolute;
+          right: 16px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px;
+          color: #a0aec0;
+          transition: color 0.3s ease;
+          z-index: 2;
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+
+        .password-toggle:hover {
+          color: #667eea;
+        }
+
+        .password-toggle:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+
+        .eye-icon {
+          width: 20px;
+          height: 20px;
+          stroke: currentColor;
+          fill: none;
+          stroke-width: 2;
+        }
+
+        .form-input {
+          width: 100%;
+          padding: 16px 20px;
+          border: 2px solid #e2e8f0;
+          border-radius: 16px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #2d3748;
+          background: rgba(255, 255, 255, 0.8);
+          transition: all 0.3s ease;
+          outline: none;
+        }
+
+        .form-input:focus {
+          border-color: #667eea;
+          background: rgba(255, 255, 255, 1);
+          box-shadow: 
+            0 0 0 3px rgba(102, 126, 234, 0.1),
+            0 4px 12px rgba(102, 126, 234, 0.15);
+          transform: translateY(-2px);
+        }
+
+        .form-input:disabled {
+          background-color: #f7fafc;
+          color: #a0aec0;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+
+        .form-input::placeholder {
+          color: #a0aec0;
+          font-weight: 400;
+        }
+
+        .lockout-warning {
+          background: linear-gradient(135deg, #fed7d7, #feb2b2);
+          border: 2px solid #fc8181;
+          border-radius: 12px;
+          padding: 16px;
+          margin-bottom: 24px;
+          text-align: center;
+          animation: pulse 2s infinite;
+        }
+
+        .lockout-text {
+          color: #c53030;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .lockout-timer {
+          color: #e53e3e;
+          font-size: 18px;
+          font-weight: 700;
+          margin-top: 8px;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.8; }
+        }
+
+        .btn {
+          width: 100%;
+          padding: 16px 24px;
+          border: none;
+          border-radius: 16px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: none;
+          letter-spacing: 0.5px;
           position: relative;
           overflow: hidden;
-          width: 100%;
         }
 
-        /* Digital rain + security elements */
-        .digital-rain-container,
-        .security-elements-container,
-        .circuit-overlay,
-        .hooded-figure {
+        .btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+          left: 100%;
+        }
+
+        .btn-primary {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+          margin-top: 12px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+          background: linear-gradient(135deg, #5a67d8, #6b46c1);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+          background: rgba(255, 255, 255, 0.9);
+          color: #667eea;
+          border: 2px solid #e2e8f0;
+          margin-bottom: 16px;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+          background: rgba(102, 126, 234, 0.05);
+          border-color: #667eea;
+          transform: translateY(-1px);
+          box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15);
+        }
+
+        .btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none !important;
+          box-shadow: none !important;
+        }
+
+        .floating-elements {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
           pointer-events: none;
         }
 
-        .rain-drop {
+        .floating-element {
           position: absolute;
-          color: #00ff88;
-          font-size: 18px;
-          font-weight: 700;
-          opacity: 0.75;
-          text-shadow: 0 0 8px #00ff88;
-          animation: rainFall linear infinite;
-          z-index: 2;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes rainFall {
-          0% { transform: translateY(-120vh); opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateY(120vh); opacity: 0; }
+        .floating-element:nth-child(1) {
+          width: 80px;
+          height: 80px;
+          top: 10%;
+          left: 10%;
+          animation-delay: 0s;
         }
 
-        .security-element.lock { animation: lockFloat 8s ease-in-out infinite; z-index: 3; color: #ffaa00; }
-        .security-element.number { animation: numberFloat 6s ease-in-out infinite; z-index: 3; color: #00ff88; }
-        @keyframes lockFloat { 0%,100%{transform:translateY(0);opacity:0.6;}50%{transform:translateY(-20px);opacity:1;} }
-        @keyframes numberFloat { 0%,100%{transform:translateY(0);opacity:0.6;}50%{transform:translateY(-12px);opacity:0.95;} }
-
-        .circuit-overlay{ position:absolute; inset:0; background-size:120px 120px; z-index:3; opacity:0.25; }
-        .hooded-figure{ position:absolute; bottom:-50px; left:50%; transform:translateX(-50%); width:360px; height:420px; z-index:4; opacity:0.55; }
-
-        /* Panel */
-        .cyber-login-panel {
-          width: 520px;
-          max-width: 92vw;
-          background: rgba(2,6,23,0.85);
-          backdrop-filter: blur(10px);
-          border: 2px solid rgba(0,255,136,0.18);
-          border-radius: 12px;
-          position: relative;
-          padding: 36px;
-          z-index: 10;
-          box-shadow:
-            0 10px 40px rgba(2,8,20,0.6),
-            inset 0 0 40px rgba(0, 255, 136, 0.02);
-          transition: transform 0.18s ease;
+        .floating-element:nth-child(2) {
+          width: 60px;
+          height: 60px;
+          top: 70%;
+          right: 10%;
+          animation-delay: 2s;
         }
 
-        .cyber-login-panel:focus-within { transform: translateY(-2px); }
-
-        /* Header inside panel */
-        .cyber-login-header { text-align: center; margin-bottom: 22px; }
-        .cyber-title { font-size: 24px; color: #00ff88; letter-spacing: 3px; margin-bottom: 6px; font-weight:700; }
-        .cyber-subtitle { font-size: 12px; color: #ffaa00; opacity:0.9; }
-
-        .security-status { display:flex; justify-content:space-between; gap:12px; margin-bottom: 18px; color:#00ff88; font-size:12px; }
-
-        .cyber-form { display:flex; flex-direction:column; gap:18px; }
-
-        .cyber-input-field {
-          width:100%;
-          padding:12px 14px;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(0,255,136,0.14);
-          border-radius:6px;
-          color:#d1ffd8;
-          font-family: 'Courier New', monospace;
-          transition: box-shadow .18s ease, border-color .18s ease;
-        }
-        .cyber-input-field:focus { outline:none; border-color: #00ff88; box-shadow: 0 0 18px rgba(0,255,136,0.08); background: rgba(0,255,136,0.02); }
-
-        .password-input-wrapper{ position:relative; display:flex; align-items:center; }
-        .password-toggle { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#00ff88; cursor:pointer; }
-
-        .lockout-warning { background: rgba(255,68,68,0.08); border:1px solid #ff4444; padding:12px; border-radius:8px; color:#ff9b9b; font-weight:700; text-align:center; }
-
-        .cyber-btn { padding:14px 16px; border-radius:8px; border:2px solid rgba(0,255,136,0.15); font-weight:700; letter-spacing:1.5px; cursor:pointer; background:transparent; color:#d1ffd8; }
-        .cyber-btn-primary { border-color: #00ff88; background: linear-gradient(90deg, rgba(0,255,136,0.06), rgba(255,170,0,0.03)); }
-        .cyber-btn:disabled { opacity:0.55; cursor:not-allowed; transform:none; box-shadow:none; }
-
-        .warning-message { position: absolute; bottom: calc(var(--footer-height) + 18px); left: 50%; transform: translateX(-50%); font-size:11px; color:#ffb3b3; z-index: 15; }
-
-        /* Responsive tweaks */
-        @media (max-width: 600px) {
-          .cyber-login-panel { padding: 22px; border-radius: 10px; width: 92vw; }
-          .cyber-title { font-size: 20px; }
+        .floating-element:nth-child(3) {
+          width: 40px;
+          height: 40px;
+          bottom: 20%;
+          left: 20%;
+          animation-delay: 4s;
         }
 
-        /* Small devices: ensure nothing is hidden under footer */
-        @media (max-height: 720px) {
-          .cyber-login-panel { max-height: calc(100vh - var(--header-total) - var(--footer-height) - 40px); overflow:auto; }
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0.4;
+          }
+          50% {
+            transform: translateY(-20px) rotate(180deg);
+            opacity: 0.8;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .login-card {
+            padding: 32px 24px;
+            margin: 20px;
+          }
+          
+          .login-title {
+            font-size: 28px;
+          }
+          
+          .form-input, .btn {
+            padding: 14px 18px;
+          }
         }
       `}</style>
+      
+      <Layout title="Login - M-Group app">
+        <div className="modern-login-container">
+          <div className="floating-elements">
+            <div className="floating-element"></div>
+            <div className="floating-element"></div>
+            <div className="floating-element"></div>
+          </div>
+          
+          <div className="login-card">
+            <ToastContainer 
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+            
+            <form onSubmit={handleSubmit}>
+              <h1 className="login-title">Welcome Back</h1>
+              <p className="login-subtitle">Sign in to your account</p>
 
-      {/* The Layout wrapper — page-safe-area class ensures content is below header + above footer */}
-      <Layout title="Secure Login - M-Group Portal">
-        <div className="page-safe-area">
-          <div className="cybersecurity-login-container">
-            {/* Background visual layers */}
-            <div className="digital-rain-container">
-              {digitalRain.map((drop) => (
-                <div
-                  key={drop.id}
-                  className="rain-drop"
-                  style={{
-                    left: `${drop.x}%`,
-                    animationDuration: `${drop.animationDuration}s`,
-                    animationDelay: `${drop.animationDelay}s`,
-                  }}
-                >
-                  {drop.char}
+              {isLocked && (
+                <div className="lockout-warning">
+                  <p className="lockout-text">Account temporarily locked</p>
+                  <div className="lockout-timer">Try again in {formatTime(remainingTime)}</div>
                 </div>
-              ))}
-            </div>
+              )}
 
-            <div className="security-elements-container">
-              {securityElements.map((element) => (
-                <div
-                  key={element.id}
-                  className={`security-element ${element.type}`}
-                  style={{
-                    left: `${element.x}%`,
-                    top: `${element.y}%`,
-                    animationDelay: `${element.animationDelay}s`,
-                    fontSize: element.fontSize ? `${element.fontSize}px` : undefined,
-                  }}
-                >
-                  {element.content}
-                </div>
-              ))}
-            </div>
-
-            <div className="circuit-overlay" />
-            <div className="hooded-figure" />
-
-            {/* Login panel */}
-            <div className="cyber-login-panel" role="main" aria-label="Secure Login Panel">
-              {/* Panel corners */}
-              <div className="panel-corner top-left" style={{ position: "absolute", top: -10, left: -10, width: 28, height: 28, border: "3px solid #ffaa00", borderRight: "none", borderBottom: "none" }} />
-              <div className="panel-corner top-right" style={{ position: "absolute", top: -10, right: -10, width: 28, height: 28, border: "3px solid #ffaa00", borderLeft: "none", borderBottom: "none" }} />
-              <div className="panel-corner bottom-left" style={{ position: "absolute", bottom: -10, left: -10, width: 28, height: 28, border: "3px solid #ffaa00", borderRight: "none", borderTop: "none" }} />
-              <div className="panel-corner bottom-right" style={{ position: "absolute", bottom: -10, right: -10, width: 28, height: 28, border: "3px solid #ffaa00", borderLeft: "none", borderTop: "none" }} />
-
-              {/* scan line */}
-              <div style={{ position: "absolute", inset: "0 0 auto 0", height: 2, background: "linear-gradient(90deg, transparent, #00ff88, transparent)", animation: "scanMove 4s linear infinite", zIndex: 5 }} />
-
-              <ToastContainer position="top-right" />
-
-              <div className="cyber-login-header">
-                <h1 className="cyber-title">SECURE ACCESS</h1>
-                <p className="cyber-subtitle">M-GROUP SECURITY PORTAL v4.2</p>
+              <div className="form-group">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-input"
+                  placeholder="Enter your email address"
+                  required
+                  disabled={isLocked}
+                />
               </div>
 
-              <div className="security-status" aria-hidden>
-                <div className="status-item"><div className="status-dot" style={{ width: 8, height: 8, borderRadius: 8, background: "#00ff88" }} /> <span>ENCRYPTED</span></div>
-                <div className="status-item"><div className="status-dot" style={{ width: 8, height: 8, borderRadius: 8, background: "#00ff88" }} /> <span>SECURE</span></div>
-                <div className="status-item"><div className="status-dot" style={{ width: 8, height: 8, borderRadius: 8, background: "#00ff88" }} /> <span>PROTECTED</span></div>
-              </div>
-
-              <form onSubmit={handleSubmit} className="cyber-form" aria-live="polite">
-                {isLocked && (
-                  <div className="lockout-warning" role="status">
-                    <div className="lockout-text">ACCOUNT TEMPORARILY LOCKED</div>
-                    <div className="lockout-timer">RETRY IN {formatTime(remainingTime)}</div>
-                  </div>
-                )}
-
-                <div className="cyber-input-group">
-                  <label className="cyber-input-label" style={{ color: "#00ff88", fontSize: 12, letterSpacing: 1 }}>Security ID</label>
+              <div className="form-group">
+                <div className="password-input-wrapper">
                   <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="cyber-input-field"
-                    placeholder="Enter your security identifier"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="form-input"
+                    placeholder="Enter your password"
                     required
                     disabled={isLocked}
-                    aria-label="security id"
                   />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLocked}
+                  >
+                    {showPassword ? (
+                      <svg className="eye-icon" viewBox="0 0 24 24">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                      </svg>
+                    ) : (
+                      <svg className="eye-icon" viewBox="0 0 24 24">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    )}
+                  </button>
                 </div>
+              </div>
 
-                <div className="cyber-input-group">
-                  <label className="cyber-input-label" style={{ color: "#00ff88", fontSize: 12, letterSpacing: 1 }}>Access Code</label>
-                  <div className="password-input-wrapper">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="cyber-input-field"
-                      placeholder="Enter your access code"
-                      required
-                      disabled={isLocked}
-                      aria-label="access code"
-                    />
-                    <button
-                      type="button"
-                      className="password-toggle"
-                      onClick={() => setShowPassword(!showPassword)}
-                      disabled={isLocked}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      {showPassword ? "🙈" : "👁️"}
-                    </button>
-                  </div>
-                </div>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => navigate("/forgot-password")}
+                disabled={isLocked}
+              >
+                Forgot Password?
+              </button>
 
-                <button
-                  type="button"
-                  className="cyber-btn cyber-btn-secondary"
-                  onClick={() => navigate("/forgot-password")}
-                  disabled={isLocked}
-                  aria-label="reset access code"
-                >
-                  Reset Access Code
-                </button>
-
-                <button type="submit" className="cyber-btn cyber-btn-primary" disabled={isLocked} aria-label="grant access">
-                  {isLocked ? "ACCESS DENIED" : "GRANT ACCESS"}
-                </button>
-              </form>
-            </div>
-
-            
+              <button type="submit" className="btn btn-primary" disabled={isLocked}>
+                {isLocked ? 'Account Locked' : 'Sign In'}
+              </button>
+            </form>
           </div>
         </div>
       </Layout>
