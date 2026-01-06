@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import About from "./pages/About";
-import Contact from "./pages/Contact";
 import Pagenotfound from "./pages/Pagenotfound";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
@@ -67,11 +66,9 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
             <Route path="/Event" element={<Event />} />
             <Route path="/lostandfound" element={<LostandFound />} />
             <Route path="/registration" element={<Registration />} />
-            <Route path="/eventparticipent" element={<Eventparticipent />} />
             <Route path="/founditem" element={<Found />} />
             <Route path="*" element={<Pagenotfound />} /> 
 
